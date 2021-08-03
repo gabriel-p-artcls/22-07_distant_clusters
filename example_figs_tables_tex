@@ -1,0 +1,455 @@
+
+
+
+
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Examples for figures using graphicx
+A guide "Using Imported Graphics in LaTeX2e"  (Keith Reckdahl)
+is available on a lot of LaTeX public servers or ctan mirrors.
+The file is : epslatex.pdf 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%-------------------------------------------------------------
+%                 A figure as large as the width of the column
+%-------------------------------------------------------------
+   \begin{figure}
+   \centering
+   \includegraphics[width=\hsize]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure}
+%
+%-------------------------------------------------------------
+%                                    One column rotated figure
+%-------------------------------------------------------------
+   \begin{figure}
+   \centering
+   \includegraphics[angle=-90,width=3cm]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure}
+%
+%-------------------------------------------------------------
+%                        Figure with caption on the right side 
+%-------------------------------------------------------------
+   \begin{figure}
+   \sidecaption
+   \includegraphics[width=3cm]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure}
+%
+%-------------------------------------------------------------
+%                                Figure with a new BoundingBox 
+%-------------------------------------------------------------
+   \begin{figure}
+   \centering
+   \includegraphics[bb=10 20 100 300,width=3cm,clip]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure}
+%
+%-------------------------------------------------------------
+%                                      The "resizebox" command 
+%-------------------------------------------------------------
+   \begin{figure}
+   \resizebox{\hsize}{!}
+            {\includegraphics[bb=10 20 100 300,clip]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure}
+%
+%-------------------------------------------------------------
+%                                             Two column Figure 
+%-------------------------------------------------------------
+   \begin{figure*}
+   \resizebox{\hsize}{!}
+            {\includegraphics[bb=10 20 100 300,clip]{empty.eps}
+      \caption{Vibrational stability equation of state
+               $S_{\mathrm{vib}}(\lg e, \lg \rho)$.
+               $>0$ means vibrational stability.
+              }
+         \label{FigVibStab}
+   \end{figure*}
+%
+%-------------------------------------------------------------
+%                                             Simple A&A Table
+%-------------------------------------------------------------
+%
+\begin{table}
+\caption{Nonlinear Model Results}             % title of Table
+\label{table:1}      % is used to refer this table in the text
+\centering                          % used for centering table
+\begin{tabular}{c c c c}        % centered columns (4 columns)
+\hline\hline                 % inserts double horizontal lines
+HJD & $E$ & Method\#2 & Method\#3 \\    % table heading 
+\hline                        % inserts single horizontal line
+   1 & 50 & $-837$ & 970 \\      % inserting body of the table
+   2 & 47 & 877    & 230 \\
+   3 & 31 & 25     & 415 \\
+   4 & 35 & 144    & 2356 \\
+   5 & 45 & 300    & 556 \\ 
+\hline                                   %inserts single line
+\end{tabular}
+\end{table}
+%
+%-------------------------------------------------------------
+%                                             Two column Table 
+%-------------------------------------------------------------
+%
+\begin{table*}
+\caption{Nonlinear Model Results}             
+\label{table:1}      
+\centering          
+\begin{tabular}{c c c c l l l }     % 7 columns 
+\hline\hline       
+                      % To combine 4 columns into a single one 
+HJD & $E$ & Method\#2 & \multicolumn{4}{c}{Method\#3}\\ 
+\hline                    
+   1 & 50 & $-837$ & 970 & 65 & 67 & 78\\  
+   2 & 47 & 877    & 230 & 567& 55 & 78\\
+   3 & 31 & 25     & 415 & 567& 55 & 78\\
+   4 & 35 & 144    & 2356& 567& 55 & 78 \\
+   5 & 45 & 300    & 556 & 567& 55 & 78\\
+\hline                  
+\end{tabular}
+\end{table*}
+%
+%-------------------------------------------------------------
+%                                          Table with notes 
+%-------------------------------------------------------------
+%
+% A single note
+\begin{table}
+\caption{\label{t7}Spectral types and photometry for stars in the
+  region.}
+\centering
+\begin{tabular}{lccc}
+\hline\hline
+Star&Spectral type&RA(J2000)&Dec(J2000)\\
+\hline
+69           &B1\,V     &09 15 54.046 & $-$50 00 26.67\\
+49           &B0.7\,V   &*09 15 54.570& $-$50 00 03.90\\
+LS~1267~(86) &O8\,V     &09 15 52.787&11.07\\
+24.6         &7.58      &1.37 &0.20\\
+\hline
+LS~1262      &B0\,V     &09 15 05.17&11.17\\
+MO 2-119     &B0.5\,V   &09 15 33.7 &11.74\\
+LS~1269      &O8.5\,V   &09 15 56.60&10.85\\
+\hline
+\end{tabular}
+\tablefoot{The top panel shows likely members of Pismis~11. The second
+panel contains likely members of Alicante~5. The bottom panel
+displays stars outside the clusters.}
+\end{table}
+%
+% More notes
+%
+\begin{table}
+\caption{\label{t7}Spectral types and photometry for stars in the
+  region.}
+\centering
+\begin{tabular}{lccc}
+\hline\hline
+Star&Spectral type&RA(J2000)&Dec(J2000)\\
+\hline
+69           &B1\,V     &09 15 54.046 & $-$50 00 26.67\\
+49           &B0.7\,V   &*09 15 54.570& $-$50 00 03.90\\
+LS~1267~(86) &O8\,V     &09 15 52.787&11.07\tablefootmark{a}\\
+24.6         &7.58\tablefootmark{1}&1.37\tablefootmark{a}   &0.20\tablefootmark{a}\\
+\hline
+LS~1262      &B0\,V     &09 15 05.17&11.17\tablefootmark{b}\\
+MO 2-119     &B0.5\,V   &09 15 33.7 &11.74\tablefootmark{c}\\
+LS~1269      &O8.5\,V   &09 15 56.60&10.85\tablefootmark{d}\\
+\hline
+\end{tabular}
+\tablefoot{The top panel shows likely members of Pismis~11. The second
+panel contains likely members of Alicante~5. The bottom panel
+displays stars outside the clusters.\\
+\tablefoottext{a}{Photometry for MF13, LS~1267 and HD~80077 from
+Dupont et al.}
+\tablefoottext{b}{Photometry for LS~1262, LS~1269 from
+Durand et al.}
+\tablefoottext{c}{Photometry for MO2-119 from
+Mathieu et al.}
+}
+\end{table}
+%
+%-------------------------------------------------------------
+%                                       Table with references 
+%-------------------------------------------------------------
+%
+\begin{table*}[h]
+ \caption[]{\label{nearbylistaa2}List of nearby SNe used in this work.}
+\begin{tabular}{lccc}
+ \hline \hline
+  SN name &
+  Epoch &
+ Bands &
+  References \\
+ &
+  (with respect to $B$ maximum) &
+ &
+ \\ \hline
+1981B   & 0 & {\it UBV} & 1\\
+1986G   &  $-$3, $-$1, 0, 1, 2 & {\it BV}  & 2\\
+1989B   & $-$5, $-$1, 0, 3, 5 & {\it UBVRI}  & 3, 4\\
+1990N   & 2, 7 & {\it UBVRI}  & 5\\
+1991M   & 3 & {\it VRI}  & 6\\
+\hline
+\noalign{\smallskip}
+\multicolumn{4}{c}{ SNe 91bg-like} \\
+\noalign{\smallskip}
+\hline
+1991bg   & 1, 2 & {\it BVRI}  & 7\\
+1999by   & $-$5, $-$4, $-$3, 3, 4, 5 & {\it UBVRI}  & 8\\
+\hline
+\noalign{\smallskip}
+\multicolumn{4}{c}{ SNe 91T-like} \\
+\noalign{\smallskip}
+\hline
+1991T   & $-$3, 0 & {\it UBVRI}  &  9, 10\\
+2000cx  & $-$3, $-$2, 0, 1, 5 & {\it UBVRI}  & 11\\ %
+\hline
+\end{tabular}
+\tablebib{(1)~\citet{branch83};
+(2) \citet{phillips87}; (3) \citet{barbon90}; (4) \citet{wells94};
+(5) \citet{mazzali93}; (6) \citet{gomez98}; (7) \citet{kirshner93};
+(8) \citet{patat96}; (9) \citet{salvo01}; (10) \citet{branch03};
+(11) \citet{jha99}.
+}
+\end{table}
+%-------------------------------------------------------------
+%                      A rotated Two column Table in landscape  
+%-------------------------------------------------------------
+\begin{sidewaystable*}
+\caption{Summary for ISOCAM sources with mid-IR excess 
+(YSO candidates).}\label{YSOtable}
+\centering
+\begin{tabular}{crrlcl} 
+\hline\hline             
+ISO-L1551 & $F_{6.7}$~[mJy] & $\alpha_{6.7-14.3}$ 
+& YSO type$^{d}$ & Status & Comments\\
+\hline
+  \multicolumn{6}{c}{\it New YSO candidates}\\ % To combine 6 columns into a single one
+\hline
+  1 & 1.56 $\pm$ 0.47 & --    & Class II$^{c}$ & New & Mid\\
+  2 & 0.79:           & 0.97: & Class II ?     & New & \\
+  3 & 4.95 $\pm$ 0.68 & 3.18  & Class II / III & New & \\
+  5 & 1.44 $\pm$ 0.33 & 1.88  & Class II       & New & \\
+\hline
+  \multicolumn{6}{c}{\it Previously known YSOs} \\
+\hline
+  61 & 0.89 $\pm$ 0.58 & 1.77 & Class I & \object{HH 30} & Circumstellar disk\\
+  96 & 38.34 $\pm$ 0.71 & 37.5& Class II& MHO 5          & Spectral type\\
+\hline
+\end{tabular}
+\end{sidewaystable*}
+%-------------------------------------------------------------
+%                      A rotated One column Table in landscape  
+%-------------------------------------------------------------
+\begin{sidewaystable}
+\caption{Summary for ISOCAM sources with mid-IR excess 
+(YSO candidates).}\label{YSOtable}
+\centering
+\begin{tabular}{crrlcl} 
+\hline\hline             
+ISO-L1551 & $F_{6.7}$~[mJy] & $\alpha_{6.7-14.3}$ 
+& YSO type$^{d}$ & Status & Comments\\
+\hline
+  \multicolumn{6}{c}{\it New YSO candidates}\\ % To combine 6 columns into a single one
+\hline
+  1 & 1.56 $\pm$ 0.47 & --    & Class II$^{c}$ & New & Mid\\
+  2 & 0.79:           & 0.97: & Class II ?     & New & \\
+  3 & 4.95 $\pm$ 0.68 & 3.18  & Class II / III & New & \\
+  5 & 1.44 $\pm$ 0.33 & 1.88  & Class II       & New & \\
+\hline
+  \multicolumn{6}{c}{\it Previously known YSOs} \\
+\hline
+  61 & 0.89 $\pm$ 0.58 & 1.77 & Class I & \object{HH 30} & Circumstellar disk\\
+  96 & 38.34 $\pm$ 0.71 & 37.5& Class II& MHO 5          & Spectral type\\
+\hline
+\end{tabular}
+\end{sidewaystable}
+%
+%-------------------------------------------------------------
+%                              Table longer than a single page  
+%-------------------------------------------------------------
+% All long tables will be placed automatically at the end of the document
+%
+\longtab{
+\begin{longtable}{lllrrr}
+\caption{\label{kstars} Sample stars with absolute magnitude}\\
+\hline\hline
+Catalogue& $M_{V}$ & Spectral & Distance & Mode & Count Rate \\
+\hline
+\endfirsthead
+\caption{continued.}\\
+\hline\hline
+Catalogue& $M_{V}$ & Spectral & Distance & Mode & Count Rate \\
+\hline
+\endhead
+\hline
+\endfoot
+%%
+Gl 33    & 6.37 & K2 V & 7.46 & S & 0.043170\\
+Gl 66AB  & 6.26 & K2 V & 8.15 & S & 0.260478\\
+Gl 68    & 5.87 & K1 V & 7.47 & P & 0.026610\\
+         &      &      &      & H & 0.008686\\
+Gl 86 
+\footnote{Source not included in the HRI catalog. See Sect.~5.4.2 for details.}
+         & 5.92 & K0 V & 10.91& S & 0.058230\\
+\end{longtable}
+}
+%
+%-------------------------------------------------------------
+%                              Table longer than a single page
+%                                            and in landscape, 
+%                    in the preamble, use: \usepackage{lscape}
+%-------------------------------------------------------------
+
+% All long tables will be placed automatically at the end of the document
+%
+\longtab{
+\begin{landscape}
+\begin{longtable}{lllrrr}
+\caption{\label{kstars} Sample stars with absolute magnitude}\\
+\hline\hline
+Catalogue& $M_{V}$ & Spectral & Distance & Mode & Count Rate \\
+\hline
+\endfirsthead
+\caption{continued.}\\
+\hline\hline
+Catalogue& $M_{V}$ & Spectral & Distance & Mode & Count Rate \\
+\hline
+\endhead
+\hline
+\endfoot
+%%
+Gl 33    & 6.37 & K2 V & 7.46 & S & 0.043170\\
+Gl 66AB  & 6.26 & K2 V & 8.15 & S & 0.260478\\
+Gl 68    & 5.87 & K1 V & 7.47 & P & 0.026610\\
+         &      &      &      & H & 0.008686\\
+Gl 86
+\footnote{Source not included in the HRI catalog. See Sect.~5.4.2 for details.}
+         & 5.92 & K0 V & 10.91& S & 0.058230\\
+\end{longtable}
+\end{landscape}
+}
+%
+%-------------------------------------------------------------
+%               Appendices have to be placed at the end, after
+%                                        \end{thebibliography}
+%-------------------------------------------------------------
+\end{thebibliography}
+
+\begin{appendix} %First appendix
+\section{Background galaxy number counts and shear noise-levels}
+Because the optical images used in this analysis...
+\begin{figure*}%f1
+\includegraphics[width=10.9cm]{1787f23.eps}
+\caption{Shown in greyscale is a...}
+\label{cl12301}
+\end{figure*}
+
+In this case....
+\begin{figure*}
+\centering
+\includegraphics[width=16.4cm,clip]{1787f24.ps}
+\caption{Plotted above...}
+\label{appfig}
+\end{figure*}
+
+Because the optical images...
+
+\section{Title of Second appendix.....} %Second appendix
+These studies, however, have faced...
+\begin{table}
+\caption{Complexes characterisation.}\label{starbursts}
+\centering
+\begin{tabular}{lccc}
+\hline \hline
+Complex & $F_{60}$ & 8.6 &  No. of  \\
+...
+\hline
+\end{tabular}
+\end{table}
+
+The second method produces...
+\end{appendix}
+%
+%
+\end{document}
+
+%
+%-------------------------------------------------------------
+%          For the appendices, table longer than a single page
+%-------------------------------------------------------------
+
+% Table will be print automatically at the end of the document, 
+% after the whole appendices
+
+\begin{appendix} %First appendix
+\section{Background galaxy number counts and shear noise-levels}
+
+% In the appendices do not forget to put the counter of the table 
+% as an option
+
+\longtab[1]{
+\begin{longtable}{lrcrrrrrrrrl}
+\caption{Line data and abundances ...}\\
+\hline
+\hline
+Def & mol & Ion & $\lambda$ & $\chi$ & $\log gf$ & N & e &  rad & $\delta$ & $\delta$ 
+red & References \\
+\hline
+\endfirsthead
+\caption{Continued.} \\
+\hline
+Def & mol & Ion & $\lambda$ & $\chi$ & $\log gf$ & B & C &  rad & $\delta$ & $\delta$ 
+red & References \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
+A & CH & 1 &3638 & 0.002 & $-$2.551 &  &  &  & $-$150 & 150 &  Jorgensen et al. (1996) \\                    
+\end{longtable}
+}% End longtab
+\end{appendix}
+
+%-------------------------------------------------------------
+%                   For appendices and landscape, large table:
+%                    in the preamble, use: \usepackage{lscape}
+%-------------------------------------------------------------
+
+\begin{appendix} %First appendix
+%
+\longtab[1]{
+\begin{landscape}
+\begin{longtable}{lrcrrrrrrrrl}
+...
+\end{longtable}
+\end{landscape}
+}% End longtab
+\end{appendix}
+
+%%%% End of aa.dem
