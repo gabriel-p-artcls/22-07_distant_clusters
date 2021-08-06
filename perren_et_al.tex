@@ -207,7 +207,8 @@ located more than a few Kpc away.}
  \caption{Selected catalogued open clusters with a distance $\geq$9000 pc,
  ordered by right ascension. The ages are expressed as the logarithm, and the
  distances are in parsec. In parenthesis, the short names used for the clusters
- throughout the article.}
+ throughout the article. Clusters with no distances below the 9000 pc limit in
+ any of the catalogs are marked with boldface.}
  \label{tab:clusters}
  \centering
  % \begin{tabular}{lcccccccccc}
@@ -224,7 +225,7 @@ located more than a few Kpc away.}
  & 9.48  & 9800  & 9.3   & 6273  \\
  Berkeley  26 (BER26)     & 102.58 & 5.75      & 9.6   & 12589 & -   & -   & 9.6
  & 4300  & 8.71  & 2724  \\
- Berkeley  29 (BER29)     & 103.27 & 16.93     & 9.025 & 14871 & 9.49  & 12604 &
+ Berkeley  29 (\textbf{BER29})     & 103.27 & 16.93     & 9.025 & 14871 & 9.49  & 12604 &
  9.025 & 14871 & 9.1   & 10797 \\
  Tombaugh 2 (TOMB2)     & 105.77 & -20.82    & 9.01  & 6080  & 9.21  & 9316  &
  9.01 & 13260 & 9.01  & 6565  \\
@@ -232,13 +233,13 @@ located more than a few Kpc away.}
  9.18 & 12600 & 8.87  & 2360  \\
  FSR 1212 (F1212)   & 106.94 & -14.15    & -   & -   & 9.14  & 9682  & -   & -
  & 8.65  & 1780  \\
- Saurer 1 (SAU1)   & 110.23 & 1.81      & 9.7   & 13200 & -   & -   & 9.85  &
+ Saurer 1 (\textbf{SAU1})   & 110.23 & 1.81      & 9.7   & 13200 & -   & -   & 9.85  &
  13200 & 9.6   & 13719 \\
  Czernik 30 (CZER30)    & 112.83 & -9.97     & 9.4   & 9120  & 9.46  & 6647  &
  9.4 & 6200  & 9.2   & 6812  \\
- Arp-Madore 2 (ARPM2)     & 114.69 & -33.84    & 9.335 & 13341 & 9.48  & 11751 &
+ Arp-Madore 2 (\textbf{ARPM2})     & 114.69 & -33.84    & 9.335 & 13341 & 9.48  & 11751 &
  9.335 & 13341 & 9.335 & 13338 \\
- vd Bergh-Hagen 4 (BH4)     & 114.43 & -36.07    & -   & -   & -   & -  
+ vd Bergh-Hagen 4 (\textbf{BH4})     & 114.43 & -36.07    & -   & -   & -   & -  
  & 8.3   & 19300 & -   & -   \\
  FSR 1419 (F1419)   & 124.71 & -47.79    & -   & -   & 9.21  & 11165 & -   & -   & 8.375 & 7746  \\
  vd Bergh-Hagen 37 (BH37)    & 128.95 & -43.62    & 8.84  & 11220 & 8.24 
@@ -257,11 +258,11 @@ located more than a few Kpc away.}
  & 9649  & 8.9   & 12000 & 9     & 7241  \\
  vd Bergh-Hagen 176 (BH176)   & 234.85 & -50.05    & -   & -   & -   & - 
  & -   & 13400 & 9.8   & 18887 \\
- Kronberger 31 (KRON31)    & 295.05 & 26.26     & -   & 11900 & -   & -   & -   &
+ Kronberger 31 (\textbf{KRON31})    & 295.05 & 26.26     & -   & 11900 & -   & -   & -   &
  -   & 8.5   & 12617 \\
  Saurer 6 (SAU6)   & 297.76 & 32.24     & 9.29  & 9330  & -   & -   & 9.29  &
  9330 & 9.2   & 7329  \\
- Berkeley 56 (BER56)     & 319.43 & 41.83     & 9.6   & 12100 & 9.47  & 9516  &
+ Berkeley 56 (\textbf{BER56})     & 319.43 & 41.83     & 9.6   & 12100 & 9.47  & 9516  &
  9.6 & 12100 & 9.4   & 13180 \\
  Berkeley 102 (BER102)    & 354.66 & 56.64     & 9.5   & 9638  & 9.59  & 10519 &
  8.78  & 2600  & 9.14  & 4900 \\
@@ -338,10 +339,11 @@ located more than a few Kpc away.}
 
  \begin{figure*}
   \resizebox{\hsize}{!}{\includegraphics[]{figs/MWmap.png}}
-  \caption{Position of the twenty-five clusters selected from the four catalogs
-  mentioned in the text, on a face-on view of the Milky Way. The Sun and the
-  center of the Galaxy are marked with a yellow filled circle and a black
-  filled circle, respectively.}
+  \caption{Top: position of the twenty-five clusters selected from the four
+  catalogs mentioned in the text, on a face-on view of the Milky Way. The Sun
+  and the center of the Galaxy are marked with a yellow filled circle and a
+  black filled circle, respectively. Bottom: edge-on views, same color and
+  marker conventions as above.}
   \label{fig:MWmap}
  \end{figure*}
 
@@ -353,7 +355,57 @@ located more than a few Kpc away.}
 \section{Cluster analysis}
  \label{sec:clust_analy}
 
- xxxxx
+  \begin{table}
+  \caption{xxx}
+  \label{tab:clusters}
+  \centering
+  % \begin{tabular}{lcccccccccc}
+  \begin{tabular}{lllllllllll}
+  \hline\hline
+  Cluster & radius  & $r_{c}$  &  $r_{t}$\\
+  \hline
+   ARPM2  & 3    & 1.38 & 4.01\\
+   BER102 & 2.5  & 0.98 & 4.39\\
+   BER25  & 5    & 1.48 & 7.03\\
+   BER26  & 1.6  & 0.70 & 3.78\\
+   BER29  & 2    & 0.50 & 5.42\\
+   BER56  & 4.5  & 1.58 & 7.99\\
+   BER73  & 2    & 0.57 & 4.83\\
+   BER75  & 2    & 0.40 & 5.07\\
+   BER76  & 4    & 1.65 & 7.77\\
+   CZER30 & 2.5  & 0.57 & 6.22\\
+   E09205 & 3    & 1.07 & 4.24\\
+   E09218 & 3    & 0.60 & 6.76\\
+   E09308 & 1.5  & 0.21 & 5.05\\
+   F1212  & 3    & 0.86 & 9.20\\
+   F1419  & 3    & 1.31 & 5.05\\
+   KRON31 & 2    & 0.46 & 6.69\\
+   KRON39 & 2    & 0.27 & 5.52\\
+   SAU1   & 2    & 0.70 & 3.98\\
+   SAU3   & 2    & 0.49 & 4.94\\
+   SAU6   & 2    & 0.56 & 3.76\\
+   TOMB2  & 3.5  & 0.86 & 6.72\\
+   BH144  & 1.5  & 0.33 & 2.63\\
+   BH176  & 2    & 0.60 & 4.57\\
+   BH37   & 2    & 1.17 & 4.10\\
+   BH4    & 2    & 0.40 & 6.07\\
+  \hline
+  \end{tabular}
+  \end{table}
+
+  \begin{figure}
+  \centering
+   \includegraphics[width=\hsize]{figs/ber29_A23.png}
+   \caption{xxx}
+   \label{fig:BER29_centrad}
+  \end{figure}
+
+  \begin{figure}
+  \centering
+   \includegraphics[width=\hsize]{figs/BER29_membs.png}
+   \caption{xxx}
+   \label{fig:BER29_membs}
+  \end{figure}
 
 
 
