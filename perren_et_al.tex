@@ -114,7 +114,7 @@ located more than a few Kpc away.}
  from their birth position~\citep{carraro_2013,Molina_2018}. As deeper, more
  complete, and more precise photometric and astrometric data becomes available,
  these studies will inevitably be extended towards more distant regions of the
- Galaxy.\\
+ Galaxy.
 
  \textbf{AGREGARCONTENIDO ACA}\\
 
@@ -355,57 +355,69 @@ located more than a few Kpc away.}
 \section{Cluster analysis}
  \label{sec:clust_analy}
 
+ The first step in the cluster analysis is the estimation of their structural
+ properties, i.e. center coordinates and limiting radius. Although centers and
+ diameters are present in (some of) the catalogues, not all of these values are
+ correct. We use our \texttt{ASteCA} package
+ \citep{Perren_2015}\footnote{\url{http://asteca.github.io/}} throughout this
+ work to perform the structural and fundamental parameters analysis. We have
+ applied this tool to the study of hundreds of clusters in previous articles,
+ with excellent results~\citep{Perren_2017,Perren_2020}.
+
+ The center values are obtained after applying a two-dimensional kernel density
+ analysis (KDE) on each of the cluster's coordinates. This method assigns the
+ center of the cluster to the point with the largest density in the frame. 
+
   \begin{table}
   \caption{xxx}
-  \label{tab:clusters}
+  \label{tab:radii}
   \centering
-  % \begin{tabular}{lcccccccccc}
-  \begin{tabular}{lllllllllll}
+  \begin{tabular}{llll}
   \hline\hline
-  Cluster & radius  & $r_{c}$  &  $r_{t}$\\
+  Cluster & $r_{c}$  &  $r_{t}$ & radius\\
   \hline
-   ARPM2  & 3    & 1.38 & 4.01\\
-   BER102 & 2.5  & 0.98 & 4.39\\
-   BER25  & 5    & 1.48 & 7.03\\
-   BER26  & 1.6  & 0.70 & 3.78\\
-   BER29  & 2    & 0.50 & 5.42\\
-   BER56  & 4.5  & 1.58 & 7.99\\
-   BER73  & 2    & 0.57 & 4.83\\
-   BER75  & 2    & 0.40 & 5.07\\
-   BER76  & 4    & 1.65 & 7.77\\
-   CZER30 & 2.5  & 0.57 & 6.22\\
-   E09205 & 3    & 1.07 & 4.24\\
-   E09218 & 3    & 0.60 & 6.76\\
-   E09308 & 1.5  & 0.21 & 5.05\\
-   F1212  & 3    & 0.86 & 9.20\\
-   F1419  & 3    & 1.31 & 5.05\\
-   KRON31 & 2    & 0.46 & 6.69\\
-   KRON39 & 2    & 0.27 & 5.52\\
-   SAU1   & 2    & 0.70 & 3.98\\
-   SAU3   & 2    & 0.49 & 4.94\\
-   SAU6   & 2    & 0.56 & 3.76\\
-   TOMB2  & 3.5  & 0.86 & 6.72\\
-   BH144  & 1.5  & 0.33 & 2.63\\
-   BH176  & 2    & 0.60 & 4.57\\
-   BH37   & 2    & 1.17 & 4.10\\
-   BH4    & 2    & 0.40 & 6.07\\
+   BER73         & 0.6$_{0.5}^{0.7}$ &  4.9$_{3.8}^{6.3}$ &  2.0\\
+   BER25         & 1.5$_{1.2}^{1.8}$ &  7.0$_{6.2}^{8.0}$ &  5.0\\
+   BER75         & 0.4$_{0.3}^{0.5}$ &  5.0$_{3.6}^{6.6}$ &  2.0\\
+   BER26         & 0.7$_{0.5}^{1.0}$ &  3.4$_{2.5}^{4.5}$ &  1.6\\
+   BER29         & 0.5$_{0.4}^{0.5}$ &  7.4$_{6.4}^{8.6}$ &  3.0\\
+   TOMB2         & 0.9$_{0.8}^{0.9}$ &  6.7$_{6.1}^{7.4}$ &  3.5\\
+   BER76         & 1.6$_{1.2}^{2.5}$ &  7.4$_{5.7}^{9.6}$ &  4.0\\
+   F1212         & 0.8$_{0.6}^{1.1}$ &  8.8$_{6.6}^{10.7}$ & 3.0\\
+   SAU1          & 0.7$_{0.5}^{1.0}$ &  3.9$_{2.9}^{5.4}$ &  2.0\\
+   CZER30        & 0.6$_{0.4}^{0.7}$ &  6.4$_{4.8}^{8.2}$ &  2.5\\
+   ARPM2         & 1.4$_{1.0}^{2.0}$ &  4.1$_{3.4}^{4.9}$ &  3.0\\
+   BH4           & 0.4$_{0.3}^{0.5}$ &  5.7$_{4.0}^{7.1}$ &  2.0\\
+   F1419         & 1.2$_{0.9}^{1.8}$ &  6.0$_{4.3}^{8.3}$ &  3.0\\
+   BH37          & 1.2$_{0.8}^{1.9}$ &  3.8$_{2.5}^{5.6}$ &  2.0\\
+   E9205         & 1.0$_{0.9}^{1.3}$ &  4.4$_{3.7}^{5.3}$ &  3.0\\
+   E9218         & 0.6$_{0.6}^{0.7}$ &  6.5$_{5.9}^{7.3}$ &  3.0\\
+   SAU3          & 0.5$_{0.4}^{0.6}$ &  4.9$_{3.8}^{6.4}$ &  2.0\\
+   KRON39        & 0.3$_{0.2}^{0.3}$ &  5.6$_{4.1}^{7.0}$ &  2.0\\
+   E9308         & 0.2$_{0.2}^{0.2}$ &  5.0$_{4.2}^{5.7}$ &  1.5\\
+   BH144         & 0.3$_{0.3}^{0.4}$ &  2.8$_{2.3}^{3.4}$ &  1.5\\
+   BH176         & 0.6$_{0.5}^{0.7}$ &  4.6$_{3.8}^{5.8}$ &  2.0\\
+   KRON31        & 0.5$_{0.4}^{0.6}$ &  6.9$_{5.7}^{7.6}$ &  2.0\\
+   SAU6          & 0.5$_{0.4}^{0.7}$ &  3.7$_{2.9}^{4.8}$ &  2.0\\
+   BER56         & 1.6$_{1.4}^{1.7}$ &  8.1$_{7.4}^{8.9}$ &  4.5\\
+   BER102        & 1.0$_{0.8}^{1.5}$ &  3.8$_{3.0}^{4.9}$ &  2.5\\
   \hline
   \end{tabular}
   \end{table}
 
-  \begin{figure}
-  \centering
-   \includegraphics[width=\hsize]{figs/ber29_A23.png}
-   \caption{xxx}
-   \label{fig:BER29_centrad}
-  \end{figure}
 
-  \begin{figure}
-  \centering
-   \includegraphics[width=\hsize]{figs/BER29_membs.png}
-   \caption{xxx}
-   \label{fig:BER29_membs}
-  \end{figure}
+ \begin{figure*}
+  \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_struct.png}}
+  \caption{xxx}
+  \label{fig:BER29_struct}
+ \end{figure*}
+
+
+ \begin{figure*}
+  \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
+  \caption{xxx}
+  \label{fig:BER29_fpars}
+ \end{figure*}
 
 
 
@@ -428,20 +440,6 @@ located more than a few Kpc away.}
  xxxxx
 
 
-
-
-   %-------------------------------------- Two column figure (place early!)
-   % \begin{figure*}
-   % \centering
-   % %%%\includegraphics{empty.eps}
-   % %%%\includegraphics{empty.eps}
-   % %%%\includegraphics{empty.eps}
-   % \caption{Adiabatic exponent $\Gamma_1$.
-   %             $\Gamma_1$ is plotted as a function of
-   %             $\lg$ internal energy $\mathrm{[erg\,g^{-1}]}$ and $\lg$
-   %             density $\mathrm{[g\,cm^{-3}]}$.}
-   %            \label{FigGam}%
-   %  \end{figure*}
 
 
    %--------------------------------------------------- One column table
@@ -517,6 +515,48 @@ matplotlib\footnote{\url{http://matplotlib.org/}}~\citep{hunter_2007}
 
 \bibliographystyle{aa}
 \bibliography{biblio} % your references Yourfile.bib
+
+
+% \begin{appendix}
+% \section{Structure analysis}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/0_struct.png}}
+%   \caption{xxx}
+%   \label{fig:0struct}
+%  \end{figure*}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/4_struct.png}}
+%   \caption{xxx}
+%   \label{fig:4struct}
+%  \end{figure*}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/8_struct.png}}
+%   \caption{xxx}
+%   \label{fig:4struct}
+%  \end{figure*}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/12_struct.png}}
+%   \caption{xxx}
+%   \label{fig:12struct}
+%  \end{figure*}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/16_struct.png}}
+%   \caption{xxx}
+%   \label{fig:16struct}
+%  \end{figure*}
+
+%  \begin{figure*}
+%   \resizebox{\hsize}{!}{\includegraphics[]{figs/20_struct.png}}
+%   \caption{xxx}
+%   \label{fig:20struct}
+%  \end{figure*}
+
+% \end{appendix}
 
 \end{document}
 
