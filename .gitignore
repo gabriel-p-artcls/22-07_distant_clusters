@@ -139,6 +139,5 @@ cython_debug/
 
 .vscode/*
 *.code-workspace
-0_data/*
 *D1*.png
 *D2*.png
