@@ -141,3 +141,4 @@ cython_debug/
 *.code-workspace
 *D1*.png
 *D2*.png
+fundpars.pickle
