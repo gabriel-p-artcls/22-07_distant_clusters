@@ -47,8 +47,7 @@ out_folder = 'tmp/'
 def main():
     """
     """
-    DBvsASteCA() 
-    print(4,5)
+    DBvsASteCA()
 
     # ASteCAvsASteCA()
 
