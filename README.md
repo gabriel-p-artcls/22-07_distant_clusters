@@ -1,7 +1,6 @@
 
-# RUP152 et al
+# Analysis of the 25 most distant clusters
 
-Analysis of 8 distant clusters plus Ruprecht 152.
 
 <!-- MarkdownTOC levels="1,2,3" autolink="true" style="ordered" -->
 
@@ -12,7 +11,7 @@ Analysis of 8 distant clusters plus Ruprecht 152.
 1. [ASteCA](#asteca)
 
 <!-- /MarkdownTOC -->
-import matp
+
 
 ## Gaia EDR3 data
 
