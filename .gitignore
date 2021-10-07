@@ -142,3 +142,5 @@ cython_debug/
 *D1*.png
 *D2*.png
 fundpars.pickle
+*sublime-project
+*sublime-workspace
