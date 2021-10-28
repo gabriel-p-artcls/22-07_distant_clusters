@@ -38,11 +38,26 @@ Ber56        319.43 41.83  3   9.6   12100 9.47 9516  9.6   12100  9.4  13180
 FSR0338      327.93 55.33  2.7 8.1   14655 nan   nan  nan   nan    8.1  14655
 Ber102       354.66 56.64  5   9.5   9638  9.59 10519 8.78  2600   9.14 4900
 """
-data = ascii.read(lit_data)
-out_folder = '../2_pipeline/xx_ASteCA/tmp/'
+lit_data = ascii.read(lit_data)
+DBs_list = ('D_OC', 'D_CG', 'D_WB', 'D_MW')
+
+# # Use this block to plot the ASteCA results instead
+# # ASteCA output data
+# asteca_data = ascii.read('../2_pipeline/5_ASteCA/out/asteca_output.dat')
+# asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
+# asteca_dists = []
+# for cl in lit_data['Cluster']:
+#     try:
+#         idx = asteca_names.index(cl.upper())
+#         d_pc = 10**(.2 * (asteca_data[idx]['d_mean'] + 5))
+#     except ValueError:
+#         d_pc = np.nan
+#     asteca_dists.append(round(d_pc, 0))
+# lit_data['D_AS'] = asteca_dists
+# DBs_list = ('D_AS',)
 
 
-def plot(dpi=300):
+def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
     """
     Gridspec idea: http://www.sc.eso.org/~bdias/pycoffee/codes/20160407/
                    gridspec_demo.html
@@ -50,21 +65,28 @@ def plot(dpi=300):
     # Default Galactic Center is 8.3 kpc (Gillessen et al. 2009)
     gc_frame = coord.Galactocentric()
 
+    # Obtain latitude, longitude
     eq = SkyCoord(
-        ra=data['RA'] * u.degree, dec=data['DEC'] * u.degree, frame='icrs')
+        ra=lit_data['RA'] * u.degree, dec=lit_data['DEC'] * u.degree,
+        frame='icrs')
     lb = eq.transform_to('galactic')
-    data['lon'] = lb.l.wrap_at(180 * u.deg).radian * u.radian
-    data['lat'] = lb.b.radian * u.radian
-    lon = np.rad2deg(data['lon'])
-    for i, lat in enumerate(np.rad2deg(data['lat'])):
-        print("{:<15} l={:<10.2f}, b={:<10.2f}".format(
-            data['Cluster'][i], lon[i], lat))
+    lon = lb.l.wrap_at(180 * u.deg).radian * u.radian
+    lat = lb.b.radian * u.radian
+    # lon = np.rad2deg(lit_data['lon'])
+    # for i, lat in enumerate(np.rad2deg(lit_data['lat'])):
+    #     print("{:<15} l={:<10.2f}, b={:<10.2f}".format(
+    #         lit_data['Cluster'][i], lon[i], lat))
 
-    fig = plt.figure(figsize=(10, 12))
-    gs = gridspec.GridSpec(5, 4)
-    #     6, 6, height_ratios=[1, 1, 1, 0.04, .7, .7],
-    #     width_ratios=[1, 1, 1, 1, 1, 1])
-    # gs.update(hspace=0.03, wspace=.3)
+    xyz_kpc = {}
+    for cat in DBs_list:
+        xyz_kpc[cat] = xyzCoords(lit_data, cat, lon, lat, gc_frame)
+
+    print("Cluster", DBs_list)
+    for i, cl in enumerate(lit_data['Cluster']):
+        z_dist = ""
+        for cat in DBs_list:
+            z_dist += " {:>6.2f}".format(xyz_kpc[cat][2][i].value)
+        print("{:<15}".format(cl), z_dist)
 
     # Sun's coords according to the Galactocentric frame.
     x_sun, z_sun = gc_frame.galcen_distance, gc_frame.z_sun
@@ -74,31 +96,21 @@ def plot(dpi=300):
     cl_plots1, cl_plots2 = [[], []], [[], []]
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     markers = ('o', 's', 'x', 'v', '^')
+
+    fig = plt.figure(figsize=(10, 12))
+    gs = gridspec.GridSpec(5, 4)
+
     plt.subplot(gs[0:4, 0:4])
     plt.grid(ls=':', c='grey', lw=.5, zorder=.5)
-    for ic, cat in enumerate(('D_OC', 'D_CG', 'D_WB', 'D_MW')):
-        try:
-            data['dist_pc'] = data[cat].filled(np.nan)
-        except AttributeError:
-            data['dist_pc'] = data[cat]
-            pass
 
-        # Galactic coordinates.
-        coords = SkyCoord(
-            l=data['lon'], b=data['lat'], distance=data['dist_pc'] * u.pc,
-            frame='galactic')
-        # Galactocentric coordinates.
-        c_glct = coords.transform_to(gc_frame)
-        data['x_pc'], data['y_pc'], data['z_pc'] = c_glct.x, c_glct.y, c_glct.z
-        data['x_pc'].convert_unit_to('kpc')
-        data['y_pc'].convert_unit_to('kpc')
-        data['z_pc'].convert_unit_to('kpc')
+    for ic, cat in enumerate(DBs_list):
+        x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         pl = plt.scatter(
-            data['x_pc'], data['y_pc'].data, alpha=.5, c=colors[ic],
-            marker=markers[ic], s=100, zorder=2.5)
+            x_kpc, y_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
+            zorder=2.5)
         cl_plots1[0].append(pl)
         cl_plots1[1].append(cat.replace('D_', ''))
-
+    # Plot Sun and center of Milky Way
     plt.scatter(s_xys.x, s_xys.y, c='yellow', s=50, edgecolor='k', zorder=2.5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=2.5)
     # Plot spiral arms
@@ -120,70 +132,64 @@ def plot(dpi=300):
     l1 = plt.legend(cl_plots1[0], cl_plots1[1], loc=1, fontsize=10)
     plt.legend(cl_plots2[0], cl_plots2[1], loc=4, fontsize=10)
     plt.gca().add_artist(l1)
-
     plt.xlim(-24, 9)
     plt.ylim(-19, 16)
     plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=12)
     plt.ylabel(r"$y_{GC}$ [Kpc]", fontsize=12)
 
+    #
+    # X_GC vs Z_GC
     plt.subplot(gs[4:5, 0:2])
-    for ic, cat in enumerate(('D_OC', 'D_CG', 'D_WB', 'D_MW')):
-        try:
-            data['dist_pc'] = data[cat].filled(np.nan)
-        except AttributeError:
-            data['dist_pc'] = data[cat]
-            pass
-
-        # Galactic coordinates.
-        coords = SkyCoord(
-            l=data['lon'], b=data['lat'], distance=data['dist_pc'] * u.pc,
-            frame='galactic')
-        # Galactocentric coordinates.
-        c_glct = coords.transform_to(gc_frame)
-        data['x_pc'], data['y_pc'], data['z_pc'] = c_glct.x, c_glct.y, c_glct.z
-        data['x_pc'].convert_unit_to('kpc')
-        data['y_pc'].convert_unit_to('kpc')
-        data['z_pc'].convert_unit_to('kpc')
+    for ic, cat in enumerate(DBs_list):
+        x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
-            data['x_pc'], data['z_pc'], alpha=.5, c=colors[ic],
-            marker=markers[ic], s=100, zorder=2.5)
-
+            x_kpc, z_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
+            zorder=2.5)
     plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=12)
     plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=12)
     plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=5)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.ylim(-2.6, 2.6)
 
+    #
+    # Y_GC vs Z_GC
     plt.subplot(gs[4:5, 2:4])
-    for ic, cat in enumerate(('D_OC', 'D_CG', 'D_WB', 'D_MW')):
-        try:
-            data['dist_pc'] = data[cat].filled(np.nan)
-        except AttributeError:
-            data['dist_pc'] = data[cat]
-            pass
-
-        # Galactic coordinates.
-        coords = SkyCoord(
-            l=data['lon'], b=data['lat'], distance=data['dist_pc'] * u.pc,
-            frame='galactic')
-        # Galactocentric coordinates.
-        c_glct = coords.transform_to(gc_frame)
-        data['x_pc'], data['y_pc'], data['z_pc'] = c_glct.x, c_glct.y, c_glct.z
-        data['x_pc'].convert_unit_to('kpc')
-        data['y_pc'].convert_unit_to('kpc')
-        data['z_pc'].convert_unit_to('kpc')
+    for ic, cat in enumerate(DBs_list):
+        x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
-            data['y_pc'], data['z_pc'], alpha=.5, c=colors[ic],
-            marker=markers[ic], s=100, zorder=2.5)
-
+            y_kpc, z_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
+            zorder=2.5)
     plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=12)
     plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=12)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
     plt.scatter(s_xys.y, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.ylim(-2.6, 2.6)
 
     fig.tight_layout()
-    fig.savefig('MWmap.png', dpi=dpi, bbox_inches='tight')
+    fig.savefig(out_folder + 'MWmap.png', dpi=dpi, bbox_inches='tight')
+
+
+def xyzCoords(lit_data, cat, lon, lat, gc_frame):
+    """
+    """
+    try:
+        dist_pc = lit_data[cat].filled(np.nan)
+    except AttributeError:
+        dist_pc = lit_data[cat]
+    dist_pc = dist_pc / 1000.
+
+    # Galactic coordinates.
+    coords = SkyCoord(l=lon, b=lat, distance=dist_pc * u.kpc, frame='galactic')
+
+    # Galactocentric coordinates.
+    c_glct = coords.transform_to(gc_frame)
+
+    # Rectangular coordinates
+    x_kpc, y_kpc, z_kpc = c_glct.x, c_glct.y, c_glct.z
+
+    return x_kpc, y_kpc, z_kpc
 
 
 def momany():
