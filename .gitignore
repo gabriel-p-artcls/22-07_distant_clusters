@@ -144,3 +144,4 @@ cython_debug/
 fundpars.pickle
 *sublime-project
 *sublime-workspace
+*.pdf
