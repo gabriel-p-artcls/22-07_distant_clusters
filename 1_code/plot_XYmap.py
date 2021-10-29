@@ -5,6 +5,7 @@ import astropy.coordinates as coord
 from astropy.io import ascii
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import seaborn as sns
 import numpy as np
 
 
@@ -94,20 +95,29 @@ def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
         -x_sun, 0., z_sun, unit='kpc', representation_type='cartesian')
 
     cl_plots1, cl_plots2 = [[], []], [[], []]
-    colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    markers = ('o', 's', 'x', 'v', '^')
+    # colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+    colors = sns.color_palette("Spectral", 13)[2::3]
+    # colors = sns.color_palette("Set2")
+    # colors = sns.color_palette("Paired")[::2]
+    # colors = sns.color_palette("cubehelix", 10)[::2]
 
-    fig = plt.figure(figsize=(10, 12))
-    gs = gridspec.GridSpec(5, 4)
+    markers = ('o', '*', 'v', '^')
+    Xmin, Xmax, Ymin, Ymax, Zmin, Zmax = -24, 11, -19, 16, -2.6, 2.6
+
+    gs_x, gs_y = 8, 8
+    fig = plt.figure(figsize=(13, 13))
+    gs = gridspec.GridSpec(gs_y, gs_x)
 
     plt.subplot(gs[0:4, 0:4])
-    plt.grid(ls=':', c='grey', lw=.5, zorder=.5)
+    # plt.grid(ls=':', c='grey', lw=.5, zorder=.5)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
 
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         pl = plt.scatter(
-            x_kpc, y_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
-            zorder=2.5)
+            x_kpc, y_kpc, alpha=.8, marker=markers[ic], s=100,
+            lw=.5, edgecolor='k', zorder=2.5, color=colors[ic])
         cl_plots1[0].append(pl)
         cl_plots1[1].append(cat.replace('D_', ''))
     # Plot Sun and center of Milky Way
@@ -117,55 +127,66 @@ def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
     spiral_arms = momany()
     for sp_name, vals in spiral_arms.items():
         xy_arm = np.array(list(zip(*vals)))
+        if sp_name == 'Outer':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c="#0B5CA4", ls='-.', lw=2)
+        if sp_name == 'Perseus':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='orange', ls='--', lw=2)
         if sp_name == 'Orion-Cygnus':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='k')
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='k', ls="-", lw=2)
         elif sp_name == 'Carina-Sagittarius':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='b', ls='--')
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='b', ls=':', lw=2)
         elif sp_name == 'Crux-Scutum':
-            pl, = plt.plot(
-                xy_arm[0], xy_arm[1], c='purple', ls='--')
-        else:
-            pl, = plt.plot(xy_arm[0], xy_arm[1], ls='--')
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='purple', ls='-.', lw=2)
+        elif sp_name == 'Norma':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='green', ls=':', lw=2)
         cl_plots2[0].append(pl)
         cl_plots2[1].append(sp_name)
 
-    l1 = plt.legend(cl_plots1[0], cl_plots1[1], loc=1, fontsize=10)
-    plt.legend(cl_plots2[0], cl_plots2[1], loc=4, fontsize=10)
+    l1 = plt.legend(cl_plots1[0], cl_plots1[1], loc=1, fontsize=12)
+    plt.legend(cl_plots2[0], cl_plots2[1], loc=4, fontsize=12)
     plt.gca().add_artist(l1)
-    plt.xlim(-24, 9)
-    plt.ylim(-19, 16)
-    plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=12)
-    plt.ylabel(r"$y_{GC}$ [Kpc]", fontsize=12)
+    plt.xlim(Xmin, Xmax)
+    plt.ylim(Ymin, Ymax)
+    plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=15)
+    plt.ylabel(r"$y_{GC}$ [Kpc]", fontsize=15)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
 
     #
     # X_GC vs Z_GC
-    plt.subplot(gs[4:5, 0:2])
+    plt.subplot(gs[4:6, 0:4])
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
-            x_kpc, z_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
-            zorder=2.5)
-    plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=12)
-    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=12)
+            x_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
+            s=100, lw=.5, edgecolor='k', zorder=2.5)
+    plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
     plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=5)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
-    plt.ylim(-2.6, 2.6)
+    plt.xlim(Xmin, Xmax)
+    plt.ylim(Zmin, Zmax)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
 
     #
     # Y_GC vs Z_GC
-    plt.subplot(gs[4:5, 2:4])
+    plt.subplot(gs[6:8, 0:4])
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
-            y_kpc, z_kpc, alpha=.5, c=colors[ic], marker=markers[ic], s=100,
-            zorder=2.5)
-    plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=12)
-    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=12)
+            y_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
+            s=100, lw=.5, edgecolor='k', zorder=2.5)
+    plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
     plt.scatter(s_xys.y, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
-    plt.ylim(-2.6, 2.6)
+    plt.xlim(Ymin, Ymax)
+    plt.ylim(Zmin, Zmax)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
 
     fig.tight_layout()
     fig.savefig(out_folder + 'MWmap.png', dpi=dpi, bbox_inches='tight')
@@ -378,4 +399,5 @@ def momany():
 
 
 if __name__ == '__main__':
+    plt.style.use('science')
     plot()
