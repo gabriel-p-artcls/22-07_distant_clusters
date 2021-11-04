@@ -39,30 +39,35 @@ Ber56        319.43 41.83  3   9.6   12100 9.47 9516  9.6   12100  9.4  13180
 FSR0338      327.93 55.33  2.7 8.1   14655 nan   nan  nan   nan    8.1  14655
 Ber102       354.66 56.64  5   9.5   9638  9.59 10519 8.78  2600   9.14 4900
 """
-lit_data = ascii.read(lit_data)
-DBs_list = ('D_OC', 'D_CG', 'D_WB', 'D_MW')
-
-# # Use this block to plot the ASteCA results instead
-# # ASteCA output data
-# asteca_data = ascii.read('../2_pipeline/5_ASteCA/out/asteca_output.dat')
-# asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
-# asteca_dists = []
-# for cl in lit_data['Cluster']:
-#     try:
-#         idx = asteca_names.index(cl.upper())
-#         d_pc = 10**(.2 * (asteca_data[idx]['d_mean'] + 5))
-#     except ValueError:
-#         d_pc = np.nan
-#     asteca_dists.append(round(d_pc, 0))
-# lit_data['D_AS'] = asteca_dists
-# DBs_list = ('D_AS',)
 
 
-def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
+def main(
+    lit_data, dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/',
+        plot_ASteCA=False):
     """
     Gridspec idea: http://www.sc.eso.org/~bdias/pycoffee/codes/20160407/
                    gridspec_demo.html
     """
+    lit_data = ascii.read(lit_data)
+    DBs_list = ('D_OC', 'D_CG', 'D_WB', 'D_MW')
+
+    # Use this block to plot the ASteCA results instead
+    # ASteCA output data
+    if plot_ASteCA:
+        asteca_data = ascii.read(
+            '../2_pipeline/5_ASteCA/out/asteca_output.dat')
+        asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
+        asteca_dists = []
+        for cl in lit_data['Cluster']:
+            try:
+                idx = asteca_names.index(cl.upper())
+                d_pc = 10**(.2 * (asteca_data[idx]['d_mean'] + 5))
+            except ValueError:
+                d_pc = np.nan
+            asteca_dists.append(round(d_pc, 0))
+        lit_data['D_AS'] = asteca_dists
+        DBs_list = ('D_AS',)
+
     # Default Galactic Center is 8.3 kpc (Gillessen et al. 2009)
     gc_frame = coord.Galactocentric()
 
@@ -73,21 +78,18 @@ def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
     lb = eq.transform_to('galactic')
     lon = lb.l.wrap_at(180 * u.deg).radian * u.radian
     lat = lb.b.radian * u.radian
-    # lon = np.rad2deg(lit_data['lon'])
-    # for i, lat in enumerate(np.rad2deg(lit_data['lat'])):
-    #     print("{:<15} l={:<10.2f}, b={:<10.2f}".format(
-    #         lit_data['Cluster'][i], lon[i], lat))
 
     xyz_kpc = {}
     for cat in DBs_list:
         xyz_kpc[cat] = xyzCoords(lit_data, cat, lon, lat, gc_frame)
 
-    print("Cluster", DBs_list)
     for i, cl in enumerate(lit_data['Cluster']):
-        z_dist = ""
+        x_dist, y_dist, z_dist = "", "", ""
         for cat in DBs_list:
+            x_dist += " {:>6.2f}".format(xyz_kpc[cat][0][i].value)
+            y_dist += " {:>6.2f}".format(xyz_kpc[cat][1][i].value)
             z_dist += " {:>6.2f}".format(xyz_kpc[cat][2][i].value)
-        print("{:<15}".format(cl), z_dist)
+        print("{:<15}".format(cl), x_dist, y_dist, z_dist)
 
     # Sun's coords according to the Galactocentric frame.
     x_sun, z_sun = gc_frame.galcen_distance, gc_frame.z_sun
@@ -154,17 +156,19 @@ def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
 
     #
     # X_GC vs Z_GC
-    plt.subplot(gs[4:6, 0:4])
+    # plt.subplot(gs[4:6, 0:4])
+    plt.subplot(gs[0:2, 4:8])
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
             x_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
             s=100, lw=.5, edgecolor='k', zorder=2.5)
-    plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=15)
-    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=5)
-    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
     plt.xlim(Xmin, Xmax)
     plt.ylim(Zmin, Zmax)
     plt.xticks(fontsize=15)
@@ -172,17 +176,19 @@ def plot(dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/'):
 
     #
     # Y_GC vs Z_GC
-    plt.subplot(gs[6:8, 0:4])
+    # plt.subplot(gs[6:8, 0:4])
+    plt.subplot(gs[2:4, 4:8])
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
             y_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
             s=100, lw=.5, edgecolor='k', zorder=2.5)
-    plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=15)
-    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
     plt.scatter(s_xys.y, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
-    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
     plt.xlim(Ymin, Ymax)
     plt.ylim(Zmin, Zmax)
     plt.xticks(fontsize=15)
@@ -400,4 +406,4 @@ def momany():
 
 if __name__ == '__main__':
     plt.style.use('science')
-    plot()
+    main(lit_data)

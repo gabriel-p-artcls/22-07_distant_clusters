@@ -118,7 +118,7 @@ located more than a few Kpc away.}
  isochrone fittings \citep{Phelps1994} or on direct comparison with HR diagrams
  of synthetic clusters \citep{Siess1997}. Automated processes such as the one
  applied by \cite{Kharchenko_2012} have also played an important role in
- determining cluster parameters in a massive way. But the continuous increasing
+ determining cluster parameters in a massive way. But the continuous increase
  of high quality data is a defying circumstance where a variety of analysis are
  being considered even including artificial neural networks
  \citep{Cantat_2020} combined with new strategies for determining cluster
@@ -219,9 +219,10 @@ located more than a few Kpc away.}
 
  Since we are interested in the open clusters most distant from the Sun, we
  select from these cross-matched catalogues those that are located at a
- distance of 9 Kpc or more in either of them. This is an arbitrary value that
+ distance of 9000 pc or more in either of them. This is an arbitrary value that
  results in enough clusters to draw general conclusions, but not too many that
- would impede their detailed analysis.
+ would impede their detailed analysis.\\
+
  The initial full list consisted of thirty-eight open clusters. Eleven of these
  were found only in the MW catalog with distances larger than 9000 pc. These are
  either listed with substantially smaller distances in the other catalogs, or
@@ -264,7 +265,8 @@ located more than a few Kpc away.}
  be studied in this work are shown in Table~\ref{tab:clusters}. Most of the
  selected clusters are located in the Third Quadrant with all of them in the
  latitude range of [-12$^{\circ}$, 8$^{\circ}$], relatively close to the
- galactic plane.
+ galactic plane. The final list thus contains 24 clusters in the MW catalog,
+ 21 in WB, 19 in OC, and 16 in CG.
 
  \begin{table*}
  \caption{Selected open clusters with a catalogued distance $\geq$9000 pc,
@@ -274,7 +276,6 @@ located more than a few Kpc away.}
  any of the catalogs are marked with boldface.}
  \label{tab:clusters}
  \centering
- % \begin{tabular}{lcccccccccc}
  \begin{tabular}{lllllllllll}
  \hline\hline
  Cluster & $\alpha_{2000}$  & $\delta_{2000}$ & OC$_{age}$ & OC$_{dist}$ & CG$_{age}$ &
@@ -336,27 +337,36 @@ located more than a few Kpc away.}
  There are two other major works where a large catalog of analyzed open clusters
  is presented: \cite{Lui_2019} and \cite{Dias_2021}. The latter does not contain
  clusters with such large distances, and was hence not used. The former lists
- only four, and their values will be included in the discussion of the results
- in Sect.~\ref{sec:results}.\\
+ only four clusters that are also present in our set of twenty-five selected
+ clusters. None of their distances comply with our selection filter, hence this
+ database was not included. This fact notwithstanding, their distance values will
+ be mentioned in the discussion of the results in Sect.~\ref{sec:results}.\\
 
  Data from Gaia EDR3~\citep{Gaia_2016,Gaia_EDR3} was retrieved for a box of 20
- arcmin of length around the central coordinates for all the clusters.
+ arcmin of length around the central coordinates for all the clusters. We
+ employed equatorial coordinates, parallax, proper motions, and photometry
+ ($G$, $(G_{BP}-G_{RP})$) from these survey.
  %
  In Fig~\ref{fig:MWmap} we show the twenty-five selected clusters for each of
  the four catalogues, positioned on the face-on view of the Galaxy (top), and
  two edge on views (center, bottom). The spiral arms are those presented
  in~\cite{Momany_2006}. The large dispersion for the distances
- assigned to each cluster in different catalogs is clearly visible.
+ assigned to each cluster in different catalogs is clearly visible, where
+ ideally the position of all the clusters would overlap for the four catalogs.\\
 
- \begin{figure}
+ In what follows we will only show the figures for a single representative
+ cluster (Berkeley 29) to avoid the clutter and improve the readability of the
+ article. The plots for the remaining clusters can be found in the appendix.
+
+ \begin{figure*}
   \resizebox{\hsize}{!}{\includegraphics[]{figs/MWmap.png}}
-  \caption{Top: position of the twenty-five clusters selected from the four
+  \caption{Right: position of the twenty-five clusters selected from the four
   catalogs mentioned in the text, on a face-on view of the Milky Way. The Sun
   and the center of the Galaxy are marked with a yellow filled circle and a
-  black filled circle, respectively. Center and bottom: edge-on views, same
+  black filled circle, respectively. Top and bottom left: edge-on views, same
   color and marker conventions as above.}
   \label{fig:MWmap}
- \end{figure}
+ \end{figure*}
 
 
 
@@ -366,69 +376,138 @@ located more than a few Kpc away.}
 \section{Cluster analysis}
  \label{sec:clust_analy}
 
- The first step in the cluster analysis is the estimation of their structural
- properties, i.e. center coordinates and limiting radius. Although centers and
- diameters are present in (some of) the catalogues, not all of these values are
- correct. We use our \texttt{ASteCA} package
- \citep{Perren_2015}\footnote{\url{http://asteca.github.io/}} throughout this
- work to perform the structural and fundamental parameters analysis. We have
- applied this tool to the study of hundreds of clusters in previous articles,
- with excellent results~\citep{Perren_2017,Perren_2020}.
+ \subsection{Structural analysis}
+  \label{sec:clust_analy}
 
- The center values are obtained after applying a two-dimensional kernel density
- analysis (KDE) on each of the cluster's coordinates. This method assigns the
- center of the cluster to the point with the largest density in the frame. 
+  The first step in the cluster analysis is the estimation of their structural
+  properties, i.e. center coordinates and limiting radius. Although centers and
+  diameters are present in (some of) the catalogues, not all of these values are
+  correct. We use our \texttt{ASteCA} package
+  \citep{Perren_2015}\footnote{\url{http://asteca.github.io/}} throughout this
+  work to perform the structural and fundamental parameters analysis. We have
+  applied this tool to the study of hundreds of clusters in previous articles,
+  with excellent results~\citep{Perren_2017,Perren_2020}.
+
+  The center values are obtained applying a two-dimensional kernel density
+  analysis (KDE) on each of the cluster's coordinates. This method assigns the
+  center of the cluster to the point with the largest density in the frame. A
+  King's profile~\citep{King_1962} fit is then performed on the radial density
+  profile of each cluster to estimate their core and tidal radii ($r_{c}$,
+  $r_{t}$). The adopted radius $r_{a}$ is the limiting distance from the
+  center used to define the studied cluster region for each cluster. These
+  values are shown in Table~\ref{tab:radii}. The adopted radius in this work is
+  on average 50\% smaller than the tidal radius. This decision allows us to
+  alleviate the issue of field star contamination, while ensuring that only a
+  small number of true members (cluster stars located as far from the
+  center as the tidal radius) are lost. The fraction of lost members can be
+  estimated integrating the King's profile. This fraction depends on the
+  concentration of the cluster ($r_{t}/r_{c}$) and the value of the adopted
+  radius as a fraction of the tidal radius ($r_{a}/r_{t}$). In our case, less
+  than 20\% of the members could be lost in a worst case scenario. Since these
+  are clusters that are strongly contaminated (particularly in the parallax and
+  proper motions spaces), the trade off between losing a small portion of
+  members and improving the contrast of the true members over the field noise,
+  is positive.
+
+  The restrictive $r_{a}$ values used in our analysis means that the total
+  estimated mass for each cluster shown in Sect.~\ref{sec:results}, must be
+  thought of as a lower limit.\\
 
   \begin{table}
-  \caption{xxx}
+  \caption{Core ($r_{c}$), tidal ($r_{t}$), and adopted ($r_{a}$) radii values.
+  The first two are shown with their respective 16th an 84th percentiles in
+  parenthesis.}
   \label{tab:radii}
   \centering
   \begin{tabular}{llll}
   \hline\hline
-  Cluster & $r_{c}$  &  $r_{t}$ & radius\\
+  Cluster & $r_{c}$ (16th, 84th) &  $r_{t}$ (16th, 84th) & $r_{a}$\\
   \hline
-   BER73         & 0.6$_{0.5}^{0.7}$ &  4.9$_{3.8}^{6.3}$ &  2.0\\
-   BER25         & 1.5$_{1.2}^{1.8}$ &  7.0$_{6.2}^{8.0}$ &  5.0\\
-   BER75         & 0.4$_{0.3}^{0.5}$ &  5.0$_{3.6}^{6.6}$ &  2.0\\
-   BER26         & 0.7$_{0.5}^{1.0}$ &  3.4$_{2.5}^{4.5}$ &  1.6\\
-   BER29         & 0.5$_{0.4}^{0.5}$ &  7.4$_{6.4}^{8.6}$ &  3.0\\
-   TOMB2         & 0.9$_{0.8}^{0.9}$ &  6.7$_{6.1}^{7.4}$ &  3.5\\
-   BER76         & 1.6$_{1.2}^{2.5}$ &  7.4$_{5.7}^{9.6}$ &  4.0\\
-   F1212         & 0.8$_{0.6}^{1.1}$ &  8.8$_{6.6}^{10.7}$ & 3.0\\
-   SAU1          & 0.7$_{0.5}^{1.0}$ &  3.9$_{2.9}^{5.4}$ &  2.0\\
-   CZER30        & 0.6$_{0.4}^{0.7}$ &  6.4$_{4.8}^{8.2}$ &  2.5\\
-   ARPM2         & 1.4$_{1.0}^{2.0}$ &  4.1$_{3.4}^{4.9}$ &  3.0\\
-   BH4           & 0.4$_{0.3}^{0.5}$ &  5.7$_{4.0}^{7.1}$ &  2.0\\
-   F1419         & 1.2$_{0.9}^{1.8}$ &  6.0$_{4.3}^{8.3}$ &  3.0\\
-   BH37          & 1.2$_{0.8}^{1.9}$ &  3.8$_{2.5}^{5.6}$ &  2.0\\
-   E9205         & 1.0$_{0.9}^{1.3}$ &  4.4$_{3.7}^{5.3}$ &  3.0\\
-   E9218         & 0.6$_{0.6}^{0.7}$ &  6.5$_{5.9}^{7.3}$ &  3.0\\
-   SAU3          & 0.5$_{0.4}^{0.6}$ &  4.9$_{3.8}^{6.4}$ &  2.0\\
-   KRON39        & 0.3$_{0.2}^{0.3}$ &  5.6$_{4.1}^{7.0}$ &  2.0\\
-   E9308         & 0.2$_{0.2}^{0.2}$ &  5.0$_{4.2}^{5.7}$ &  1.5\\
-   BH144         & 0.3$_{0.3}^{0.4}$ &  2.8$_{2.3}^{3.4}$ &  1.5\\
-   BH176         & 0.6$_{0.5}^{0.7}$ &  4.6$_{3.8}^{5.8}$ &  2.0\\
-   KRON31        & 0.5$_{0.4}^{0.6}$ &  6.9$_{5.7}^{7.6}$ &  2.0\\
-   SAU6          & 0.5$_{0.4}^{0.7}$ &  3.7$_{2.9}^{4.8}$ &  2.0\\
-   BER56         & 1.6$_{1.4}^{1.7}$ &  8.1$_{7.4}^{8.9}$ &  4.5\\
-   BER102        & 1.0$_{0.8}^{1.5}$ &  3.8$_{3.0}^{4.9}$ &  2.5\\
+   BER73         & 0.6 (0.5, 0.7) &  4.9 (3.8, 6.3) &  2.0\\
+   BER25         & 1.5 (1.2, 1.8) &  7.0 (6.2, 8.0) &  5.0\\
+   BER75         & 0.4 (0.3, 0.5) &  5.0 (3.6, 6.6) &  2.0\\
+   BER26         & 0.7 (0.5, 1.0) &  3.4 (2.5, 4.5) &  1.6\\
+   BER29         & 0.5 (0.4, 0.5) &  7.4 (6.4, 8.6) &  3.0\\
+   TOMB2         & 0.9 (0.8, 0.9) &  6.7 (6.1, 7.4) &  3.5\\
+   BER76         & 1.6 (1.2, 2.5) &  7.4 (5.7, 9.6) &  4.0\\
+   F1212         & 0.8 (0.6, 1.1) &  8.8 (6.6, 10.7) & 3.0\\
+   SAU1          & 0.7 (0.5, 1.0) &  3.9 (2.9, 5.4) &  2.0\\
+   CZER30        & 0.6 (0.4, 0.7) &  6.4 (4.8, 8.2) &  2.5\\
+   ARPM2         & 1.4 (1.0, 2.0) &  4.1 (3.4, 4.9) &  3.0\\
+   BH4           & 0.4 (0.3, 0.5) &  5.7 (4.0, 7.1) &  2.0\\
+   F1419         & 1.2 (0.9, 1.8) &  6.0 (4.3, 8.3) &  3.0\\
+   BH37          & 1.2 (0.8, 1.9) &  3.8 (2.5, 5.6) &  2.0\\
+   E9205         & 1.0 (0.9, 1.3) &  4.4 (3.7, 5.3) &  3.0\\
+   E9218         & 0.6 (0.6, 0.7) &  6.5 (5.9, 7.3) &  3.0\\
+   SAU3          & 0.5 (0.4, 0.6) &  4.9 (3.8, 6.4) &  2.0\\
+   KRON39        & 0.3 (0.2, 0.3) &  5.6 (4.1, 7.0) &  2.0\\
+   E9308         & 0.2 (0.2, 0.2) &  5.0 (4.2, 5.7) &  1.5\\
+   BH144         & 0.3 (0.3, 0.4) &  2.8 (2.3, 3.4) &  1.5\\
+   BH176         & 0.6 (0.5, 0.7) &  4.6 (3.8, 5.8) &  2.0\\
+   KRON31        & 0.5 (0.4, 0.6) &  6.9 (5.7, 7.6) &  2.0\\
+   SAU6          & 0.5 (0.4, 0.7) &  3.7 (2.9, 4.8) &  2.0\\
+   BER56         & 1.6 (1.4, 1.7) &  8.1 (7.4, 8.9) &  4.5\\
+   BER102        & 1.0 (0.8, 1.5) &  3.8 (3.0, 4.9) &  2.5\\
+   % BER73         & 0.6$_{0.5}^{0.7}$ &  4.9$_{3.8}^{6.3}$ &  2.0\\
+   % BER25         & 1.5$_{1.2}^{1.8}$ &  7.0$_{6.2}^{8.0}$ &  5.0\\
+   % BER75         & 0.4$_{0.3}^{0.5}$ &  5.0$_{3.6}^{6.6}$ &  2.0\\
+   % BER26         & 0.7$_{0.5}^{1.0}$ &  3.4$_{2.5}^{4.5}$ &  1.6\\
+   % BER29         & 0.5$_{0.4}^{0.5}$ &  7.4$_{6.4}^{8.6}$ &  3.0\\
+   % TOMB2         & 0.9$_{0.8}^{0.9}$ &  6.7$_{6.1}^{7.4}$ &  3.5\\
+   % BER76         & 1.6$_{1.2}^{2.5}$ &  7.4$_{5.7}^{9.6}$ &  4.0\\
+   % F1212         & 0.8$_{0.6}^{1.1}$ &  8.8$_{6.6}^{10.7}$ & 3.0\\
+   % SAU1          & 0.7$_{0.5}^{1.0}$ &  3.9$_{2.9}^{5.4}$ &  2.0\\
+   % CZER30        & 0.6$_{0.4}^{0.7}$ &  6.4$_{4.8}^{8.2}$ &  2.5\\
+   % ARPM2         & 1.4$_{1.0}^{2.0}$ &  4.1$_{3.4}^{4.9}$ &  3.0\\
+   % BH4           & 0.4$_{0.3}^{0.5}$ &  5.7$_{4.0}^{7.1}$ &  2.0\\
+   % F1419         & 1.2$_{0.9}^{1.8}$ &  6.0$_{4.3}^{8.3}$ &  3.0\\
+   % BH37          & 1.2$_{0.8}^{1.9}$ &  3.8$_{2.5}^{5.6}$ &  2.0\\
+   % E9205         & 1.0$_{0.9}^{1.3}$ &  4.4$_{3.7}^{5.3}$ &  3.0\\
+   % E9218         & 0.6$_{0.6}^{0.7}$ &  6.5$_{5.9}^{7.3}$ &  3.0\\
+   % SAU3          & 0.5$_{0.4}^{0.6}$ &  4.9$_{3.8}^{6.4}$ &  2.0\\
+   % KRON39        & 0.3$_{0.2}^{0.3}$ &  5.6$_{4.1}^{7.0}$ &  2.0\\
+   % E9308         & 0.2$_{0.2}^{0.2}$ &  5.0$_{4.2}^{5.7}$ &  1.5\\
+   % BH144         & 0.3$_{0.3}^{0.4}$ &  2.8$_{2.3}^{3.4}$ &  1.5\\
+   % BH176         & 0.6$_{0.5}^{0.7}$ &  4.6$_{3.8}^{5.8}$ &  2.0\\
+   % KRON31        & 0.5$_{0.4}^{0.6}$ &  6.9$_{5.7}^{7.6}$ &  2.0\\
+   % SAU6          & 0.5$_{0.4}^{0.7}$ &  3.7$_{2.9}^{4.8}$ &  2.0\\
+   % BER56         & 1.6$_{1.4}^{1.7}$ &  8.1$_{7.4}^{8.9}$ &  4.5\\
+   % BER102        & 1.0$_{0.8}^{1.5}$ &  3.8$_{3.0}^{4.9}$ &  2.5\\
   \hline
   \end{tabular}
   \end{table}
 
+  In Fig.~\ref{fig:BER29_struct} we show the center and radii estimation
+  processes for the cluster Berkeley 29.
 
- \begin{figure*}
-  \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_struct.png}}
-  \caption{xxx}
-  \label{fig:BER29_struct}
- \end{figure*}
+  \begin{figure*}
+   \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_struct.png}}
+   \caption{Structural analysis of the cluster Berkeley 29. Left: analyzed
+   20x20 arcmin frame with the estimated cluster region enclosed in a red circle.
+   The asterisks in the equatorial coordinates indicate that these were shifted
+   and transformed so that the center of the frame is located at (0, 0) and to
+   remove projection artifacts. Center:
+   same frame but shown as as two-dimensional density map. Right: radial density
+   plot (logarithmic axis). The dashed green line and the shaded green area are
+   the King profile fit and its 16th-84th uncertainty region, respectively. The
+   green dotted vertical line, solid red vertical line, and solid green vertical
+   line, are the core, adopted, and tidal radii, respectively. The dashed and
+   dotted horizontal black lines are the field density estimate and its $\pm
+   1\sigma$ region, respectively.}
+   \label{fig:BER29_struct}
+  \end{figure*}
 
 
- \begin{figure*}
-  \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
-  \caption{xxx}
-  \label{fig:BER29_fpars}
- \end{figure*}
+ \subsection{Fundamental parameters}
+  \label{ssec:fund_pars}
+
+  membership here
+
+  \begin{figure*}
+   \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
+   \caption{xxx}
+   \label{fig:BER29_fpars}
+  \end{figure*}
 
 
 
@@ -444,6 +523,33 @@ located more than a few Kpc away.}
  % where discovered and catalogued as \emph{Cluster candidates with RCs}
  % in~\cite{Kronberger_2006}. Both show a very dispersed and scarcely populated
  % sequence.\\
+
+ \subsection{Metallicity gradient}
+  \label{ssec:met_gradient}
+
+  The radial metallicity ([Fe/H]) distribution, or metallicity gradient, is a
+  key tracer of the Galaxy's chemical evolution. Open clusters have been used as
+  a tool to investigate this relation for several decades~\citep{Janes_1979}.
+  Although we have a somewhat small sample, we present here the results to
+  highlight the 
+
+  \cite{Donor_2020}, 
+
+  Six of the clusters in our sample were investigated in~\cite{Netopil_2021} in
+  relation with the metallicity gradient: BER25, BER29, BER73, CZER30, SAU1,
+  and TOMB2.
+
+
+  \begin{figure}
+   \resizebox{\hsize}{!}{\includegraphics[]{figs/Fe_H.png}}
+   \caption{Metallicity gradient for the set of twenty-five analyzed clusters.
+   Points are colored according to the $\log(age)$. Grey vertical lines are the
+   16th and 84th percentiles. The dotted line is the broken relation from 
+   \citet[][Fig 7]{Donor_2020}.}
+   \label{fig:met_gradient}
+  \end{figure}
+
+
 
 
 

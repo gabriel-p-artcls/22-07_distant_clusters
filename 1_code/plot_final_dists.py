@@ -38,7 +38,7 @@ lit_data = ascii.read(lit_data)
 
 short_n = {
     'saurer1': 'SAU1', 'czernik30': 'CZER30', 'arpm2': 'ARPM2',
-    'saurer3': 'SAUR3', 'ber102': 'BER102', 'eso09205': 'E9205',
+    'saurer3': 'SAU3', 'ber102': 'BER102', 'eso09205': 'E9205',
     'saurer6': 'SAU6', 'ber25': 'BER25', 'ber26': 'BER26',
     'eso09218': 'E9218', 'tombaugh2': 'TOMB2', 'eso09308': 'E9308',
     'vdbh144': 'BH144', 'fsr1212': 'F1212', 'ber56': 'BER56',
@@ -76,31 +76,6 @@ def main():
 
     xlab = ('OPENCLUST', 'Cantat-Gaudin', 'WEBDA', 'MWSC')
 
-    # fig, axes = plt.subplots(1, 4, figsize=(24, 6))
-    # for i, ax in enumerate(axes):
-    #     xymin, xymax = 20, 0
-    #     for cl, vals in age_dct.items():
-    #         x, y, y_16, y_84 = list(map(
-    #             float, (vals[i + 3], vals[0], vals[1], vals[2])))
-    #         yerr = np.array([[y - y_16, y_84 - y]]).T
-    #         col = dist_dct[cl][0]
-    #         ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=.5, zorder=1)
-    #         ax.scatter(x, y, c=col, vmin=12, vmax=16, zorder=4)
-    #         xymin, xymax = min(xymin, x, y), max(xymax, x, y)
-    #         ax.annotate(cl, (x + .02, y))
-    #     xymin, xymax = xymin - .2, xymax + .2
-    #     ax.plot((xymin, xymax), (xymin, xymax), ls='--', marker='', lw=.8)
-    #     ax.set_xlim(xymin, xymax)
-    #     ax.set_ylim(xymin, xymax)
-    #     ax.set_xlabel("log(age) [{}]".format(xlab[i]))
-    #     ax.set_ylabel("log(age) [ASteCA]")
-
-    # fig.tight_layout()
-    # plt.savefig(
-    #     root_f + out_folder + "ages.png", dpi=150, bbox_inches='tight')
-
-    #
-    #
     xymin, xymax = (1900, 1900, 1900, 1000), (16500, 16500, 20500, 21500)
     fig, axes = plt.subplots(2, 4, figsize=(18, 8))
 
