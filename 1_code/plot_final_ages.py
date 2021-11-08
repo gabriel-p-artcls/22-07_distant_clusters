@@ -1,7 +1,16 @@
 
+"""
+Plot the distances obtained with ASteCA versus those from the four databases
+"""
+
+
 from astropy.io import ascii
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+import matplotlib.gridspec as gridspec
+from adjustText import adjust_text
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -23,7 +32,7 @@ vdBH37       128.95 -43.62 3   8.84  11220 8.24 4038  8.85  2500  7.5   5202
 ESO09205     150.81 -64.75 5   9.3   5168  9.65 12444 9.78  10900 9.3   5168
 ESO09218     153.74 -64.61 5   9.024 10607 9.46 9910  9.024 607   9.15  9548
 Saurer3      160.35 -55.31 4   9.3   9550  nan   nan  9.45  8830  9.3   7075
-Kronberger39 163.56 -61.74 .8  nan   11100 nan   nan  nan   nan   6.    4372
+Kronberger39 163.56 -61.74 .8  nan   11100 nan   nan  nan   nan   7.3    4372
 Shorlin1     166.44 -61.23 .8  nan   nan   nan   nan  nan   12600 6.5   5594
 ESO09308     169.92 -65.22 1   9.74  14000 nan   nan  9.65  3700   9.8  13797
 vdBH144      198.78 -65.92 1.5 8.9   12000 9.17 9649  8.9   12000  9    7241
@@ -43,22 +52,18 @@ short_n = {
     'eso09218': 'E9218', 'tombaugh2': 'TOMB2', 'eso09308': 'E9308',
     'vdbh144': 'BH144', 'fsr1212': 'F1212', 'ber56': 'BER56',
     'fsr1419': 'F1419', 'ber73': 'BER73', 'kronberger31': 'KRON31',
-    'vdbh37': 'BH37', 'ber75': 'BER75', 'kronberger39': 'KRON39',
+    'vdbh37': 'BH37', 'ber75': 'BER75',
+    'kronberger39': 'KRON39\n' + r'  ($\leftarrow$ 6)',
     'vdbh4': 'BH4', 'ber76': 'BER76', 'ber29': 'BER29', 'vdbh176': 'BH176'}
 
-root_f = '../2_pipeline/5_ASteCA/'
-in_folder = root_f + 'out/'
-out_folder = 'tmp/'
+in_folder = '../2_pipeline/5_ASteCA/out/'
+out_folder = '../2_pipeline/plots/'
 
 
-def main():
+def main(dpi=dpi):
     """
     """
     data = ascii.read(in_folder + 'asteca_output.dat')
-    # for _ in data['NAME']:
-    #     short = _[3:7].upper() + _[-2:]
-    #     print("'{}': '{}',".format(_[3:], short))
-    # breakpoint()
 
     lit_names = [_.lower() for _ in lit_data['Cluster']]
     age_dct, dist_dct = {}, {}
@@ -69,81 +74,47 @@ def main():
             cl['a_median'], cl['a_16th'], cl['a_84th'], lit_data[cl_i]['A_OC'],
             lit_data[cl_i]['A_CG'], lit_data[cl_i]['A_WB'],
             lit_data[cl_i]['A_MW'])
-        dist_dct[cl_name] = (
-            cl['d_median'], cl['d_16th'], cl['d_84th'], lit_data[cl_i]['D_OC'],
-            lit_data[cl_i]['D_CG'], lit_data[cl_i]['D_WB'],
-            lit_data[cl_i]['D_MW'])
+        dist_dct[cl_name] = cl['d_median']
 
     xlab = ('OPENCLUST', 'Cantat-Gaudin', 'WEBDA', 'MWSC')
 
-    fig, axes = plt.subplots(4, 1, figsize=(5, 20))
-    for i, ax in enumerate(axes):
-        xymin, xymax = 20, 0
+    #
+    fig = plt.figure(figsize=(20, 20))
+    gs = gridspec.GridSpec(grid_y, grid_x)
+
+    for i in (0, 1, 2, 3):
+        ax = plt.subplot(gs[0:2, 2 * i:2 * i + 2])
+        texts = []
         for cl, vals in age_dct.items():
             x, y, y_16, y_84 = list(map(
                 float, (vals[i + 3], vals[0], vals[1], vals[2])))
-            x, y = (10**x) / 1e6, (10**y) / 1e6
-            # yerr = np.array([[y - y_16, y_84 - y]]).T
-            col = dist_dct[cl][0]
-            # ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=.5, zorder=1)
-            ax.scatter(x, y, c=col, vmin=12, vmax=16, zorder=4)
-            xymin, xymax = min(xymin, x, y), max(xymax, x, y)
-            ax.annotate(cl, (x + .02, y))
-        xymin, xymax = xymin - .2, xymax + .2
-        ax.plot((xymin, xymax), (xymin, xymax), ls='--', marker='', lw=.8)
-        # ax.set_xlim(xymin, xymax)
-        # ax.set_ylim(xymin, xymax)
-        ax.set_xlabel("log(age) [{}]".format(xlab[i]))
-        ax.set_ylabel("log(age) [ASteCA]")
+            # x, y, y_16, y_84 = (10**np.array([x, y, y_16, y_84])) / 1e6
+            yerr = np.array([[y - y_16, y_84 - y]]).T
+            col = dist_dct[cl]
+            ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=.5, zorder=1)
+            im = ax.scatter(x, y, vmin=13, vmax=16, c=col, s=sc_sz, ec=sc_ec,
+                            lw=sc_lw, zorder=4)
+            # ax.annotate(short_n[cl], (x + 100, y))
+            texts.append(ax.text(x, y, short_n[cl]))
+
+        adjust_text(texts)
+
+        xylim = ((8.5, 10.28), (8.1, 10.28), (8.1, 10.28), (7.1, 10.28))
+        ax.plot(xylim[i], xylim[i], ls='--', c='k', lw=1.5)
+        ax.set_yticks(np.arange(xylim[i][0] + .1, 10.21, 0.2))
+        ax.set_xlim(*xylim[i])
+        ax.set_ylim(*xylim[i])
+        if i == 0:
+            ax.set_ylabel(r"ASteCA [$\log$ age]")
+        ax.set_xlabel(r"{} [$\log$ age]".format(xlab[i]))
+        if i == 3:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+            cbar.ax.set_ylabel(r"Dist [$\mu$]")
 
     fig.tight_layout()
-    plt.savefig(
-        root_f + out_folder + "ages.png", dpi=150, bbox_inches='tight')
-
-    #
-    #
-    # xymin, xymax = (1900, 1900, 1900, 1000), (16500, 16500, 20500, 21500)
-    # fig, axes = plt.subplots(2, 4, figsize=(18, 8))
-
-    # for i, yax in enumerate(axes):
-    #     for j, ax in enumerate(yax):
-    #         for cl, vals in dist_dct.items():
-    #             x, y, y_16, y_84 = list(map(
-    #                 float, (vals[j + 3], vals[0], vals[1], vals[2])))
-    #             y, y_16, y_84 = 10**(.2 * (y + 5)), 10**(.2 * (y_16 + 5)),\
-    #                 10**(.2 * (y_84 + 5))
-    #             col = age_dct[cl][0]
-    #             if i == 0:
-    #                 yerr = np.array([[y - y_16, y_84 - y]]).T
-    #                 ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=1,
-    #                             zorder=1)
-    #                 ax.scatter(x, y, c=col, vmin=8.8, vmax=10, zorder=4)
-    #                 ax.annotate(short_n[cl], (x + 100, y), fontsize=12)
-    #             else:
-    #                 yerr = np.array([[y - y_16, y_84 - y]]).T
-    #                 ax.errorbar(x, x - y, yerr=yerr, fmt='', c='grey',
-    #                             alpha=1, zorder=1)
-    #                 ax.scatter(x, x - y, c=col, vmin=8.8, vmax=10, zorder=4)
-    #                 ax.annotate(short_n[cl], (x + 100, x - y), fontsize=12)
-
-    #         if i == 0:
-    #             ax.plot((xymin[j], xymax[j]), (xymin[j], xymax[j]),
-    #                     ls='--', marker='', lw=.8)
-    #             ax.set_xlim(xymin[j], xymax[j])
-    #             ax.set_ylim(xymin[j], xymax[j])
-    #             ax.set_xlabel("dist {} [pc]".format(xlab[j]), fontsize=14)
-    #             ax.set_ylabel("dist ASteCA [pc]", fontsize=14)
-    #         if i == 1:
-    #             ax.plot((xymin[j], xymax[j]), (0, 0),
-    #                     ls='--', marker='', lw=.8)
-    #             ax.set_xlim(xymin[j], xymax[j])
-    #             ax.set_xlabel("dist {} [pc]".format(xlab[j]), fontsize=14)
-    #             ax.set_ylabel(
-    #                 r"$\Delta$ ({} - ASteCA) [pc]".format(xlab[j]),
-    #                 fontsize=14)
-
-    # fig.tight_layout()
-    # plt.savefig(root_f + out_folder + "dist.png", dpi=150, bbox_inches='tight')
+    plt.savefig(out_folder + "ages.png", dpi=dpi, bbox_inches='tight')
 
 
 if __name__ == '__main__':

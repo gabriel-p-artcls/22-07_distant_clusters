@@ -1,4 +1,9 @@
 
+"""
+Plot the clusters in all four databases in the context of the Milky Way
+"""
+
+
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 import astropy.coordinates as coord
@@ -7,6 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import seaborn as sns
 import numpy as np
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -40,40 +46,40 @@ FSR0338      327.93 55.33  2.7 8.1   14655 nan   nan  nan   nan    8.1  14655
 Ber102       354.66 56.64  5   9.5   9638  9.59 10519 8.78  2600   9.14 4900
 """
 
+out_folder = '../2_pipeline/plots/'
 
-def main(
-    lit_data, dpi=300, out_folder='../2_pipeline/5_ASteCA/tmp/',
-        plot_ASteCA=False):
+
+def main(dpi=dpi):
     """
     Gridspec idea: http://www.sc.eso.org/~bdias/pycoffee/codes/20160407/
                    gridspec_demo.html
     """
-    lit_data = ascii.read(lit_data)
+    data = ascii.read(lit_data)
     DBs_list = ('D_OC', 'D_CG', 'D_WB', 'D_MW')
 
-    # Use this block to plot the ASteCA results instead
-    # ASteCA output data
-    if plot_ASteCA:
-        asteca_data = ascii.read(
-            '../2_pipeline/5_ASteCA/out/asteca_output.dat')
-        asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
-        asteca_dists = []
-        for cl in lit_data['Cluster']:
-            try:
-                idx = asteca_names.index(cl.upper())
-                d_pc = 10**(.2 * (asteca_data[idx]['d_mean'] + 5))
-            except ValueError:
-                d_pc = np.nan
-            asteca_dists.append(round(d_pc, 0))
-        lit_data['D_AS'] = asteca_dists
-        DBs_list = ('D_AS',)
+    # # Use this block to plot the ASteCA results instead
+    # # ASteCA output data
+    # if plot_ASteCA:
+    #     asteca_data = ascii.read(
+    #         '../2_pipeline/5_ASteCA/out/asteca_output.dat')
+    #     asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
+    #     asteca_dists = []
+    #     for cl in data['Cluster']:
+    #         try:
+    #             idx = asteca_names.index(cl.upper())
+    #             d_pc = 10**(.2 * (asteca_data[idx]['d_mean'] + 5))
+    #         except ValueError:
+    #             d_pc = np.nan
+    #         asteca_dists.append(round(d_pc, 0))
+    #     data['D_AS'] = asteca_dists
+    #     DBs_list = ('D_AS',)
 
     # Default Galactic Center is 8.3 kpc (Gillessen et al. 2009)
     gc_frame = coord.Galactocentric()
 
     # Obtain latitude, longitude
     eq = SkyCoord(
-        ra=lit_data['RA'] * u.degree, dec=lit_data['DEC'] * u.degree,
+        ra=data['RA'] * u.degree, dec=data['DEC'] * u.degree,
         frame='icrs')
     lb = eq.transform_to('galactic')
     lon = lb.l.wrap_at(180 * u.deg).radian * u.radian
@@ -81,9 +87,9 @@ def main(
 
     xyz_kpc = {}
     for cat in DBs_list:
-        xyz_kpc[cat] = xyzCoords(lit_data, cat, lon, lat, gc_frame)
+        xyz_kpc[cat] = xyzCoords(data, cat, lon, lat, gc_frame)
 
-    for i, cl in enumerate(lit_data['Cluster']):
+    for i, cl in enumerate(data['Cluster']):
         x_dist, y_dist, z_dist = "", "", ""
         for cat in DBs_list:
             x_dist += " {:>6.2f}".format(xyz_kpc[cat][0][i].value)
@@ -106,9 +112,8 @@ def main(
     markers = ('o', '*', 'v', '^')
     Xmin, Xmax, Ymin, Ymax, Zmin, Zmax = -24, 11, -19, 16, -2.6, 2.6
 
-    gs_x, gs_y = 8, 8
-    fig = plt.figure(figsize=(13, 13))
-    gs = gridspec.GridSpec(gs_y, gs_x)
+    fig = plt.figure(figsize=(17, 17))
+    gs = gridspec.GridSpec(grid_y, grid_x)
 
     plt.subplot(gs[0:4, 0:4])
     # plt.grid(ls=':', c='grey', lw=.5, zorder=.5)
@@ -118,8 +123,8 @@ def main(
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         pl = plt.scatter(
-            x_kpc, y_kpc, alpha=.8, marker=markers[ic], s=100,
-            lw=.5, edgecolor='k', zorder=2.5, color=colors[ic])
+            x_kpc, y_kpc, alpha=.8, marker=markers[ic], s=sc_sz * 2,
+            lw=sc_lw, edgecolor=sc_ec, zorder=2.5, color=colors[ic])
         cl_plots1[0].append(pl)
         cl_plots1[1].append(cat.replace('D_', ''))
     # Plot Sun and center of Milky Way
@@ -195,16 +200,16 @@ def main(
     plt.yticks(fontsize=15)
 
     fig.tight_layout()
-    fig.savefig(out_folder + 'MWmap.png', dpi=dpi, bbox_inches='tight')
+    plt.savefig(out_folder + 'MWmap.png', bbox_inches='tight', dpi=dpi)
 
 
-def xyzCoords(lit_data, cat, lon, lat, gc_frame):
+def xyzCoords(data, cat, lon, lat, gc_frame):
     """
     """
     try:
-        dist_pc = lit_data[cat].filled(np.nan)
+        dist_pc = data[cat].filled(np.nan)
     except AttributeError:
-        dist_pc = lit_data[cat]
+        dist_pc = data[cat]
     dist_pc = dist_pc / 1000.
 
     # Galactic coordinates.
@@ -406,4 +411,4 @@ def momany():
 
 if __name__ == '__main__':
     plt.style.use('science')
-    main(lit_data)
+    main()

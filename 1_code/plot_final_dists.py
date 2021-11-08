@@ -1,7 +1,16 @@
 
+"""
+Plot the distances obtained with ASteCA versus those from the four databases
+"""
+
+
 from astropy.io import ascii
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from adjustText import adjust_text
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -46,29 +55,23 @@ short_n = {
     'vdbh37': 'BH37', 'ber75': 'BER75', 'kronberger39': 'KRON39',
     'vdbh4': 'BH4', 'ber76': 'BER76', 'ber29': 'BER29', 'vdbh176': 'BH176'}
 
-root_f = '../2_pipeline/5_ASteCA/'
-in_folder = root_f + 'out/'
-out_folder = 'tmp/'
+in_folder = '../2_pipeline/5_ASteCA/out/'
+out_folder = '../2_pipeline/plots/'
 
 
-def main():
+def main(dpi=dpi):
     """
     """
     data = ascii.read(in_folder + 'asteca_output.dat')
-    # for _ in data['NAME']:
-    #     short = _[3:7].upper() + _[-2:]
-    #     print("'{}': '{}',".format(_[3:], short))
-    # breakpoint()
 
     lit_names = [_.lower() for _ in lit_data['Cluster']]
     age_dct, dist_dct = {}, {}
+    vmin, vmax = 1000, 0
     for cl in data:
         cl_name = cl['NAME'][3:]
         cl_i = lit_names.index(cl_name)
-        age_dct[cl_name] = (
-            cl['a_median'], cl['a_16th'], cl['a_84th'], lit_data[cl_i]['A_OC'],
-            lit_data[cl_i]['A_CG'], lit_data[cl_i]['A_WB'],
-            lit_data[cl_i]['A_MW'])
+        age_dct[cl_name] = cl['a_median']
+        vmin, vmax = min(vmin, cl['a_median']), max(vmax, cl['a_median'])
         dist_dct[cl_name] = (
             cl['d_median'], cl['d_16th'], cl['d_84th'], lit_data[cl_i]['D_OC'],
             lit_data[cl_i]['D_CG'], lit_data[cl_i]['D_WB'],
@@ -76,48 +79,70 @@ def main():
 
     xlab = ('OPENCLUST', 'Cantat-Gaudin', 'WEBDA', 'MWSC')
 
-    xymin, xymax = (1900, 1900, 1900, 1000), (16500, 16500, 20500, 21500)
-    fig, axes = plt.subplots(2, 4, figsize=(18, 8))
+    #
+    fig = plt.figure(figsize=(20, 20))
+    gs = gridspec.GridSpec(grid_y, grid_x)
 
-    for i, yax in enumerate(axes):
-        for j, ax in enumerate(yax):
+    xylim = (100, 20400)
+    for i in (0, 2):
+        for j in (0, 1, 2, 3):
+            yf = i + 2 if i == 0 else i + 1
+            ax = plt.subplot(gs[i:yf, 2 * j:2 * j + 2])
+            texts = []
             for cl, vals in dist_dct.items():
                 x, y, y_16, y_84 = list(map(
                     float, (vals[j + 3], vals[0], vals[1], vals[2])))
+                # Skip missing clusters
+                if np.isnan(x):
+                    continue
+
                 y, y_16, y_84 = 10**(.2 * (y + 5)), 10**(.2 * (y_16 + 5)),\
                     10**(.2 * (y_84 + 5))
-                col = age_dct[cl][0]
+                col = age_dct[cl]
                 if i == 0:
                     yerr = np.array([[y - y_16, y_84 - y]]).T
-                    ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=1,
-                                zorder=1)
-                    ax.scatter(x, y, c=col, vmin=8.8, vmax=10, zorder=4)
-                    ax.annotate(short_n[cl], (x + 100, y), fontsize=12)
+                    ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', zorder=1)
+                    im = ax.scatter(
+                        x, y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+                        zorder=4, vmin=vmin, vmax=vmax)
+                    # xo = np.random.choice((-3000, 200))
+                    # yo = np.random.choice((-1000, 500))
+                    # ax.annotate(short_n[cl], (x + xo, y + yo), zorder=5)
                 else:
                     yerr = np.array([[y - y_16, y_84 - y]]).T
-                    ax.errorbar(x, x - y, yerr=yerr, fmt='', c='grey',
-                                alpha=1, zorder=1)
-                    ax.scatter(x, x - y, c=col, vmin=8.8, vmax=10, zorder=4)
-                    ax.annotate(short_n[cl], (x + 100, x - y), fontsize=12)
+                    ax.errorbar(
+                        x, x - y, yerr=yerr, fmt='', c='grey', zorder=1)
+                    im = ax.scatter(
+                        x, x - y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+                        vmin=vmin, vmax=vmax, zorder=4)
+                if i == 0:
+                    texts.append(ax.text(x, y, short_n[cl]))
 
             if i == 0:
-                ax.plot((xymin[j], xymax[j]), (xymin[j], xymax[j]),
-                        ls='--', marker='', lw=.8)
-                ax.set_xlim(xymin[j], xymax[j])
-                ax.set_ylim(xymin[j], xymax[j])
-                ax.set_xlabel("dist {} [pc]".format(xlab[j]), fontsize=14)
-                ax.set_ylabel("dist ASteCA [pc]", fontsize=14)
-            if i == 1:
-                ax.plot((xymin[j], xymax[j]), (0, 0),
-                        ls='--', marker='', lw=.8)
-                ax.set_xlim(xymin[j], xymax[j])
-                ax.set_xlabel("dist {} [pc]".format(xlab[j]), fontsize=14)
-                ax.set_ylabel(
-                    r"$\Delta$ ({} - ASteCA) [pc]".format(xlab[j]),
-                    fontsize=14)
+                adjust_text(texts)
+                ax.plot(xylim, xylim, ls='--', c='k', lw=1.5, zorder=0)
+                ax.set_xlim(*xylim)
+                ax.set_ylim(*xylim)
+                ax.set_xticklabels([])
+                # ax.set_xlabel("{} [pc]".format(xlab[j]), fontsize=14)
+                if j == 0:
+                    ax.set_ylabel("ASteCA [pc]")
+            if i == 2:
+                ax.plot(xylim, (0, 0), ls='--', c='k', lw=1.5, zorder=0)
+                ax.set_xlim(*xylim)
+                ax.set_xlabel("{} [pc]".format(xlab[j]))
+                if j == 0:
+                    ax.set_ylabel(r"(DB - ASteCA) [pc]")
+            # if j != 0:
+            #     ax.set_yticklabels([])
+            if j == 3:
+                divider = make_axes_locatable(ax)
+                cax = divider.append_axes('right', size='5%', pad=0.05)
+                cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+                cbar.ax.set_ylabel(r"$\log$ age")
 
     fig.tight_layout()
-    plt.savefig(root_f + out_folder + "dist.png", dpi=150, bbox_inches='tight')
+    plt.savefig(out_folder + "dist.png", dpi=dpi, bbox_inches='tight')
 
 
 if __name__ == '__main__':

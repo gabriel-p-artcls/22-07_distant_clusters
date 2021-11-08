@@ -1,10 +1,4 @@
 
-import numpy as np
-from astropy.io import ascii
-import matplotlib.pyplot as plt
-from adjustText import adjust_text
-
-
 """
 Plot the distances estimated by ASteCA vs other distance estimates.
 
@@ -18,6 +12,16 @@ parallaxes with a uniform prior, using ASteCA (the first column is the median).
 The 'Kalkayotl _16K  _84K' columns are obtained with the Kalkayotl code
 using a uniform prior.
 """
+
+
+import numpy as np
+from astropy.io import ascii
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+import matplotlib.gridspec as gridspec
+from adjustText import adjust_text
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
+
 
 plx_corr_data = """
 Cluster      plx_median plx_MAD ASteCA _16   _84   Kalkayotl _16K  _84K
@@ -59,17 +63,17 @@ short_n = {
     'vdbh37': 'BH37', 'ber75': 'BER75', 'kronberger39': 'KRON39',
     'vdbh4': 'BH4', 'ber76': 'BER76', 'ber29': 'BER29', 'vdbh176': 'BH176'}
 
-root_f = '../2_pipeline/5_ASteCA/'
-out_folder = 'tmp/'
+in_folder = '../2_pipeline/5_ASteCA/out/'
+out_folder = '../2_pipeline/plots/'
 
 
-def main(dpi=300):
+def main(dpi=dpi):
     """
     """
     plx_data = ascii.read(plx_corr_data)
 
     # ASteCA output data
-    asteca_data = ascii.read('../2_pipeline/5_ASteCA/out/asteca_output.dat')
+    asteca_data = ascii.read(in_folder + 'asteca_output.dat')
     asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
 
     asteca_dists, asteca_ages = [], []
@@ -82,24 +86,21 @@ def main(dpi=300):
         asteca_ages.append(asteca_data[idx]['a_mean'])
     asteca_dists = np.array(asteca_dists)
 
-    # print(np.median(abs(asteca_dists - plx_data['plx_median'])))
-    # print(np.median(abs(asteca_dists - plx_data['mode'])))
-    # msk = asteca_dists < 10000
-    # print(np.median(abs(asteca_dists[msk] - plx_data['plx_median'][msk])))
-    # print(np.median(abs(asteca_dists[msk] - plx_data['mode'][msk])))
-    # print(np.median(abs(asteca_dists[~msk] - plx_data['plx_median'][~msk])))
-    # print(np.median(abs(asteca_dists[~msk] - plx_data['mode'][~msk])))
+    #
+    fig = plt.figure(figsize=(20, 20))
+    gs = gridspec.GridSpec(grid_y, grid_x)
 
-    for sol in ('ASteCA', 'plx_median', 'Kalkayotl'):
+    xlabel = ('ASteCA (Plx)', r'median(Plx)$^{-1}$', 'Kalkayotl')
+    for i, sol in enumerate(('ASteCA', 'plx_median', 'Kalkayotl')):
         print(sol)
-        fig, ax = plt.subplots(figsize=(6, 6))
+        ax = plt.subplot(gs[0:2, 2 * i:2 * i + 2])
         texts = []
-        for i, cl in enumerate(plx_data):
+        for j, cl in enumerate(plx_data):
             x = cl[sol]
-            y = asteca_dists[i][0]
+            y = asteca_dists[j][0]
 
             if sol == 'plx_median':
-                xerr = plx_data['plx_MAD'][i]
+                xerr = plx_data['plx_MAD'][j]
             elif sol == 'Kalkayotl':
                 _16 = cl['Kalkayotl'] - cl['_16K']
                 _84 = cl['_84K'] - cl['Kalkayotl']
@@ -108,26 +109,32 @@ def main(dpi=300):
                 _16, _84 = cl['ASteCA'] - cl['_16'], cl['_84'] - cl['ASteCA']
                 xerr = np.array([[_16, _84]]).T
 
-            d_16th, d_84th = y - asteca_dists[i][1], asteca_dists[i][2] - y
+            d_16th, d_84th = y - asteca_dists[j][1], asteca_dists[j][2] - y
             yerr = np.array([[d_16th, d_84th]]).T
             ax.errorbar(x, y, xerr=xerr, yerr=yerr, fmt='', c='grey', alpha=.7,
                         zorder=1)
-            ax.scatter(x, y, c=asteca_ages[i], vmin=8.8, vmax=10,
-                       alpha=.6, zorder=4)
-            texts.append(plt.text(x, y, short_n[cl['Cluster']]))
+            im = ax.scatter(x, y, c=asteca_ages[j], s=sc_sz, ec=sc_ec,
+                            lw=sc_lw, vmin=8.8, vmax=10, zorder=4)
+            texts.append(ax.text(x, y, short_n[cl['Cluster']]))
 
         adjust_text(texts)
         # minimizeTextOverlap(texts, fig, ax)
 
-        ax.plot((1000, 17000), (1000, 17000), ls='--', marker='', lw=.8)
-        ax.set_xlim(2100, 16400)
-        ax.set_ylim(2100, 16400)
-        ax.set_xlabel("Plx [pc]", fontsize=14)
-        ax.set_ylabel("ASteCA [pc]", fontsize=14)
+        ax.plot((1000, 17000), (1000, 17000), ls='--', c='k', lw=1.5)
+        ax.set_xlim(1900, 16400)
+        ax.set_ylim(1900, 16400)
 
-        fig.tight_layout()
-        plt.savefig(root_f + out_folder + "plx_dist_{}.png".format(sol),
-                    dpi=dpi, bbox_inches='tight')
+        ax.set_xlabel("{} [pc]".format(xlabel[i]), fontsize=14)
+        if i == 0:
+            ax.set_ylabel("ASteCA [pc]", fontsize=14)
+        if i == 2:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+            cbar.ax.set_ylabel(r"$\log$ age")
+
+    fig.tight_layout()
+    plt.savefig(out_folder + "plx_dist.png", dpi=dpi, bbox_inches='tight')
 
 
 if __name__ == '__main__':

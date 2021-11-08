@@ -1,10 +1,14 @@
 
+"""
+Compare the ASteCA results from the original run (asteca_output.dat) with those
+from 4 extra runs (asteca_output_2345.dat) performed with more time given
+to the 'ptemecee' algorithm.
+"""
+
 from astropy.io import ascii
 import numpy as np
 import matplotlib.pyplot as plt
 
-"""
-"""
 
 root_f = '../2_pipeline/5_ASteCA/'
 in_folder = root_f + 'out/'

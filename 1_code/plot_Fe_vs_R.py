@@ -1,10 +1,16 @@
 
+"""
+Generate the radial migration plot FeH vs R_GC
+"""
+
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 import astropy.coordinates as coord
 from astropy.io import ascii
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import numpy as np
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 radec_data = """
 Cluster      RA  DEC
@@ -52,12 +58,12 @@ radec_data = ascii.read(radec_data)
 # """
 # _16_clusts = ascii.read(_16_clusts)
 
-root_f = '../2_pipeline/5_ASteCA/'
-in_folder = root_f + 'out/'
-out_folder = 'tmp/'
+# root_f = '../2_pipeline/5_ASteCA/'
+in_folder = '../2_pipeline/5_ASteCA/out/'
+out_folder = '../2_pipeline/plots/'
 
 
-def main(dpi=300):
+def main(dpi=dpi):
     """
     Plot [Fe/H] vs R_GC distribution for the ASteCA results
     """
@@ -92,14 +98,18 @@ def main(dpi=300):
             _[3:], lb.l[i], lb.b[i], dist_pc[1][i], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
 
     #
-    fig, ax = plt.subplots(figsize=(6, 3))
+    fig = plt.figure(figsize=(25, 25))
+    gs = gridspec.GridSpec(grid_y, grid_x)
+
+    ax = plt.subplot(gs[0:1, 0:2])
 
     x, y = R_GC.T[1].value, FeH.value
     xerr = np.array([x - R_GC.T[0].value, R_GC.T[2].value - x])
     yerr = np.array([FeH - FeH_16, FeH_84 - FeH])
     plt.errorbar(
         x, y, xerr=xerr, yerr=yerr, fmt='none', c='grey', ls='none', zorder=0)
-    plt.scatter(x, y, s=50, c=asteca_data['a_median'], ec='k', lw=.5, zorder=5)
+    plt.scatter(
+        x, y, s=sc_sz, c=asteca_data['a_median'], ec=sc_ec, lw=sc_lw, zorder=5)
 
     ax.annotate("SAU1", (txt['saurer1'][0] + .25, txt['saurer1'][1] + .025))
     ax.annotate("BH144", (txt['vdbh144'][0] + .25, txt['vdbh144'][1] + .025))
@@ -112,13 +122,12 @@ def main(dpi=300):
     plt.xlim(7.5, 23)
     plt.ylim(-0.75, 0.3)
     cbar = plt.colorbar()
-    cbar.set_label('log(age)')
+    cbar.set_label(r"$\log$ age")
     plt.xlabel(r"$R_{GC}$ [kpc]")
     plt.ylabel("[Fe/H]")
 
     fig.tight_layout()
-    plt.savefig(
-        root_f + out_folder + "Fe_H.png", dpi=dpi, bbox_inches='tight')
+    plt.savefig(out_folder + "Fe_H.png", dpi=dpi, bbox_inches='tight')
 
 
 def ZtoFeH(Z):
