@@ -12,8 +12,8 @@
 %                              according to the author-year natbib style
 
 %
-% \documentclass[draft]{aa} 
-\documentclass{aa}
+\documentclass[draft]{aa} 
+% \documentclass{aa}
 
 %
 \usepackage{graphicx}
@@ -345,7 +345,7 @@ located more than a few Kpc away.}
  Data from Gaia EDR3~\citep{Gaia_2016,Gaia_EDR3} was retrieved for a box of 20
  arcmin of length around the central coordinates for all the clusters. We
  employed equatorial coordinates, parallax, proper motions, and photometry
- ($G$, $(G_{BP}-G_{RP})$) from these survey.
+ ($G$, $G_{BP}-G_{RP}$) from these survey.
  %
  In Fig~\ref{fig:MWmap} we show the twenty-five selected clusters for each of
  the four catalogues, positioned on the face-on view of the Galaxy (top), and
@@ -363,8 +363,8 @@ located more than a few Kpc away.}
   \caption{Right: position of the twenty-five clusters selected from the four
   catalogs mentioned in the text, on a face-on view of the Milky Way. The Sun
   and the center of the Galaxy are marked with a yellow filled circle and a
-  black filled circle, respectively. Top and bottom left: edge-on views, same
-  color and marker conventions as above.}
+  black filled circle, respectively. Left, top and bottom: edge-on views,
+  same color and marker conventions as above.}
   \label{fig:MWmap}
  \end{figure*}
 
@@ -390,28 +390,44 @@ located more than a few Kpc away.}
 
   The center values are obtained applying a two-dimensional kernel density
   analysis (KDE) on each of the cluster's coordinates. This method assigns the
-  center of the cluster to the point with the largest density in the frame. A
-  King's profile~\citep{King_1962} fit is then performed on the radial density
-  profile of each cluster to estimate their core and tidal radii ($r_{c}$,
-  $r_{t}$). The adopted radius $r_{a}$ is the limiting distance from the
-  center used to define the studied cluster region for each cluster. These
-  values are shown in Table~\ref{tab:radii}. The adopted radius in this work is
-  on average 50\% smaller than the tidal radius. This decision allows us to
-  alleviate the issue of field star contamination, while ensuring that only a
-  small number of true members (cluster stars located as far from the
-  center as the tidal radius) are lost. The fraction of lost members can be
-  estimated integrating the King's profile. This fraction depends on the
-  concentration of the cluster ($r_{t}/r_{c}$) and the value of the adopted
-  radius as a fraction of the tidal radius ($r_{a}/r_{t}$). In our case, less
-  than 20\% of the members could be lost in a worst case scenario. Since these
-  are clusters that are strongly contaminated (particularly in the parallax and
-  proper motions spaces), the trade off between losing a small portion of
-  members and improving the contrast of the true members over the field noise,
-  is positive.
+  center of the cluster to the point with the largest density in the frame. As
+  shown in previous articles \citep{Perren_2015,Perren_2017,Perren_2020}, this
+  approach is robust even when applied on frames with star densities that
+  are very much non-uniform. See for example the case of van den Bergh-Hagen 37,
+  shown in Fig.~\ref{fig:12struct}.
 
-  The restrictive $r_{a}$ values used in our analysis means that the total
-  estimated mass for each cluster shown in Sect.~\ref{sec:results}, must be
-  thought of as a lower limit.\\
+  A King's profile~\citep{King_1962} fit is performed on the radial
+  density profile of each cluster to estimate their core and tidal radii
+  ($r_{c}$, $r_{t}$). The adopted radius $r_{a}$ is the limiting distance from
+  the center used to define the studied cluster region for each cluster. These
+  radii are estimated applying a process that compares the ratio of the
+  approximated number of true members for increasing radii values, with the
+  number of stars in a concentric ring centered on each radius. The
+  approximated number of members is obtained as the total number of stars within
+  the radius, minus the expected number (field density times circle area). This
+  method produces an overdensity around the value where the radial density
+  approaches the field density, maximizing the contrast between members included
+  within the radius and contaminating field stars. The method is also useful
+  for heavily contaminated cluster, and/or clusters with very few true
+  members. All radii values are shown in Table~\ref{tab:radii}.\\
+
+  The adopted radius $r_{a}$ is on average 50\% smaller than the
+  tidal radius (see Table~\ref{tab:radii}). This allows us to alleviate the
+  issue of field star contamination, while ensuring that only a small number of
+  true members (cluster stars located as far from the center as the tidal
+  radius) are lost.
+  The fraction of lost members can be estimated integrating King's profile. This
+  fraction depends on the concentration of the cluster ($r_{t}/r_{c}$) and the
+  value of the adopted radius as a fraction of the tidal radius ($r_{a}/r_{t}$).
+  In our case, less than 20\% of the members could be lost in a worst case
+  scenario. Since these are clusters that are strongly contaminated 
+  (particularly in the parallax and proper motions spaces), the trade off
+  between losing a small portion of members and improving the contrast of the
+  true members over the field noise, is positive.
+
+  The $r_{a}$ values used in our analysis being smaller than the tidal radius,
+  means that the total estimated mass for each cluster shown in
+  Sect.~\ref{sec:results}, must be thought of as a lower limit.\\
 
   \begin{table}
   \caption{Core ($r_{c}$), tidal ($r_{t}$), and adopted ($r_{a}$) radii values.
@@ -477,23 +493,24 @@ located more than a few Kpc away.}
   \end{tabular}
   \end{table}
 
-  In Fig.~\ref{fig:BER29_struct} we show the center and radii estimation
-  processes for the cluster Berkeley 29.
+  In Fig.~\ref{fig:BER29_struct} we show the structural analysis, center and
+  radii estimation processes, for the cluster Berkeley 29. The asterisks in the
+  equatorial coordinates of the left plot indicate that these were shifted
+  and transformed so that the center of the frame is located at (0, 0) and to
+  remove projection artifacts. The right plot shows the radial density analysis
+  where the dashed green line and the shaded green area are the King profile fit
+  and its 16th-84th uncertainty region, respectively. The green dotted vertical
+  line, solid red vertical line, and solid green vertical line, are the core 
+  ($r_{c}$), adopted ($r_{a}$), and tidal ($r_{t}$) radii, respectively. The
+  dashed and dotted horizontal black lines are the field density estimate and
+  its $\pm1\sigma$ region, respectively.
 
   \begin{figure*}
    \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_struct.png}}
-   \caption{Structural analysis of the cluster Berkeley 29. Left: analyzed
-   20x20 arcmin frame with the estimated cluster region enclosed in a red circle.
-   The asterisks in the equatorial coordinates indicate that these were shifted
-   and transformed so that the center of the frame is located at (0, 0) and to
-   remove projection artifacts. Center:
-   same frame but shown as as two-dimensional density map. Right: radial density
-   plot (logarithmic axis). The dashed green line and the shaded green area are
-   the King profile fit and its 16th-84th uncertainty region, respectively. The
-   green dotted vertical line, solid red vertical line, and solid green vertical
-   line, are the core, adopted, and tidal radii, respectively. The dashed and
-   dotted horizontal black lines are the field density estimate and its $\pm
-   1\sigma$ region, respectively.}
+   \caption{Left: analyzed 20x20 arcmin frame with the estimated cluster region
+   enclosed in a red circle. Center: same frame but shown as as two-dimensional
+   density map. Right: radial density plot in logarithmic axis. Details in the
+   body of the article.}
    \label{fig:BER29_struct}
   \end{figure*}
 
@@ -502,6 +519,12 @@ located more than a few Kpc away.}
   \label{ssec:fund_pars}
 
   membership here
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+  consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+  cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
   \begin{figure*}
    \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
@@ -638,46 +661,46 @@ matplotlib\footnote{\url{http://matplotlib.org/}}~\citep{hunter_2007}
 \bibliography{biblio} % your references Yourfile.bib
 
 
-% \begin{appendix}
-% \section{Structure analysis}
+\begin{appendix}
+\section{Structure analysis}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/0_struct.png}}
-%   \caption{xxx}
-%   \label{fig:0struct}
-%  \end{figure*}
+ % \begin{figure*}
+ %  \resizebox{\hsize}{!}{\includegraphics[]{figs/0_struct.png}}
+ %  \caption{xxx}
+ %  \label{fig:0struct}
+ % \end{figure*}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/4_struct.png}}
-%   \caption{xxx}
-%   \label{fig:4struct}
-%  \end{figure*}
+ % \begin{figure*}
+ %  \resizebox{\hsize}{!}{\includegraphics[]{figs/4_struct.png}}
+ %  \caption{xxx}
+ %  \label{fig:4struct}
+ % \end{figure*}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/8_struct.png}}
-%   \caption{xxx}
-%   \label{fig:4struct}
-%  \end{figure*}
+ % \begin{figure*}
+ %  \resizebox{\hsize}{!}{\includegraphics[]{figs/8_struct.png}}
+ %  \caption{xxx}
+ %  \label{fig:4struct}
+ % \end{figure*}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/12_struct.png}}
-%   \caption{xxx}
-%   \label{fig:12struct}
-%  \end{figure*}
+ \begin{figure*}
+  \resizebox{\hsize}{!}{\includegraphics[]{figs/12_struct.png}}
+  \caption{xxx}
+  \label{fig:12struct}
+ \end{figure*}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/16_struct.png}}
-%   \caption{xxx}
-%   \label{fig:16struct}
-%  \end{figure*}
+ % \begin{figure*}
+ %  \resizebox{\hsize}{!}{\includegraphics[]{figs/16_struct.png}}
+ %  \caption{xxx}
+ %  \label{fig:16struct}
+ % \end{figure*}
 
-%  \begin{figure*}
-%   \resizebox{\hsize}{!}{\includegraphics[]{figs/20_struct.png}}
-%   \caption{xxx}
-%   \label{fig:20struct}
-%  \end{figure*}
+ % \begin{figure*}
+ %  \resizebox{\hsize}{!}{\includegraphics[]{figs/20_struct.png}}
+ %  \caption{xxx}
+ %  \label{fig:20struct}
+ % \end{figure*}
 
-% \end{appendix}
+\end{appendix}
 
 \end{document}
 
