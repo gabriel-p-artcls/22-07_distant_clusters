@@ -73,11 +73,11 @@ def main(dpi=dpi):
         age_dct[cl_name] = cl['a_median']
         vmin, vmax = min(vmin, cl['a_median']), max(vmax, cl['a_median'])
         dist_dct[cl_name] = (
-            cl['d_median'], cl['d_16th'], cl['d_84th'], lit_data[cl_i]['D_OC'],
-            lit_data[cl_i]['D_CG'], lit_data[cl_i]['D_WB'],
-            lit_data[cl_i]['D_MW'])
+            cl['d_median'], cl['d_16th'], cl['d_84th'], lit_data[cl_i]['D_MW'],
+            lit_data[cl_i]['D_WB'], lit_data[cl_i]['D_OC'],
+            lit_data[cl_i]['D_CG'])
 
-    xlab = ('OPENCLUST', 'Cantat-Gaudin', 'WEBDA', 'MWSC')
+    xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
 
     #
     fig = plt.figure(figsize=(20, 20))

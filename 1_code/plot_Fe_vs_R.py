@@ -91,11 +91,17 @@ def main(dpi=dpi):
     FeH_16 = ZtoFeH(asteca_data['z_16th'])
     FeH_84 = ZtoFeH(asteca_data['z_84th'])
 
+    # txt = {}
+    # for i, _ in enumerate(asteca_data['NAME']):
+    #     txt[_[3:]] = (R_GC[i][1].value, FeH[i])
+    #     print("{}, ({:.1f}, {:.1f}), d={:.0f}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
+    #         _[3:], lb.l[i], lb.b[i], dist_pc[1][i], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
+
     txt = {}
     for i, _ in enumerate(asteca_data['NAME']):
         txt[_[3:]] = (R_GC[i][1].value, FeH[i])
-        print("{}, ({:.1f}, {:.1f}), d={:.0f}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
-            _[3:], lb.l[i], lb.b[i], dist_pc[1][i], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
+        print("{}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
+            _[3:], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
 
     #
     fig = plt.figure(figsize=(25, 25))
@@ -113,6 +119,7 @@ def main(dpi=dpi):
 
     ax.annotate("SAU1", (txt['saurer1'][0] + .25, txt['saurer1'][1] + .025))
     ax.annotate("BH144", (txt['vdbh144'][0] + .25, txt['vdbh144'][1] + .025))
+    ax.annotate("BER29", (txt['ber29'][0] - 2, txt['ber29'][1] - .075))
 
     # Trend taken from Donor et al. (2020), Fig 7
     # https://ui.adsabs.harvard.edu/abs/2020AJ....159..199D/abstract

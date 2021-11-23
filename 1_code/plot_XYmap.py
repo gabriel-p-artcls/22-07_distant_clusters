@@ -55,7 +55,7 @@ def main(dpi=dpi):
                    gridspec_demo.html
     """
     data = ascii.read(lit_data)
-    DBs_list = ('D_OC', 'D_CG', 'D_WB', 'D_MW')
+    DBs_list = ('D_MW', 'D_WB', 'D_OC', 'D_CG')
 
     # # Use this block to plot the ASteCA results instead
     # # ASteCA output data

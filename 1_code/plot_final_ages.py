@@ -71,12 +71,12 @@ def main(dpi=dpi):
         cl_name = cl['NAME'][3:]
         cl_i = lit_names.index(cl_name)
         age_dct[cl_name] = (
-            cl['a_median'], cl['a_16th'], cl['a_84th'], lit_data[cl_i]['A_OC'],
-            lit_data[cl_i]['A_CG'], lit_data[cl_i]['A_WB'],
-            lit_data[cl_i]['A_MW'])
+            cl['a_median'], cl['a_16th'], cl['a_84th'], lit_data[cl_i]['A_MW'],
+            lit_data[cl_i]['A_WB'], lit_data[cl_i]['A_OC'],
+            lit_data[cl_i]['A_CG'])
         dist_dct[cl_name] = cl['d_median']
 
-    xlab = ('OPENCLUST', 'Cantat-Gaudin', 'WEBDA', 'MWSC')
+    xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
 
     #
     fig = plt.figure(figsize=(20, 20))
@@ -99,7 +99,7 @@ def main(dpi=dpi):
 
         adjust_text(texts)
 
-        xylim = ((8.5, 10.28), (8.1, 10.28), (8.1, 10.28), (7.1, 10.28))
+        xylim = ((7.1, 10.28), (8.1, 10.28), (8.5, 10.28), (8.1, 10.28))
         ax.plot(xylim[i], xylim[i], ls='--', c='k', lw=1.5)
         ax.set_yticks(np.arange(xylim[i][0] + .1, 10.21, 0.2))
         ax.set_xlim(*xylim[i])
