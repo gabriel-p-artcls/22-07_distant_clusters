@@ -2,6 +2,9 @@
 # Figure DPI
 dpi = 300
 
+# Font size
+ft_sz = 14
+
 # Grid size for gridspec
 grid_x, grid_y = 10, 10
 

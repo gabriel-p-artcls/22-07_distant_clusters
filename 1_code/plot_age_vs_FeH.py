@@ -1,16 +1,16 @@
 
 """
-Generate the radial migration plot FeH vs R_GC
+Generate the age versus FeH plot
 """
 
 from astropy import units as u
 from astropy.coordinates import SkyCoord
-import astropy.coordinates as coord
 from astropy.io import ascii
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
-from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
+from plot_pars import dpi, grid_x, grid_y, ft_sz, sc_sz, sc_ec, sc_lw
+from plot_Fe_vs_R import xyzCoords, ZtoFeH
 
 radec_data = """
 Cluster      RA  DEC
@@ -64,7 +64,6 @@ out_folder = '../2_pipeline/plots/'
 
 def main(dpi=dpi):
     """
-    Plot [Fe/H] vs R_GC distribution for the ASteCA results
     """
     asteca_data = ascii.read(in_folder + 'asteca_output.dat')
 
@@ -86,6 +85,10 @@ def main(dpi=dpi):
         [asteca_data['d_16th'], asteca_data['d_median'],
          asteca_data['d_84th']]) + 5))
     R_GC = xyzCoords(dist_pc, lon, lat)
+
+    Age = (10**asteca_data['a_median']) / 1e9
+    Age_16 = (10**asteca_data['a_16th']) / 1e9
+    Age_84 = (10**asteca_data['a_84th']) / 1e9
     FeH = ZtoFeH(asteca_data['z_median'])
     FeH_16 = ZtoFeH(asteca_data['z_16th'])
     FeH_84 = ZtoFeH(asteca_data['z_84th'])
@@ -94,93 +97,43 @@ def main(dpi=dpi):
         _16_clusts['lat']
     lon, lat = lon * u.deg, lat * u.deg
     _16_R_GC = xyzCoords(dist_pc, lon, lat)
+    _16_Age = _16_clusts['age']  # np.log10(_16_clusts['age'] * 1e9)
+    _16_Age_std = _16_clusts['ea']
     _16_FeH = ZtoFeH(_16_clusts['z'])
-
-    # txt = {}
-    # for i, _ in enumerate(asteca_data['NAME']):
-    #     txt[_[3:]] = (R_GC[i][1].value, FeH[i])
-    #     print("{}, ({:.1f}, {:.1f}), d={:.0f}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
-    #         _[3:], lb.l[i], lb.b[i], dist_pc[1][i], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
-
-    txt = {}
-    for i, _ in enumerate(asteca_data['NAME']):
-        txt[_[3:]] = (R_GC[i][1].value, FeH[i])
-        print("{}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
-            _[3:], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
+    _16_FeH_std = _16_clusts['ez'] / (_16_clusts['z'] * np.log(10))
 
     #
-    fig = plt.figure(figsize=(25, 25))
+    fig = plt.figure(figsize=(20, 20))
     gs = gridspec.GridSpec(grid_y, grid_x)
 
-    ax = plt.subplot(gs[0:1, 0:2])
+    ax = plt.subplot(gs[0:2, 0:2])
 
-    x, y = _16_R_GC.value, _16_FeH.value
+    x, y = _16_FeH.value, _16_Age
+    plt.errorbar(
+        x, y, xerr=_16_FeH_std, yerr=_16_Age_std, fmt='none', c='grey',
+        ls='none', zorder=0)
     plt.scatter(
-        x, y, s=sc_sz, c='grey', ec=sc_ec, lw=sc_lw, alpha=.5, zorder=2)
+        x, y, marker='^', s=sc_sz, c=_16_R_GC, ec=sc_ec, lw=sc_lw)
 
-    x, y = R_GC.T[1].value, FeH.value
-    xerr = np.array([x - R_GC.T[0].value, R_GC.T[2].value - x])
-    yerr = np.array([FeH - FeH_16, FeH_84 - FeH])
+    x, y = FeH.value, Age
+    xerr = np.array([x - FeH_16, FeH_84 - x])
+    yerr = np.array([y - Age_16, Age_84 - y])
     plt.errorbar(
         x, y, xerr=xerr, yerr=yerr, fmt='none', c='grey', ls='none', zorder=0)
     plt.scatter(
-        x, y, s=sc_sz, c=asteca_data['a_median'], ec=sc_ec, lw=sc_lw, zorder=5)
+        x, y, s=sc_sz, c=R_GC.T[1].value, ec=sc_ec, lw=sc_lw, zorder=5)
 
-    ax.annotate("SAU1", (txt['saurer1'][0] + .25, txt['saurer1'][1] + .025))
-    ax.annotate("BH144", (txt['vdbh144'][0] + .25, txt['vdbh144'][1] + .025))
-    ax.annotate("BER29", (txt['ber29'][0] - 2, txt['ber29'][1] - .075))
+    # ax.annotate("SAU1", (txt['saurer1'][0] + .25, txt['saurer1'][1] + .025))
 
-    # Trend taken from Donor et al. (2020), Fig 7
-    # https://ui.adsabs.harvard.edu/abs/2020AJ....159..199D/abstract
-    plt.plot((8., 13.9), (0., -0.4), ls=':', lw=2, c='k')
-    plt.plot((13.9, 22), (-0.4, -0.473), ls=':', lw=2, c='k')
-
-    plt.xlim(7., 23)
-    plt.ylim(-0.75, 0.3)
+    # plt.xlim(7., 23)
+    # plt.ylim(-0.75, 0.3)
     cbar = plt.colorbar()
-    cbar.set_label(r"$\log$ age")
-    plt.xlabel(r"$R_{GC}$ [kpc]")
-    plt.ylabel("[Fe/H]")
+    cbar.set_label(r"$R_{GC}$ [kpc]", fontsize=ft_sz)
+    plt.ylabel("t (Gyr)", fontsize=ft_sz)
+    plt.xlabel("[Fe/H]", fontsize=ft_sz)
 
     fig.tight_layout()
-    plt.savefig(out_folder + "Fe_H.png", dpi=dpi, bbox_inches='tight')
-
-
-def ZtoFeH(Z):
-    """
-    Transform the z metallicity values to [Fe/H] using the approximation given
-    in the CMD service. We are assuming [M/H]~[Fe/H]
-
-    [M/H]=log(Z/X)-log(Z/X)_o,
-    with (Z/X)_o=0.0207 and Y=0.2485+1.78Z for PARSEC tracks.
-
-    X + Y + Z = 1 --> X = 1 - Y - Z --> (Y=0.2485+1.78Z)
-    X = 1 - 0.2485 - Z(1 + 1.78)
-    """
-    a, b = 0.2485, 1.78
-    X = 1 - a - Z * (b + 1)
-    feh = np.log10(Z / X) - np.log10(0.0207)
-    return feh
-
-
-def xyzCoords(dist_pc, lon, lat):
-    """
-    """
-    gc_frame = coord.Galactocentric()
-    dist_pc = dist_pc / 1000.
-
-    # Galactic coordinates.
-    coords = SkyCoord(l=lon, b=lat, distance=dist_pc * u.kpc, frame='galactic')
-
-    # Galactocentric coordinates.
-    c_glct = coords.transform_to(gc_frame)
-
-    # Rectangular coordinates
-    x_kpc, y_kpc, z_kpc = c_glct.x, c_glct.y, c_glct.z
-
-    R_GC = np.sqrt(x_kpc**2 + y_kpc**2 + z_kpc**2)
-
-    return R_GC.T
+    plt.savefig(out_folder + "age_vs_Fe_H.png", dpi=dpi, bbox_inches='tight')
 
 
 if __name__ == '__main__':

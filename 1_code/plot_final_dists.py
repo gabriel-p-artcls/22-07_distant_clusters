@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from adjustText import adjust_text
-from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
+from plot_pars import dpi, grid_x, grid_y, ft_sz, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -77,69 +77,73 @@ def main(dpi=dpi):
             lit_data[cl_i]['D_WB'], lit_data[cl_i]['D_OC'],
             lit_data[cl_i]['D_CG'])
 
-    xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
-
-    #
     fig = plt.figure(figsize=(20, 20))
     gs = gridspec.GridSpec(grid_y, grid_x)
-
+    # xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
     xylim = (100, 20400)
-    for i in (0, 2):
-        for j in (0, 1, 2, 3):
-            yf = i + 2 if i == 0 else i + 1
-            ax = plt.subplot(gs[i:yf, 2 * j:2 * j + 2])
-            texts = []
-            for cl, vals in dist_dct.items():
-                x, y, y_16, y_84 = list(map(
-                    float, (vals[j + 3], vals[0], vals[1], vals[2])))
-                # Skip missing clusters
-                if np.isnan(x):
-                    continue
 
-                y, y_16, y_84 = 10**(.2 * (y + 5)), 10**(.2 * (y_16 + 5)),\
-                    10**(.2 * (y_84 + 5))
-                col = age_dct[cl]
-                if i == 0:
-                    yerr = np.array([[y - y_16, y_84 - y]]).T
-                    ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', zorder=1)
-                    im = ax.scatter(
-                        x, y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
-                        zorder=4, vmin=vmin, vmax=vmax)
-                    # xo = np.random.choice((-3000, 200))
-                    # yo = np.random.choice((-1000, 500))
-                    # ax.annotate(short_n[cl], (x + xo, y + yo), zorder=5)
-                else:
-                    yerr = np.array([[y - y_16, y_84 - y]]).T
-                    ax.errorbar(
-                        x, x - y, yerr=yerr, fmt='', c='grey', zorder=1)
-                    im = ax.scatter(
-                        x, x - y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
-                        vmin=vmin, vmax=vmax, zorder=4)
-                if i == 0:
-                    texts.append(ax.text(x, y, short_n[cl]))
+    # y0, y1, x0, x1
+    gs_ij = ((0, 2, 0, 2), (0, 2, 2, 4), (2, 4, 0, 2), (2, 4, 2, 4))
 
-            if i == 0:
-                adjust_text(texts)
-                ax.plot(xylim, xylim, ls='--', c='k', lw=1.5, zorder=0)
-                ax.set_xlim(*xylim)
-                ax.set_ylim(*xylim)
-                ax.set_xticklabels([])
-                # ax.set_xlabel("{} [pc]".format(xlab[j]), fontsize=14)
-                if j == 0:
-                    ax.set_ylabel("ASteCA [pc]")
-            if i == 2:
-                ax.plot(xylim, (0, 0), ls='--', c='k', lw=1.5, zorder=0)
-                ax.set_xlim(*xylim)
-                ax.set_xlabel("{} [pc]".format(xlab[j]))
-                if j == 0:
-                    ax.set_ylabel(r"(DB - ASteCA) [pc]")
-            # if j != 0:
-            #     ax.set_yticklabels([])
-            if j == 3:
-                divider = make_axes_locatable(ax)
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                cbar = fig.colorbar(im, cax=cax, orientation='vertical')
-                cbar.ax.set_ylabel(r"$\log$ age")
+    for db_id, xlab in enumerate(
+            ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')):
+
+        dd = {}
+        for cl, vals in dist_dct.items():
+            x, y, y_16, y_84 = list(map(
+                float, (vals[db_id + 3], vals[0], vals[1], vals[2])))
+            # Skip missing clusters
+            if np.isnan(x):
+                continue
+            y, y_16, y_84 = 10**(.2 * (y + 5)), 10**(.2 * (y_16 + 5)),\
+                10**(.2 * (y_84 + 5))
+            dd[cl] = (x, y, y_16, y_84, age_dct[cl])
+
+        y0, y1, x0, x1 = gs_ij[db_id]
+        ax1 = plt.subplot(gs[y0:y1, x0:x1])
+
+        texts = []
+        for cl, (x, y, y_16, y_84, col) in dd.items():
+            yerr = np.array([[y - y_16, y_84 - y]]).T
+            ax1.errorbar(x, y, yerr=yerr, fmt='', c='grey', zorder=1)
+            ax1.scatter(
+                x, y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+                zorder=4, vmin=vmin, vmax=vmax)
+            texts.append(ax1.text(x, y, short_n[cl]))
+
+        adjust_text(texts)
+        ax1.plot(xylim, xylim, ls='--', c='k', lw=1.5, zorder=0)
+        ax1.set_xlim(*xylim)
+        ax1.set_ylim(*xylim)
+        if db_id in (0, 1):
+            ax1.set_xticklabels([])
+        if db_id in (1, 3):
+            ax1.set_yticklabels([])
+        ax1.set_xlabel("{} [pc]".format(xlab), fontsize=ft_sz)
+        if db_id in (0, 2):
+            ax1.set_ylabel("ASteCA [pc]", fontsize=ft_sz)
+
+        #
+        ax2 = plt.subplot(gs[db_id:db_id + 1, 4:6])
+        for cl, (x, y, y_16, y_84, col) in dd.items():
+            yerr = np.array([[y - y_16, y_84 - y]]).T
+            ax2.errorbar(
+                x, x - y, yerr=yerr, fmt='', c='grey', zorder=1)
+            im = ax2.scatter(
+                x, x - y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+                vmin=vmin, vmax=vmax, zorder=4)
+
+        ax2.plot(xylim, (0, 0), ls='--', c='k', lw=1.5, zorder=0)
+        ax2.set_xlim(*xylim)
+        ax2.set_xlabel("{} [pc]".format(xlab), fontsize=ft_sz)
+        # if db_id in (0, 2):
+        ax2.set_ylabel(r"$\Delta$ [pc]", fontsize=ft_sz)
+
+        # if db_id in (1, 3):
+        divider = make_axes_locatable(ax2)
+        cax = divider.append_axes('right', size='5%', pad=0.05)
+        cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+        cbar.ax.set_ylabel(r"$\log$ age", fontsize=ft_sz)
 
     fig.tight_layout()
     plt.savefig(out_folder + "dist.png", dpi=dpi, bbox_inches='tight')
@@ -148,3 +152,60 @@ def main(dpi=dpi):
 if __name__ == '__main__':
     plt.style.use('science')
     main()
+
+    # for i in (0, 2):
+    #     for j in (0, 1, 2, 3):
+    #         yf = i + 2 if i == 0 else i + 1
+    #         ax = plt.subplot(gs[i:yf, 2 * j:2 * j + 2])
+    #         texts = []
+    #         for cl, vals in dist_dct.items():
+    #             x, y, y_16, y_84 = list(map(
+    #                 float, (vals[j + 3], vals[0], vals[1], vals[2])))
+    #             # Skip missing clusters
+    #             if np.isnan(x):
+    #                 continue
+
+    #             y, y_16, y_84 = 10**(.2 * (y + 5)), 10**(.2 * (y_16 + 5)),\
+    #                 10**(.2 * (y_84 + 5))
+    #             col = age_dct[cl]
+    #             if i == 0:
+    #                 yerr = np.array([[y - y_16, y_84 - y]]).T
+    #                 ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', zorder=1)
+    #                 im = ax.scatter(
+    #                     x, y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+    #                     zorder=4, vmin=vmin, vmax=vmax)
+    #                 # xo = np.random.choice((-3000, 200))
+    #                 # yo = np.random.choice((-1000, 500))
+    #                 # ax.annotate(short_n[cl], (x + xo, y + yo), zorder=5)
+    #             else:
+    #                 yerr = np.array([[y - y_16, y_84 - y]]).T
+    #                 ax.errorbar(
+    #                     x, x - y, yerr=yerr, fmt='', c='grey', zorder=1)
+    #                 im = ax.scatter(
+    #                     x, x - y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
+    #                     vmin=vmin, vmax=vmax, zorder=4)
+    #             if i == 0:
+    #                 texts.append(ax.text(x, y, short_n[cl]))
+
+    #         if i == 0:
+    #             adjust_text(texts)
+    #             ax.plot(xylim, xylim, ls='--', c='k', lw=1.5, zorder=0)
+    #             ax.set_xlim(*xylim)
+    #             ax.set_ylim(*xylim)
+    #             ax.set_xticklabels([])
+    #             # ax.set_xlabel("{} [pc]".format(xlab[j]), fontsize=14)
+    #             if j == 0:
+    #                 ax.set_ylabel("ASteCA [pc]")
+    #         if i == 2:
+    #             ax.plot(xylim, (0, 0), ls='--', c='k', lw=1.5, zorder=0)
+    #             ax.set_xlim(*xylim)
+    #             ax.set_xlabel("{} [pc]".format(xlab[j]))
+    #             if j == 0:
+    #                 ax.set_ylabel(r"(DB - ASteCA) [pc]")
+    #         # if j != 0:
+    #         #     ax.set_yticklabels([])
+    #         if j == 3:
+    #             divider = make_axes_locatable(ax)
+    #             cax = divider.append_axes('right', size='5%', pad=0.05)
+    #             cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+    #             cbar.ax.set_ylabel(r"$\log$ age")
