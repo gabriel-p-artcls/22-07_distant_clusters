@@ -80,7 +80,7 @@ def main(dpi=dpi):
     fig = plt.figure(figsize=(20, 20))
     gs = gridspec.GridSpec(grid_y, grid_x)
     # xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
-    xylim = (100, 20400)
+    xylim = (100, 20800)
 
     # y0, y1, x0, x1
     gs_ij = ((0, 2, 0, 2), (0, 2, 2, 4), (2, 4, 0, 2), (2, 4, 2, 4))
@@ -137,7 +137,7 @@ def main(dpi=dpi):
         ax2.set_xlim(*xylim)
         ax2.set_xlabel("{} [pc]".format(xlab), fontsize=ft_sz)
         # if db_id in (0, 2):
-        ax2.set_ylabel(r"$\Delta$ [pc]", fontsize=ft_sz)
+        # ax2.set_ylabel(r"$\Delta$ [pc]", fontsize=ft_sz)
 
         # if db_id in (1, 3):
         divider = make_axes_locatable(ax2)

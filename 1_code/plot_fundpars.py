@@ -28,8 +28,9 @@ to store the proper motions plot data.
 The 'R1' line in 'asteca.ini' must include the required range of parameter
 values.
 
-This file then needs to be processed with the 'plot_fund_pars_pickle.py' code
-to generate the final images.
+The output is a single file called 'fundpars.pickle'. This file then needs
+to be processed with the 'plot_fund_pars_pickle.py' code to generate the
+final images.
 
 """
 

@@ -143,7 +143,7 @@ def main(dpi=dpi):
     plt.ylabel("[Fe/H]")
 
     fig.tight_layout()
-    plt.savefig(out_folder + "Fe_H.png", dpi=dpi, bbox_inches='tight')
+    plt.savefig(out_folder + "Fe_vs_R.png", dpi=dpi, bbox_inches='tight')
 
 
 def ZtoFeH(Z):

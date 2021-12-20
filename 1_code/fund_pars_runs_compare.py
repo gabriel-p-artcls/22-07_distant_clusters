@@ -1,5 +1,7 @@
 
 """
+Helper script, not for article plots.
+
 Compare the ASteCA results from the original run (asteca_output.dat) with those
 from 4 extra runs (asteca_output_2345.dat) performed with more time given
 to the 'ptemecee' algorithm.

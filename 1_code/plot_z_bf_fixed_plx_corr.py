@@ -171,7 +171,7 @@ def plotDistDelta(ax, d_asteca, sols, xlabel=False):
         leg_pos = 'lower right'
         ax.set_ylabel(r"(ASteCA - ASteCA$^{*}$) [pc]", fontsize=14)
     ax.legend(loc=leg_pos, frameon=True, framealpha=0.5)
-    plt.xlim(2100, 16400)
+    # plt.xlim(2100, 16400)
 
 
 def ditsMod2pc(dms):
