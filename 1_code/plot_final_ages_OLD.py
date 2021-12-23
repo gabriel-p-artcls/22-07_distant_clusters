@@ -5,11 +5,12 @@ Plot the distances obtained with ASteCA versus those from the four databases
 
 
 from astropy.io import ascii
-# import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
-# from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.gridspec as gridspec
-from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw, ft_sz
+from adjustText import adjust_text
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -44,6 +45,17 @@ Ber102       354.66 56.64  5   9.5   9638  9.59 10519 8.78  2600   9.14 4900
 """
 lit_data = ascii.read(lit_data)
 
+short_n = {
+    'saurer1': 'SAU1', 'czernik30': 'CZER30', 'arpm2': 'ARPM2',
+    'saurer3': 'SAUR3', 'ber102': 'BER102', 'eso09205': 'E9205',
+    'saurer6': 'SAU6', 'ber25': 'BER25', 'ber26': 'BER26',
+    'eso09218': 'E9218', 'tombaugh2': 'TOMB2', 'eso09308': 'E9308',
+    'vdbh144': 'BH144', 'fsr1212': 'F1212', 'ber56': 'BER56',
+    'fsr1419': 'F1419', 'ber73': 'BER73', 'kronberger31': 'KRON31',
+    'vdbh37': 'BH37', 'ber75': 'BER75',
+    'kronberger39': 'KRON39\n' + r'  ($\leftarrow$ 6)',
+    'vdbh4': 'BH4', 'ber76': 'BER76', 'ber29': 'BER29', 'vdbh176': 'BH176'}
+
 in_folder = '../2_pipeline/5_ASteCA/out/'
 out_folder = '../2_pipeline/plots/'
 
@@ -54,35 +66,52 @@ def main(dpi=dpi):
     data = ascii.read(in_folder + 'asteca_output.dat')
 
     lit_names = [_.lower() for _ in lit_data['Cluster']]
-    age_dct = {'x': [], 'A_MW': [], 'A_WB': [], 'A_OC': [], 'A_CG': []}
+    age_dct, dist_dct = {}, {}
     for cl in data:
         cl_name = cl['NAME'][3:]
         cl_i = lit_names.index(cl_name)
-        age_asteca = (10**cl['a_median']) / 1e9
-        age_dct['x'].append(age_asteca)
-        age_dct['A_MW'].append(age_asteca - (10**lit_data[cl_i]['A_MW']) / 1e9)
-        age_dct['A_WB'].append(age_asteca - (10**lit_data[cl_i]['A_WB']) / 1e9)
-        age_dct['A_OC'].append(age_asteca - (10**lit_data[cl_i]['A_OC']) / 1e9)
-        age_dct['A_CG'].append(age_asteca - (10**lit_data[cl_i]['A_CG']) / 1e9)
+        age_dct[cl_name] = (
+            cl['a_median'], cl['a_16th'], cl['a_84th'], lit_data[cl_i]['A_MW'],
+            lit_data[cl_i]['A_WB'], lit_data[cl_i]['A_OC'],
+            lit_data[cl_i]['A_CG'])
+        dist_dct[cl_name] = cl['d_median']
+
+    xlab = ('MWSC', 'WEBDA', 'OPENCLUST', 'Cantat-Gaudin')
 
     #
-    fig = plt.figure(figsize=(25, 25))
+    fig = plt.figure(figsize=(20, 20))
     gs = gridspec.GridSpec(grid_y, grid_x)
-    ax = plt.subplot(gs[0:1, 0:2])
 
-    ax.scatter(age_dct['x'], age_dct['A_MW'], label="MWSC",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='o')
-    ax.scatter(age_dct['x'], age_dct['A_WB'], label="WEBDA",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='s')
-    ax.scatter(age_dct['x'], age_dct['A_OC'], label="OC02",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='^')
-    ax.scatter(age_dct['x'], age_dct['A_CG'], label="CG20",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='v')
+    for i in (0, 1, 2, 3):
+        ax = plt.subplot(gs[0:2, 2 * i:2 * i + 2])
+        texts = []
+        for cl, vals in age_dct.items():
+            x, y, y_16, y_84 = list(map(
+                float, (vals[i + 3], vals[0], vals[1], vals[2])))
+            # x, y, y_16, y_84 = (10**np.array([x, y, y_16, y_84])) / 1e6
+            yerr = np.array([[y - y_16, y_84 - y]]).T
+            col = dist_dct[cl]
+            ax.errorbar(x, y, yerr=yerr, fmt='', c='grey', alpha=.5, zorder=1)
+            im = ax.scatter(x, y, vmin=13, vmax=16, c=col, s=sc_sz, ec=sc_ec,
+                            lw=sc_lw, zorder=4)
+            # ax.annotate(short_n[cl], (x + 100, y))
+            texts.append(ax.text(x, y, short_n[cl]))
 
-    ax.axhline(0, ls=':', c='k')
-    ax.set_xlabel("ASteCA [Gyr]", fontsize=ft_sz)
-    ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
-    plt.legend()
+        adjust_text(texts)
+
+        xylim = ((7.1, 10.28), (8.1, 10.28), (8.5, 10.28), (8.1, 10.28))
+        ax.plot(xylim[i], xylim[i], ls='--', c='k', lw=1.5)
+        ax.set_yticks(np.arange(xylim[i][0] + .1, 10.21, 0.2))
+        ax.set_xlim(*xylim[i])
+        ax.set_ylim(*xylim[i])
+        if i == 0:
+            ax.set_ylabel(r"ASteCA [$\log$ age]")
+        ax.set_xlabel(r"{} [$\log$ age]".format(xlab[i]))
+        if i == 3:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+            cbar.ax.set_ylabel(r"Dist [$\mu$]")
 
     fig.tight_layout()
     plt.savefig(out_folder + "ages.png", dpi=dpi, bbox_inches='tight')
