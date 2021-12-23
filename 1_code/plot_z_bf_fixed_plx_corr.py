@@ -127,7 +127,7 @@ def main(dpi=dpi):
     ax = plt.subplot(gs[2:4, 0:2])
     sols = {
         'plx_median': (plx_median, r'median(Plx)$^{-1}$'),
-        'plx_asteca': (plx_asteca, 'ASteCA)'),
+        'plx_asteca': (plx_asteca, 'ASteCA'),
         'plx_kalkayotl': (plx_kalkayotl, 'Kalkayotl')
     }
     plotDistDelta(ax, d_asteca, sols, True)
