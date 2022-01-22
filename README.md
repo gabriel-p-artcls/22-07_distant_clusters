@@ -1,7 +1,4 @@
 
-# Analysis of the 25 most distant clusters
-
-
 The folders have the following meanings:
 
 * `0_data`: raw data for the analyzed data
@@ -10,18 +7,10 @@ The folders have the following meanings:
 * `3_article`: final article
 
 
-<!-- MarkdownTOC levels="1,2,3" autolink="true" style="ordered" -->
-
-1. [Gaia EDR3 data](#gaia-edr3-data)
-1. [pyUPMASK](#pyupmask)
-1. [Members selection](#members-selection)
-1. [Extinction](#extinction)
-1. [ASteCA](#asteca)
-
-<!-- /MarkdownTOC -->
 
 
-## Gaia EDR3 data
+
+# Analysis of the 25 most distant clusters
 
 The clusters where selected from the WEBDA, OPENCLUST, MWSC, and [Cantat-Gaudin](https://www.aanda.org/articles/aa/abs/2020/08/aa38192-20/aa38192-20.html) databases, as those with a catalogued distance of 9 Kpc or more.
 
@@ -97,6 +86,28 @@ Berkeley 91         9471        8.4       2400
 
 
 
+
+
+
+# Folders in 2_pipeline
+
+<!-- MarkdownTOC levels="1,2,3" autolink="true" style="ordered" -->
+
+1. [Data filter](#data-filter)
+1. [pyUPMASK](#pyupmask)
+1. [Members selection](#members-selection)
+1. [SFD extinction](#sfd-extinction)
+1. [ASteCA](#asteca)
+1. [Parallax correction](#parallax-correction)
+
+<!-- /MarkdownTOC -->
+
+## Data filter
+
+Remove unused columns from the raw data files.
+
+
+
 ## pyUPMASK
 
 Processed all clusters with pyUPMASK+GMM, using only the proper motions as processing data.
@@ -148,7 +159,7 @@ vdbh37       90   149  90  149  98  133    0.033
 
 
 
-## Extinction
+## SFD extinction
 
 The SFD maps give:
 
@@ -214,3 +225,7 @@ R1   tombaugh2     min/max   8/max      0/.5    10/16 100/100000  0/1   3.1
 R1   vdbh37        min/max   8/max      0/3.    10/16 100/100000  0/1   3.1
 ```
 
+
+## Parallax correction
+
+Selected members with corrected parallax using the Gaia EDR3 code (`EDR3plxCorr` script)
