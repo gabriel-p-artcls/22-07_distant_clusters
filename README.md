@@ -2,6 +2,14 @@
 # Analysis of the 25 most distant clusters
 
 
+The folders have the following meanings:
+
+* `0_data`: raw data for the analyzed data
+* `1_code`: code used to analyze the data and generate the final plots
+* `2_pipeline`: output from the different processes used throughout the analysis
+* `3_article`: final article
+
+
 <!-- MarkdownTOC levels="1,2,3" autolink="true" style="ordered" -->
 
 1. [Gaia EDR3 data](#gaia-edr3-data)
