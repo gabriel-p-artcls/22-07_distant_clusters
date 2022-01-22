@@ -31,7 +31,7 @@ vdBH37       128.95 -43.62 3   8.84  11220 8.24 4038  8.85  2500  7.5   5202
 ESO09205     150.81 -64.75 5   9.3   5168  9.65 12444 9.78  10900 9.3   5168
 ESO09218     153.74 -64.61 5   9.024 10607 9.46 9910  9.024 607   9.15  9548
 Saurer3      160.35 -55.31 4   9.3   9550  nan   nan  9.45  8830  9.3   7075
-Kronberger39 163.56 -61.74 .8  nan   11100 nan   nan  nan   nan   7.3    4372
+Kronberger39 163.56 -61.74 .8  nan   11100 nan   nan  nan   nan   6.    4372
 Shorlin1     166.44 -61.23 .8  nan   nan   nan   nan  nan   12600 6.5   5594
 ESO09308     169.92 -65.22 1   9.74  14000 nan   nan  9.65  3700   9.8  13797
 vdBH144      198.78 -65.92 1.5 8.9   12000 9.17 9649  8.9   12000  9    7241
@@ -64,6 +64,11 @@ def main(dpi=dpi):
         age_dct['A_WB'].append(age_asteca - (10**lit_data[cl_i]['A_WB']) / 1e9)
         age_dct['A_OC'].append(age_asteca - (10**lit_data[cl_i]['A_OC']) / 1e9)
         age_dct['A_CG'].append(age_asteca - (10**lit_data[cl_i]['A_CG']) / 1e9)
+        print("{:<17}: {:.2f} {:.2f} {:.2f} {:.2f}".format(
+            cl_name, cl['a_median'] - lit_data[cl_i]['A_MW'],
+            cl['a_median'] - lit_data[cl_i]['A_WB'],
+            cl['a_median'] - lit_data[cl_i]['A_OC'],
+            cl['a_median'] - lit_data[cl_i]['A_CG']))
 
     #
     fig = plt.figure(figsize=(25, 25))
