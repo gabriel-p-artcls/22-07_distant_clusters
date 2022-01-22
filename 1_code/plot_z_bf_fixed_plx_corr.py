@@ -154,6 +154,8 @@ def plotDistDelta(ax, d_asteca, sols, xlabel=False):
             s=sc_sz, lw=sc_lw, ec=sc_ec)
         ax.axhline(np.median(y), ls=':', c=cols[i], lw=1.5)
 
+        print("{}: {:.0f}".format(sol[1], np.median(y)))
+
         # # Tested linear fit, There is no appreciable slope in the fit
         # from sklearn.linear_model import LinearRegression
         # X = np.array(x).reshape(-1, 1)
