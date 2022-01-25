@@ -54,12 +54,14 @@ def main(dpi=dpi):
     data = ascii.read(in_folder + 'asteca_output.dat')
 
     lit_names = [_.lower() for _ in lit_data['Cluster']]
-    age_dct = {'x': [], 'A_MW': [], 'A_WB': [], 'A_OC': [], 'A_CG': []}
+    age_dct = {
+        'x': [], 'A_MW': [], 'A_WB': [], 'A_OC': [], 'A_CG': [], 'b_fr': []}
     for cl in data:
         cl_name = cl['NAME'][3:]
         cl_i = lit_names.index(cl_name)
         age_asteca = (10**cl['a_median']) / 1e9
         age_dct['x'].append(age_asteca)
+        age_dct['b_fr'].append(cl['b_median'])
         age_dct['A_MW'].append(age_asteca - (10**lit_data[cl_i]['A_MW']) / 1e9)
         age_dct['A_WB'].append(age_asteca - (10**lit_data[cl_i]['A_WB']) / 1e9)
         age_dct['A_OC'].append(age_asteca - (10**lit_data[cl_i]['A_OC']) / 1e9)
@@ -88,6 +90,20 @@ def main(dpi=dpi):
     ax.set_xlabel("ASteCA [Gyr]", fontsize=ft_sz)
     ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
     plt.legend()
+
+    ax = plt.subplot(gs[1:3, 0:2])
+    ax.scatter(age_dct['b_fr'], age_dct['A_MW'], label="MWSC",
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='o')
+    ax.scatter(age_dct['b_fr'], age_dct['A_WB'], label="WEBDA",
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='s')
+    ax.scatter(age_dct['b_fr'], age_dct['A_OC'], label="OC02",
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='^')
+    ax.scatter(age_dct['b_fr'], age_dct['A_CG'], label="CG20",
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='v')
+    ax.axhline(0, ls=':', c='k')
+    ax.set_xlabel(r"$b_{fr}$", fontsize=ft_sz)
+    ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
+    # plt.legend()
 
     fig.tight_layout()
     plt.savefig(out_folder + "ages.png", dpi=dpi, bbox_inches='tight')
