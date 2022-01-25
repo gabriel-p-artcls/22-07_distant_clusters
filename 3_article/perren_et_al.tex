@@ -603,9 +603,9 @@ located more than a few Kpc away.}
 
   \begin{table*}
   \caption{Fundamental parameters estimated with \texttt{ASteCA} for the
-  twenty-five analyzed clusters. Sub and supra indexes indicate the 16th
-  and 84th percentiles, respectively. The last column indicates the number of
-  true members used in the analysis.}
+  twenty-five analyzed clusters. Sub and supra indexes
+  indicate the 16th and 84th percentiles, respectively. The last column
+  indicates the number of true members used in the analysis.}
   \label{tab:results}
   \centering
   \begin{tabular}{lccccccc}
@@ -695,7 +695,12 @@ located more than a few Kpc away.}
   \end{table*}
 
   Table~\ref{tab:results} shows the fundamental parameters along with their
-  uncertainties estimated by \texttt{ASteCA}. The Bayesian inference process was
+  uncertainties estimated by \texttt{ASteCA}, where the [Fe/H] parameter was
+  obtained using the approximation given in the CMD service for
+  [M/H].\footnote{Assuming [M/H]$\sim$[Fe/H], [Fe/H]$=\log(Z/X)-\log(Z/X)_{o}$, where:
+  $(Z/X)_{o}=0.0207; Y=0.2485+1.78Z$.\\
+  CMD service: \url{http://stev.oapd.inaf.it/cgi-bin/cmd}}
+  The Bayesian inference process was
   allowed to run for enough steps to achieve convergence.
   As shown in the table all the analyzed clusters are rather old, with the
   youngest one (vd Bergh-Hagen 37) assigned an age of $\sim1$ Gyr; although
@@ -731,20 +736,37 @@ located more than a few Kpc away.}
   \end{figure*}
 
   We can analyze the difference between our age estimation and those from
-  the four databases; the results are shown in Fig.~\ref{fig:ages}. The plot
-  shows that \texttt{ASteCA} assigns ages that are larger on average than the
-  databases, and more so as the estimated age increases. A difference of 3 Gyr
-  for an age of 8 Gyr (the average difference shown in the plot) translates to a
-  logarithmic difference of $\sim$ 0.2 dex, which is a reasonable uncertainty
-  given the complexities associated to the clusters under investigation. The
-  largest difference arises with Kronberger 39, for which \texttt{ASteCA} finds
-  an age of $\log(age)=9.5$ but has an age of $\log(age)=6$ assigned in the
-  MWSC database (the smallest age by far in the four databases).\\
+  the four databases; the results are shown in Fig.~\ref{fig:ages}. The top plot
+  shows that \texttt{ASteCA} systematically assigns ages that are larger on
+  average than those from the databases, and more so as the estimated age
+  increases. A difference of 3 Gyr for an age of 8 Gyr (the average difference
+  shown in the plot) translates to a logarithmic difference of $\sim$ 0.2 dex,
+  which is a reasonable uncertainty given the complexities associated to the
+  clusters under investigation.
+  The largest difference arises with Kronberger 39, for which \texttt{ASteCA}
+  finds an age of $\log(age)=9.5$ but has an age of $\log(age)=6$ assigned in
+  the MWSC database (the smallest age by far in the four databases).
+
+  As can be seen in the bottom plot of Fig.~\ref{fig:ages}, there appears to be
+  a correlation between the difference in age estimates and the binarity
+  fraction estimated. The trend shows that the larger the percentage of binary
+  systems present in the cluster, the larger on average is the difference
+  between the age value obtained by \texttt{ASteCA} and those in the
+  databases. Such an effect can be explained by noticing that the TO in the CMD
+  is pushed downwards by the presence of binaries, which are located above the
+  brightest point of the main sequence of single stars. This in turn forces the
+  fit to adjust towards larger ages, hence producing the systematic trend
+  seen in the analysis. This result points to the importance of taking binary
+  systems into account when performing stellar clusters' parameters estimations.
+  \\
+
 
   \begin{figure}
    \resizebox{\hsize}{!}{\includegraphics[]{figs/ages.png}}
-   \caption{\texttt{ASteCA} ages versus difference between databases age
-   estimates in the sense (\texttt{ASteCA} - database).}
+   \caption{Top: \texttt{ASteCA} ages versus difference between databases age
+   estimates in the sense (\texttt{ASteCA} - database).
+   Bottom: age differences versus binarity fraction assigned by
+   \texttt{ASteCA}.}
    \label{fig:ages}
   \end{figure}
 
@@ -782,11 +804,11 @@ located more than a few Kpc away.}
   for open clusters~\citep{Sollima_2010}. The median difference with the main
   \texttt{ASteCA} run is largest when the binary fraction is fixed to 0. 
   ($\sim$1100 pc), lower when we fix this parameter to 0.3 ($\sim$500 pc),
-  and lowest when it is allowed to vary ($\sim$25 pc). This indicates that a
-  proper binary fraction fit is of utmost importance for a correct estimation of
-  the cluster's fundamental parameters, particularly for the distance. Even when
-  the binary fraction is free, fixing just the metallicity to solar values can
-  have a large impact on the estimated distances as shown in
+  and lowest when it is allowed to vary ($\sim$25 pc). This is another indicator
+  that a proper binary fraction fit is of utmost importance for a correct
+  estimation of the cluster's fundamental parameters, particularly for the
+  distance. Even when the binary fraction is free, fixing just the metallicity
+  to solar values can have a large impact on the estimated distances as shown in
   Fig.~\ref{fig:dist_comparisions} (green stars).
   % $Z=Z_{\odot},b_{fr}=0.0$: 1157
   % $Z=Z_{\odot}$: -25
@@ -1145,16 +1167,19 @@ located more than a few Kpc away.}
   analysis.\\
 
 
-  In Fig.~\ref{fig:MWmap_vectors} we show how the map of the Galaxy shown in
-  Fig.~\ref{fig:MWmap} looks, but with the distance parameter values found in
-  this work. The arrows represent the velocity vectors for all the clusters with
-  available radial velocity. The values used to construct this figure are shown
-  in Table~\ref{tab:velocities}.
+  In Fig.~\ref{fig:MWmap_vectors} we show how the map of the Galaxy shown
+  previously in Fig.~\ref{fig:MWmap} looks, but with the distance parameter
+  values found in this work. The arrows represent the velocity vectors for all
+  the clusters with available radial velocity. The values used to construct this
+  figure are shown in Table~\ref{tab:velocities}.
  
 
   \begin{figure*}
    \resizebox{\hsize}{!}{\includegraphics[]{figs/MWmap_AS.png}}
-   \caption{xxx}
+   \caption{Same as Fig.~\ref{fig:MWmap} but showing the positions given by our
+   own \texttt{ASteCA} analysis. The velocity vectors are drawn for those
+   clusters with available radial velocities. The sizes of the vectors are
+   proportional to the \textbf{XXXX}.}
    \label{fig:MWmap_vectors}
   \end{figure*}
 
@@ -1166,19 +1191,60 @@ located more than a few Kpc away.}
  \subsection{Metallicity gradient}
   \label{ssec:met_gradient}
 
+  % saurer1, FeH=0.17 (-0.07,0.27), R_GC=19.7
+  % czernik30, FeH=-0.18 (-0.54,0.18), R_GC=13.5
+  % arpm2, FeH=-0.24 (-0.60,-0.09), R_GC=15.9
+  % saurer3, FeH=0.16 (-0.29,0.30), R_GC=9.0
+  % ber102, FeH=-0.13 (-0.41,0.20), R_GC=13.2
+  % eso09205, FeH=0.15 (-0.08,0.17), R_GC=13.3
+  % saurer6, FeH=0.01 (-0.37,0.24), R_GC=9.8
+  % ber25, FeH=0.03 (-0.28,0.07), R_GC=14.0
+  % ber26, FeH=0.18 (-0.08,0.30), R_GC=12.5
+  % eso09218, FeH=0.09 (-0.08,0.10), R_GC=11.7
+  % tombaugh2, FeH=-0.35 (-0.43,-0.34), R_GC=15.2
+  % eso09308, FeH=-0.32 (-0.82,0.10), R_GC=12.5
+  % vdbh144, FeH=-0.65 (-0.69,-0.43), R_GC=8.2
+  % fsr1212, FeH=0.04 (-0.23,0.25), R_GC=16.7
+  % ber56, FeH=0.10 (-0.37,0.28), R_GC=13.2
+  % fsr1419, FeH=0.24 (-0.08,0.30), R_GC=13.0
+  % ber73, FeH=-0.48 (-1.24,0.02), R_GC=12.4
+  % kronberger31, FeH=0.02 (-0.35,0.23), R_GC=8.4
+  % vdbh37, FeH=0.05 (-0.55,0.23), R_GC=8.9
+  % ber75, FeH=-0.26 (-0.90,0.11), R_GC=14.3
+  % kronberger39, FeH=0.01 (-0.31,0.25), R_GC=12.7
+  % vdbh4, FeH=-0.28 (-0.96,0.24), R_GC=13.1
+  % ber76, FeH=0.03 (-0.18,0.16), R_GC=12.6
+  % ber29, FeH=-0.14 (-0.48,0.08), R_GC=22.0
+  % vdbh176, FeH=0.26 (-0.08,0.29), R_GC=13.6
+
   The radial metallicity ([Fe/H]) distribution, or metallicity gradient, is a
   key tracer of the Galaxy's chemical evolution. Open clusters have been used as
   a tool to investigate this relation for several decades~\citep{Janes_1979}.
   Although we have a somewhat small sample, we present here the results to
-  highlight the 
+  highlight the difficulties that arise when estimating the metal content from
+  photometric data alone.
+  The gradient is usually taken to be around -0.05 dex kpc$^{-1}$ for the inner
+  clusters, with a break beyond $R_{GC}\approx10$ kpc into a shallower
+  slope~\citep{Donor_2020}. In~\cite{Donor_2018} it was previously shown that
+  the metallicity gradient is also (expectedly) highly dependent on the database
+  used fix the distances, varying as much as 40\% depending on the used
+  database. This result was confirmed in~\citep{Donor_2020}, where a
+  database-dependent variation of of 15\% was found.
+  % from Donor et al (2020)
+  % Donor et al. (2018) (henceforth OCCAMII) showed that this gradient could
+  % change by as much as 40%, depending on which distance catalog was used
 
-  \cite{Donor_2020}, 
+
+  % Donor et al 2020 (Vizier)
+  % Berkeley 29: -0.49 0.03 (3); Czernik 30: -0.4  0.01 (2); Saurer 1: -0.42
+  % 0.01 (1)
+
 
   Six of the clusters in our sample were investigated in~\cite{Netopil_2021} in
-  relation with the metallicity gradient: BER25, BER29, BER73, CZER30, SAU1,
-  and TOMB2.
+  relation with the metallicity gradient: Berkeley 25, Berkeley 29, Berkeley 73,
+  Czernik R30, Saurer 1, and Tombaugh 2.
 
-  Three where studied in~\cite{Spina_2021}: BER29, BER73, CZER30
+  Three more where studied in~\cite{Spina_2021}: BER29, BER73, CZER30
   [Fe/H]: -0.48 (1), -0.319 (1), -0.396 (2)
   (parenthesis: number of cluster members)
 
@@ -1204,61 +1270,6 @@ located more than a few Kpc away.}
 
 
 
- \subsection{Distances and distribution in the Galaxy.}
-The fundamental parameters of the 25 clusters in our sample have been reassessed
-using pyUPMASK and ASteCA. The results are shown in Table 3. Inspecting the data
-in the table we see that none of them is a young cluster. Indeed, with the
-exception of just two, the remaining ones are older than 1 Gyr. 13 clusters out
-of 25 are at more than 9 kpc from the sun, thus reducing the sample found in
-data bases in almost one half. 
-In terms of the galacto-centric distance, RG, and distribution in the galactic
-plane it happens that 14 are placed in the third galactic quadrant and 10 out of
-these 14 are under the formal galactic equator at negative latitudes. The other
-4 above the galactic plane are, Berkeley 26 at 12.52 kpc, Saurer 1 at 19.69 kpc,
-Cz30 at 13.52 and Berk 29 at 21.98 kpc.  Berkeley 26, one of the oldest cluster
-in our sample is found at z= 0.2 kpc. The most distant cluster in this quadrant,
-Berk29, appears at z=2 kpc above the formal galactic plane while Saurer 1 has z
-near 1.65 kpc and CZER 30 is at z=0.51 kpc.  At first glance, we are tempted to
-think that a large number of clusters in the third quadrant seems to accompany
-the warp defined by diffuse blue population(references are needed) which maximum
-height above the plane takes place at about -8 in latitude and near 240 in longitude.
-(Esto debo completarlo…).
-But more interesting is to see five clusters are farther than the assumed limit
-for the galactic disk radius (van referencias). They are: Berkeley 29, Rgc=22 kpc,
-Tombaugh 2, Rg=15, F1212 at Rg= 16 kpc,  SAU1 with Rg= 19 kpc and ARPM2 at
-Rg= 16 kpc. These numbers, if confirmed, may imply that the galaxy disc may be
-larger than assumed.\\
-
- When comparing our results in Table 3 with those coming from the MWSC, WEBDA,
-Open Cclus and Cantat-Gaudin databases, we clearly see important disagreements
-in almost all the parameters. We show in Fig. xx our distances against those
-given in each database;  just for easing things we indicated the ages of the
-clusters obtained  by us using a color scale. The best overall agreement in
-distances is found with Cantat-Gaudin for 16 clusters in common with differences
-ranging from -2000 to +3000 parsecs without appearing to be any dependency on
-the age of the clusters.  Within the limits of the associated errors, we can
-affirm that the agreement with CG is reasonably good.  Differences with other
-authors are frequently huge spanning a range from -10 to +10 kpc. 
-
-\subsection{The ages}
-Regarding the ages that come out from our analysis scheme, we see in Fig. Xx that
-ASteCA shows a systematic tendency to estimate older ages in comparison with all
-the databases, although the effect is quite smaller in the case of clusters in
-common with CG. The exception is Berkeley 37, in which case the difference to CG
-is very large. 
-
-We see systematic effects regarding age differences in the sense that our values
-tend to be larger. There must have a superimposition of reasons to produce that
-effect. With CG there are 6 cluster showing such differences and this can may be
-due to a different treatment of binarity (a free parameter in our analysis).
-
-
-
-\subsection{Velocities}
-
-
-
-\subsection{The metal content}
 
 
 
@@ -1267,8 +1278,41 @@ due to a different treatment of binarity (a free parameter in our analysis).
 \section{Conclusions}
  \label{sec:conclusions}
 
+  The fundamental parameters of the 25 clusters in our sample have been reassessed
+  using pyUPMASK and ASteCA. The results are shown in Table 3. Inspecting the data
+  in the table we see that none of them is a young cluster. Indeed, with the
+  exception of just two, the remaining ones are older than 1 Gyr. 13 clusters out
+  of 25 are at more than 9 kpc from the sun, thus reducing the sample found in
+  data bases in almost one half.
 
- xxx
+  In terms of the galacto-centric distance, RG, and distribution in the galactic
+  plane it happens that 14 are placed in the third galactic quadrant and 10 out of
+  these 14 are under the formal galactic equator at negative latitudes. The other
+  4 above the galactic plane are, Berkeley 26 at 12.52 kpc, Saurer 1 at 19.69 kpc,
+  Cz30 at 13.52 and Berk 29 at 21.98 kpc.  Berkeley 26, one of the oldest cluster
+  in our sample is found at z=0.2 kpc. The most distant cluster in this quadrant,
+  Berk29, appears at z=2 kpc above the formal galactic plane while Saurer 1 has z
+  near 1.65 kpc and CZER 30 is at z=0.51 kpc.  At first glance, we are tempted to
+  think that a large number of clusters in the third quadrant seems to accompany
+  the warp defined by diffuse blue population(references are needed) which maximum
+  height above the plane takes place at about -8 in latitude and near 240 in longitude.
+  (Esto debo completarlo…).
+  But more interesting is to see five clusters are farther than the assumed limit
+  for the galactic disk radius (van referencias). They are: Berkeley 29, Rgc=22 kpc,
+  Tombaugh 2, Rg=15, F1212 at Rg= 16 kpc,  SAU1 with Rg= 19 kpc and ARPM2 at
+  Rg= 16 kpc. These numbers, if confirmed, may imply that the galaxy disc may be
+  larger than assumed.\\
+
+  When comparing our results in Table 3 with those coming from the MWSC, WEBDA,
+  Open Cclus and Cantat-Gaudin databases, we clearly see important disagreements
+  in almost all the parameters. We show in Fig. xx our distances against those
+  given in each database;  just for easing things we indicated the ages of the
+  clusters obtained  by us using a color scale. The best overall agreement in
+  distances is found with Cantat-Gaudin for 16 clusters in common with differences
+  ranging from -2000 to +3000 parsecs without appearing to be any dependency on
+  the age of the clusters.  Within the limits of the associated errors, we can
+  affirm that the agreement with CG is reasonably good.  Differences with other
+  authors are frequently huge spanning a range from -10 to +10 kpc. 
 
 
 
