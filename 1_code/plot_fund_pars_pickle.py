@@ -6,9 +6,11 @@ from matplotlib.colors import LogNorm, ListedColormap
 import matplotlib.offsetbox as offsetbox
 
 """
+This script generates the VPD + CMDs for all the clusters from the
+"fundpars.pickle" file.
 """
 
-output_subdir = '../2_pipeline/5_ASteCA/tmp/'
+output_subdir = '../2_pipeline/plots/'
 forder = (
     'BER73', 'BER25', 'BER75', 'BER26', 'TOMB2', 'BER76', 'F1212', 'SAU1',
     'CZER30', 'ARPM2', 'BH4', 'F1419', 'BH37', 'E9205', 'E9218', 'SAU3',

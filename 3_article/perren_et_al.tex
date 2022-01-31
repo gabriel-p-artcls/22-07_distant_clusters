@@ -645,9 +645,11 @@ located more than a few Kpc away.}
   ARPM2 & 0.0087$_{0.0039}^{0.0120}$ & $-0.24_{-0.60}^{-0.09}$ & 9.59 $_{9.53}^{9.68 }$ & 0.62$_{0.59}^{0.68}$ &
   15.20$_{15.11}^{15.31}$ & 10.97$_{10.54}^{11.53}$ & 8.8E+03$_{6.7E+03}^{1.3E+04}$ & 0.30$_{0.16}^{0.54}$ &
   200 \\[.2cm]
-  BH4 & 0.0079$_{0.0017}^{0.0245}$ & $-0.28_{-0.96}^{0.24}$ & 9.14 $_{8.75}^{9.42 }$ & 0.42$_{0.08}^{0.48}$ &
-  14.48$_{13.90}^{15.32}$ & 7.89$_{6.03}^{11.58}$ & 1.9E+03$_{1.0E+03}^{3.5E+03}$ & 0.62$_{0.29}^{0.86}$ &
+  BH4 & 0.0101$_{0.0017}^{0.0233}$ & $-0.17_{-0.96}^{0.21}$ & 8.88$_{8.70}^{9.25}$ & 0.40$_{0.32}^{0.44}$ &
+  14.97$_{14.41}^{15.51}$ & 9.88$_{7.64}^{12.63}$ & 1.9E+03$_{1.1E+03}^{3.5E+03}$ & 0.61$_{0.28}^{0.87}$ &
   70 \\[.2cm]
+  % BH4 & 0.0079$_{0.0017}^{0.0245}$ & $-0.28_{-0.96}^{0.24}$ & 9.14 $_{8.75}^{9.42 }$ & 0.42$_{0.08}^{0.48}$ &% 14.48$_{13.90}^{15.32}$ & 7.89$_{6.03}^{11.58}$ & 1.9E+03$_{1.0E+03}^{3.5E+03}$ & 0.62$_{0.29}^{0.86}$ &
+  % 70 \\[.2cm]
   F1419 & 0.0243$_{0.0123}^{0.0279}$ & $0.24_{-0.08}^{0.30}$ & 9.60 $_{9.52}^{9.78 }$ & 0.52$_{0.49}^{0.59}$ &
   14.85$_{14.57}^{15.00}$ & 9.33$_{8.22}^{10.01}$ & 9.4E+03$_{6.4E+03}^{1.7E+04}$ & 0.56$_{0.30}^{0.85}$ &
   150 \\[.2cm]
@@ -699,17 +701,17 @@ located more than a few Kpc away.}
   [M/H].\footnote{Assuming [M/H]$\sim$[Fe/H], [Fe/H]$=\log(Z/X)-\log(Z/X)_{o}$, where:
   $(Z/X)_{o}=0.0207; Y=0.2485+1.78Z$.\\
   CMD service: \url{http://stev.oapd.inaf.it/cgi-bin/cmd}}
-  The Bayesian inference process was
-  allowed to run for enough steps to achieve convergence.
+  The Bayesian inference process was allowed to run for enough steps to achieve
+  convergence.
   As shown in the table all the analyzed clusters are rather old, with the
   youngest one (vd Bergh-Hagen 37) assigned an age of $\sim0.8$ Gyr; although
   notice the very large uncertainty associated to it. It is worth noting
   that only about half of the clusters are truly beyond the 9 kpc ($\sim$14.8
   mag) limit originally used to perform the selection from the published
   databases. The binary fraction ranges from 30\% up to $\sim90$\% for the
-  cluster Saurer 3. The total estimated mass is lies in the range [2000,
+  cluster Saurer 3. The total estimated masses are found in the range [2000,
   60000] M$_{\odot}$ with the exception of vd Bergh-Hagen 176, for which a mass
-  of 170000 M$_{\odot}$ is found. It is worth noticing however that this is a
+  of 170000 M$_{\odot}$ is given. It is worth noticing however that this is a
   lower limit estimate since \texttt{ASteCA} does not take into account the
   experienced dynamical mass loss, which can be significant for old stellar
   clusters~\citep{Martinez_2017}.\\
@@ -723,8 +725,8 @@ located more than a few Kpc away.}
   Fig.~\ref{fig:distances}, all but the CG20 database show differences of up
   to 10 kpc for clusters spanning the full distance range. Even the CG20
   database, the one with the better overall match to our values, shows
-  differences more than 2 kpc for clusters located at a distance of $\sim10$ kpc
-  from the Sun. It is thus clear that even the database with the closest fit
+  differences larger than 2 kpc for clusters located at a distance of $\sim10$
+  kpc from the Sun. It is thus clear that even the database with the closest fit
   contains substantial disagreements with the distance values estimated by 
   \texttt{ASteCA}. We see no evident trend that correlates the differences in
   the distance with the ages (used to color the circles in
@@ -736,7 +738,7 @@ located more than a few Kpc away.}
    \caption{\texttt{ASteCA} versus database distances. The plots to the right
    stacked vertically are the \texttt{ASteCA} distances versus the differences
    in the sense (\texttt{ASteCA} - database). Clusters are colored according to
-   the $\log\,age$} assigned by \texttt{ASteCA}.
+   the $\log\,age$ assigned by \texttt{ASteCA}.}
    \label{fig:distances}
   \end{figure*}
 
@@ -808,7 +810,7 @@ located more than a few Kpc away.}
   inverted triangles), where 0.3 is usually chosen to be a reasonable estimate
   for open clusters~\citep{Sollima_2010}. The median difference with the main
   \texttt{ASteCA} run is largest when the binary fraction is fixed to 0. 
-  ($\sim$1100 pc), lower when we fix this parameter to 0.3 ($\sim$500 pc),
+  ($\sim$1200 pc), lower when we fix this parameter to 0.3 ($\sim$500 pc),
   and lowest when it is allowed to vary ($\sim$25 pc). This is another indicator
   that a proper binary fraction fit is of utmost importance for a correct
   estimation of the cluster's fundamental parameters, particularly for the
@@ -1042,17 +1044,25 @@ located more than a few Kpc away.}
   Our distance thus is a good match for that of CG20, falling within the range
   given by the two previous studies mentioned.\\
 
-  \textbf{vd Bergh-Hagen 4}: This cluster is not very relevant in the visible
-  band. The CMD shows a curious main sequence extending for almost 4 magnitudes,
-  where stars above G= 18.5 mag appear blue-shifted regarding the main sequence
-  and those ones below this value are placed along it. The cluster
-  distance is 7.8 kpc and its age is 1.4 Gyr. \cite{Carraro_2007}
-  performed VI CCD photometry in this object finding an
-  age of 0.2 Gy and d= 19.3 kpc. Both distance and age are the most
-  controversial points with these authors since the Gaia data analysis leaves no
-  chance that our distance can change for over 10 kpc, and neither the age. A
-  quick view to their Fig. 17 shows the diffuse position of the TO adopted by
-  these authors\\
+  \textbf{vd Bergh-Hagen 4}: With only 70 confirmed members, this is the
+  second less populated cluster. A very weak but extended main sequence is
+  visible in the CMD stretching almost 4 magnitudes.
+  % where stars above $G=18.5$ mag appear blue-shifted with respect to the main
+  % sequence and those below this value placed along it.
+  The cluster distance and age are estimated to be $\sim$9.9 kpc and 0.8 Gyr,
+  both with large associated uncertainties.
+  \cite{Carraro_2007} performed VI CCD photometry on this object finding an
+  age of 0.2 Gy and a distance of 19.3 kpc. Although the distance given by
+  \texttt{ASteCA} after processing the Gaia data is not accurate (the 16th-84th
+  range spans almost 5 kpc), the value given by Carraro et al. lies outside
+  of the 2-sigma range making it highly unlikely. The age parameter on the other
+  hand is much closer to our estimate.
+  % Both distance and age are the most controversial points with these authors
+  % since the Gaia data analysis leaves no chance that our distance can change for
+  % over 10 kpc, and neither the age.
+  Looking at Fig. 17 of Carraro et al. we can see that their CMD for this
+  cluster is considerably more contaminated than ours, with a large number of
+  obvious field stars polluting the diagram.\\
 
   \textbf{FSR 1419}: CG20 found that FSR 1419 is 1.6 Gyr old and is placed at a
   distance of 11.1 kpc. We see in the respective CMD that the TO is set at G= 18
@@ -1724,7 +1734,7 @@ sfdmap\footnote{\url{https://github.com/kbarbary/sfdmap}}.
     SAU1  & 19.69 & -18.31  & -7.05 & 1.65  & $-0.29  \pm 0.29$ & $-0.25  \pm 0.27$ & 98.00 [2]\\
     CZER30  & 13.52 & -12.64  & -4.75 & 0.51  & $-0.62  \pm 0.12$ -&  $0.07 \pm 0.11$ & 82.07 [1]\\
     ARMP2 & 15.89 & -12.19  & -10.13  & -1.09 & $-0.49  \pm 0.23$ & $1.25 \pm 0.26$ & 58.25 [1]\\
-    BH4 & 13.10 & -10.80  & -7.35 & -0.95 & $-0.82  \pm 0.14$ & $2.12 \pm 0.16$ & --  \\
+    BH4 & 14.77 & -11.48  & -9.21 & -1.19 & $-0.82  \pm 0.14$ & $2.12\pm0.16$ & --  \\
     F1419 & 12.99 & -9.09 & -9.22 & -1.05 & $-2.48  \pm 0.24$ & $2.85 \pm 0.21$ & --\\  
     BH37  & 8.92  & -8.49 & -2.75 & -0.06 & $-3.50  \pm 0.09$ & $3.99 \pm 0.11$ & 51.90 [3]\\
     E9205 & 13.31 & -4.53 & -12.40  & -1.69 & $-3.00  \pm 0.29$ & $2.48 \pm 0.23$ & 57.40 [1]\\

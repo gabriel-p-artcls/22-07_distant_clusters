@@ -23,16 +23,25 @@ parameters must be present for all the clusters. The code is then run in 'read'
 mode to pick up these files.
 
 The proper motions must be read, and the 'C3' image must be generated in order
-to store the proper motions plot data.
+to store the proper motions plot data. Disable 'D1' and 'D2' plots to save
+time.
+
+The 'pms_folder' variable must point to the correct folder with the files
+that contain the entire frames.
 
 The 'R1' line in 'asteca.ini' must include the required range of parameter
 values.
+
+The 'D3_sol' parameter was originally set to 'mean'.
 
 The output is a single file called 'fundpars.pickle'. This file then needs
 to be processed with the 'plot_fund_pars_pickle.py' code to generate the
 final images.
 
 """
+
+pms_folder = '/media/gabriel/rest/Dropbox_nosync/Papers/future_projects/'\
+             + 'distant_clusters/2_pipeline/1_data_filter/out/'
 
 
 def main(npd, pd, clp, td):
@@ -64,8 +73,6 @@ def main(npd, pd, clp, td):
     else:
         name = name.upper()
 
-    pms_folder = '/media/gabriel/rest/Dropbox_nosync/Papers/2021/'\
-        + 'xx_distant_clusts/2_pipeline/1_data_filter/out/'
     data_all = ascii.read(pms_folder + npd['clust_name'] + '.dat')
     pms_data = {'pmRA': clp['clreg_PMs']['pmRA'],
                 'pmDE': clp['clreg_PMs']['pmDE']}
