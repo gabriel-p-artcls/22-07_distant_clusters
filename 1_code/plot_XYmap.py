@@ -102,7 +102,6 @@ def main(dpi=dpi):
     s_xys = SkyCoord(
         -x_sun, 0., z_sun, unit='kpc', representation_type='cartesian')
 
-    cl_plots1, cl_plots2 = [[], []], [[], []]
     # colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     colors = sns.color_palette("Spectral", 13)[2::3]
     # colors = sns.color_palette("Set2")
@@ -120,6 +119,7 @@ def main(dpi=dpi):
     plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.axvline(0, ls=':', c='grey', zorder=-1)
 
+    cl_plots1 = [[], []]
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         pl = plt.scatter(
@@ -127,27 +127,12 @@ def main(dpi=dpi):
             lw=sc_lw, edgecolor=sc_ec, zorder=2.5, color=colors[ic])
         cl_plots1[0].append(pl)
         cl_plots1[1].append(cat.replace('D_', ''))
+
     # Plot Sun and center of Milky Way
     plt.scatter(s_xys.x, s_xys.y, c='yellow', s=50, edgecolor='k', zorder=2.5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=2.5)
     # Plot spiral arms
-    spiral_arms = momany()
-    for sp_name, vals in spiral_arms.items():
-        xy_arm = np.array(list(zip(*vals)))
-        if sp_name == 'Outer':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c="#0B5CA4", ls='-.', lw=2)
-        if sp_name == 'Perseus':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='orange', ls='--', lw=2)
-        if sp_name == 'Orion-Cygnus':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='k', ls="-", lw=2)
-        elif sp_name == 'Carina-Sagittarius':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='b', ls=':', lw=2)
-        elif sp_name == 'Crux-Scutum':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='purple', ls='-.', lw=2)
-        elif sp_name == 'Norma':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='green', ls=':', lw=2)
-        cl_plots2[0].append(pl)
-        cl_plots2[1].append(sp_name)
+    cl_plots2 = plotSpiral()
 
     l1 = plt.legend(cl_plots1[0], cl_plots1[1], loc=1, fontsize=12)
     plt.legend(cl_plots2[0], cl_plots2[1], loc=4, fontsize=12)
@@ -222,6 +207,32 @@ def xyzCoords(data, cat, lon, lat, gc_frame):
     x_kpc, y_kpc, z_kpc = c_glct.x, c_glct.y, c_glct.z
 
     return x_kpc, y_kpc, z_kpc
+
+
+def plotSpiral():
+    """
+    """
+    spiral_arms = momany()
+
+    cl_plots = [[], []]
+    for sp_name, vals in spiral_arms.items():
+        xy_arm = np.array(list(zip(*vals)))
+        if sp_name == 'Outer':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c="#0B5CA4", ls='-.', lw=2)
+        if sp_name == 'Perseus':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='orange', ls='--', lw=2)
+        if sp_name == 'Orion-Cygnus':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='k', ls="-", lw=2)
+        elif sp_name == 'Carina-Sagittarius':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='b', ls=':', lw=2)
+        elif sp_name == 'Crux-Scutum':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='purple', ls='-.', lw=2)
+        elif sp_name == 'Norma':
+            pl, = plt.plot(xy_arm[0], xy_arm[1], c='green', ls=':', lw=2)
+        cl_plots[0].append(pl)
+        cl_plots[1].append(sp_name)
+
+    return cl_plots
 
 
 def momany():
