@@ -90,12 +90,17 @@ def main(dpi=dpi):
         xyz_kpc[cat] = xyzCoords(data, cat, lon, lat, gc_frame)
 
     for i, cl in enumerate(data['Cluster']):
-        x_dist, y_dist, z_dist = "", "", ""
+        x_dist, y_dist, z_dist, R_GC = "", "", "", ""
         for cat in DBs_list:
             x_dist += " {:>6.2f}".format(xyz_kpc[cat][0][i].value)
             y_dist += " {:>6.2f}".format(xyz_kpc[cat][1][i].value)
             z_dist += " {:>6.2f}".format(xyz_kpc[cat][2][i].value)
-        print("{:<15}".format(cl), x_dist, y_dist, z_dist)
+            RGC = np.sqrt(
+                xyz_kpc[cat][0][i]**2 + xyz_kpc[cat][1][i]**2
+                + xyz_kpc[cat][2][i]**2)
+            R_GC += " {:>6.2f}".format(RGC.value)
+        # print("{:<15}".format(cl), x_dist, y_dist, z_dist)
+        print("{:<15}".format(cl), R_GC)
 
     # Sun's coords according to the Galactocentric frame.
     x_sun, z_sun = gc_frame.galcen_distance, gc_frame.z_sun
