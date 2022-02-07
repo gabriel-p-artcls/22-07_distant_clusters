@@ -223,17 +223,23 @@ def plotSpiral():
     for sp_name, vals in spiral_arms.items():
         xy_arm = np.array(list(zip(*vals)))
         if sp_name == 'Outer':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c="#0B5CA4", ls='-.', lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c="#0B5CA4", ls='-.', lw=2, zorder=-1)
         if sp_name == 'Perseus':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='orange', ls='--', lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c='orange', ls='--', lw=2, zorder=-1)
         if sp_name == 'Orion-Cygnus':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='k', ls="-", lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c='k', ls="-", lw=2, zorder=-1)
         elif sp_name == 'Carina-Sagittarius':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='b', ls=':', lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c='b', ls=':', lw=2, zorder=-1)
         elif sp_name == 'Crux-Scutum':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='purple', ls='-.', lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c='purple', ls='-.', lw=2, zorder=-1)
         elif sp_name == 'Norma':
-            pl, = plt.plot(xy_arm[0], xy_arm[1], c='green', ls=':', lw=2)
+            pl, = plt.plot(
+                xy_arm[0], xy_arm[1], c='green', ls=':', lw=2, zorder=-1)
         cl_plots[0].append(pl)
         cl_plots[1].append(sp_name)
 
