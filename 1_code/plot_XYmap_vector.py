@@ -2,11 +2,14 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 import astropy.coordinates as coord
 from astropy.io import ascii
+# import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 import numpy as np
 from plot_pars import dpi, grid_x, grid_y
 from plot_XYmap import plotSpiral
+from plot_Fe_vs_R import ZtoFeH
 
 
 lit_data = """
@@ -49,7 +52,7 @@ def main(dpi=dpi):
     # Use this block to plot the ASteCA results instead ASteCA output data
     asteca_data = ascii.read('../2_pipeline/5_ASteCA/out/asteca_output.dat')
     asteca_names = list([_[3:].upper() for _ in asteca_data['NAME']])
-    asteca_dists = []
+    asteca_pars = []
     # d_84, d_16 = [], []
     for cl in lit_data['Cluster']:
         try:
@@ -57,17 +60,22 @@ def main(dpi=dpi):
             d_pc = 10**(.2 * (asteca_data[idx]['d_median'] + 5))
             # dis_84 = 10**(.2 * (asteca_data[idx]['d_84th'] + 5))/1000
             # dis_16 = 10**(.2 * (asteca_data[idx]['d_16th'] + 5))/1000
+            feh = ZtoFeH(asteca_data[idx]['z_median'])
+            age = asteca_data[idx]['a_median']
+            mass = asteca_data[idx]['M_median']
+            bfr = asteca_data[idx]['b_median']
         except ValueError:
-            d_pc = np.nan
-        asteca_dists.append(round(d_pc, 2))
+            feh, age, d_pc, mass, bfr = [np.nan] * 5
+        # asteca_dists.append(round(d_pc, 2))
+        asteca_pars.append([feh, age, d_pc, mass, bfr])
         # d_16.append(round(dis_16, 2))
         # d_84.append(round(dis_84, 2))
-    asteca_dists = np.array(asteca_dists)
+    asteca_pars = np.array(asteca_pars).T
 
-    plot(lit_data, asteca_dists)
+    plot(lit_data, asteca_pars)
 
 
-def plot(lit_data, asteca_dists):
+def plot(lit_data, asteca_pars):
     """
     Gridspec idea: http://www.sc.eso.org/~bdias/pycoffee/codes/20160407/
                    gridspec_demo.html
@@ -83,7 +91,7 @@ def plot(lit_data, asteca_dists):
     lon = lb.l.wrap_at(180 * u.deg).radian * u.radian
     lat = lb.b.radian * u.radian
 
-    xyz_kpc = xyzCoords(lit_data, asteca_dists, lon, lat, gc_frame)
+    xyz_kpc = xyzCoords(lit_data, asteca_pars[2], lon, lat, gc_frame)
     x_kpc, y_kpc, z_kpc, vx, vy, vz = xyz_kpc
 
     # Sun's coords according to the Galactocentric frame.
@@ -93,15 +101,19 @@ def plot(lit_data, asteca_dists):
 
     Xmin, Xmax, Ymin, Ymax, Zmin, Zmax = -24, 11, -19, 16, -2.6, 2.6
 
-    fig = plt.figure(figsize=(17, 17))
+    fig = plt.figure(figsize=(19, 17))
     gs = gridspec.GridSpec(grid_y, grid_x)
 
-    plt.subplot(gs[0:4, 0:4])
+    ax = plt.subplot(gs[0:4, 0:4])
     plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.axvline(0, ls=':', c='grey', zorder=-1)
 
-    plt.scatter(
-        x_kpc, y_kpc, alpha=.5, s=100, lw=.5, edgecolor='k', zorder=2.5)
+    im = plt.scatter(
+        x_kpc, y_kpc, alpha=.75, s=asteca_pars[3] / 100, lw=.5,
+        c=asteca_pars[1], edgecolor='k', zorder=2.5)
+        #, vmin=8.9, vmax=9.9)
+        # cmap="plasma")
+
     plotVectors(lit_data, x_kpc, y_kpc, vx, vy)
 
     # Plot Sun and center of Milky Way
@@ -118,11 +130,17 @@ def plot(lit_data, asteca_dists):
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
 
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes('right', size='2%', pad=0.05)
+    cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+    cbar.set_label(r"$\log(age)$", fontsize=15)
+
     #
     # X_GC vs Z_GC
-    plt.subplot(gs[0:2, 4:8])
-    plt.scatter(
-        x_kpc, z_kpc, alpha=.5, s=100, lw=.5, edgecolor='k', zorder=2.5)
+    ax = plt.subplot(gs[0:2, 4:8])
+    im = plt.scatter(
+        x_kpc, z_kpc, alpha=.75, s=asteca_pars[3] / 100, lw=.5,
+        c=asteca_pars[0], edgecolor='k', zorder=2.5, cmap='plasma')
     plt.axvline(0, ls=':', c='grey', zorder=-1)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
@@ -134,12 +152,17 @@ def plot(lit_data, asteca_dists):
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
     plotVectors(lit_data, x_kpc, z_kpc, vx, vz)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes('right', size='2%', pad=0.05)
+    cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+    cbar.set_label("[Fe/H]", fontsize=15)
 
     #
     # Y_GC vs Z_GC
-    plt.subplot(gs[2:4, 4:8])
-    plt.scatter(
-        y_kpc, z_kpc, alpha=.5, s=100, lw=.5, edgecolor='k', zorder=2.5)
+    ax = plt.subplot(gs[2:4, 4:8])
+    im = plt.scatter(
+        y_kpc, z_kpc, alpha=.75, s=asteca_pars[3] / 100, lw=.5,
+        c=asteca_pars[4], edgecolor='k', zorder=2.5, cmap='cividis')
     plt.axvline(0, ls=':', c='grey', zorder=-1)
     plt.axhline(0, ls=':', c='grey', zorder=-1)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
@@ -151,6 +174,10 @@ def plot(lit_data, asteca_dists):
     plt.xticks(fontsize=15)
     plt.yticks(fontsize=15)
     plotVectors(lit_data, y_kpc, z_kpc, vy, vz)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes('right', size='2%', pad=0.05)
+    cbar = fig.colorbar(im, cax=cax, orientation='vertical')
+    cbar.set_label(r"$b_{fr}$", fontsize=15)
 
     fig.tight_layout()
     fig.savefig(out_folder + 'MWmap_AS.png', dpi=dpi, bbox_inches='tight')
@@ -180,10 +207,12 @@ def plotVectors(lit_data, x, y, vx, vy):
             # The above made the arrow heads look weird
             # Source: https://stackoverflow.com/a/52613154/1391441
             txt = "-|>,head_width={},head_length={}".format(0.3, 0.5)
+            # color='slateblue'
             prop = dict(
-                arrowstyle=txt, color='slateblue', shrinkA=0, shrinkB=0)
+                arrowstyle=txt, color='k', shrinkA=0, shrinkB=0)
             plt.annotate(
-                "", xy=(xyf[i], yxf[i]), xytext=(xi, y[i]), arrowprops=prop)
+                "", xy=(xyf[i], yxf[i]), xytext=(xi, y[i]), arrowprops=prop,
+                zorder=0)
 
 
 def xyzCoords(data, dist_pc, lon, lat, gc_frame):
