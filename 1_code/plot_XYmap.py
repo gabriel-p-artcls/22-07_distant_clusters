@@ -16,7 +16,7 @@ from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
-Cluster      RA  DEC       Dm  A_OC  D_OC  A_CG D_CG  A_WB  D_WB  A_MW  D_MW
+Cluster      RA  DEC       Dm  A_OC02  D_OC02  A_CG20 D_CG20  A_WEBDA  D_WEBDA  A_MWSC  D_MWSC
 Ber73        95.50  -6.35  2   9.18  9800  9.15 6158  9.36  6850  9.15  7881
 Ber25        100.25 -16.52 5   9.7   11400 9.39 6780  9.6   11300 9.7   11400
 Ber75        102.25 -24.00 4   9.6   9100  9.23 8304  9.48  9800  9.3   6273
@@ -55,7 +55,7 @@ def main(dpi=dpi):
                    gridspec_demo.html
     """
     data = ascii.read(lit_data)
-    DBs_list = ('D_MW', 'D_WB', 'D_OC', 'D_CG')
+    DBs_list = ('D_MWSC', 'D_WEBDA', 'D_OC02', 'D_CG20')
 
     # # Use this block to plot the ASteCA results instead
     # # ASteCA output data
