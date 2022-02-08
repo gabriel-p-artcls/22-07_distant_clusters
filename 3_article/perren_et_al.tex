@@ -13,7 +13,8 @@
 
 %
 % \documentclass[draft]{aa}
-\documentclass{aa}
+% \documentclass{aa}
+\documentclass[referee]{aa}
 
 %
 \usepackage{graphicx}
@@ -37,7 +38,7 @@
       \and
       M. S. Pera\inst{1}
       \and
-      H. Navone\inst{2}
+      H. D. Navone\inst{2}
       \and
       R. A. Vázquez\inst{1,3}
       % \fnmsep\thanks{Just to show the usage
@@ -70,11 +71,11 @@ clusters. These parameters are later on employed in larger scale analyses, for
 example the structure of the Galaxy's spiral arms.
 The distance is one of the more straightforward parameters to estimate, yet
 enormous differences can still be found among published data. This is
-particularly true for open clusters located more than a few Kpc away.}
+particularly true for open clusters located more than a few kpc away.}
 % aims heading (mandatory)
 {
 We cross-matched several published catalogues and selected the twenty-five most
-distant open clusters ($>$9000 Kpc). We then performed a detailed analysis of
+distant open clusters ($>$9000 pc). We then performed a detailed analysis of
 their fundamental parameters, with emphasis on their distances, to determine the
 agreement between catalogues and our estimates.}
 % methods heading (mandatory)
@@ -83,22 +84,21 @@ data was processed with our own membership analysis code (pyUPMASK), and our
 package for automatic fundamental cluster's parameters estimation
 (\texttt{ASteCA}).}
 % results heading (mandatory)
-{We find differences in the estimated distances of up to several Kpc
+{We find differences in the estimated distances of up to several kpc
 between our results and those catalogued, even for the catalogues that show the
 best matches with \texttt{ASteCA} values. Large differences are also found for
 the age estimates.}
 % conclusions heading (optional), leave it empty if necessary 
 {Caution is thus strongly recommended when using catalogued parameters of open
 clusters to infer large-scale properties of the Galaxy, particularly for those
-located more than a few Kpc away.}
+located more than a few kpc away.}
 
 \keywords{
   Methods: statistical --
   Galaxies: star clusters: general --
   (Galaxy:) open clusters and associations: general --
-  Techniques: photometric--
-  Parallaxes --
-  Proper motions
+  Techniques: photometric --
+  Astronomical databases: miscellaneous
 }
 
 \maketitle
@@ -110,90 +110,88 @@ located more than a few Kpc away.}
  The unprecedented amount of high precision data for parallaxes, proper motions,
  and photometry provided by the Gaia mission in successive
  deliveries~\citep[DR2 and EDR3,][]{Gaia_2016,Gaia_EDR3} offers us a unique
- opportunity to estimate the fundamental parameters, age, distance, the observed
- mass and the metal content of open clusters (OC).
- Indeed, the arrival of new techniques for
- analyzing massive data combined with the increasing data precision promise
- more reliable results than those obtained with the old techniques mostly
- based on the visual inspection of their color-magnitude diagrams and
- isochrone fittings \citep{Phelps1994} or on direct comparison with HR diagrams
- of synthetic clusters \citep{Siess1997}. Automated processes such as the one
- applied by \cite{Kharchenko_2012} have also played an important role in
- determining cluster parameters in a massive way. But the continuous increase
- of high quality data is a defying circumstance where a variety of analysis are
- being considered even including artificial neural networks
- \citep{Cantat_2020} combined with new strategies for determining cluster
- memberships \citep{Krone2014,Cantat2018} or fractal analysis as the one applied
- by \citep{Gregorio_2015}.
+ opportunity to estimate the fundamental parameters of open clusters (OC): metal
+ content, age, total mass, binary fraction, distance,  and extinction.
+ The arrival of new techniques for analyzing massive data combined with the
+ increasing data precision promise more reliable results than those obtained
+ with the old techniques. The latter were mostly based on the visual inspection
+ of their color-magnitude diagrams and isochrone fittings \citep{Phelps1994}, or
+ on direct comparison with HR diagrams of synthetic clusters \citep{Siess1997}.
+ Automated processes such as the one applied by \cite{Kharchenko_2012} have also
+ played an important role in determining cluster parameters in a massive way.
+ The continuous increase of high quality data is a defying circumstance
+ where a variety of analysis are being considered including artificial
+ neural networks~\citep{Cantat_2020}, combined with new strategies for
+ determining cluster memberships \citep{Krone2014,Cantat2018} or dynamical
+ evolution analysis as the one applied by \citep{Gregorio_2015}.
 
  %
  The intrinsic value of studying OCs has been profusely described in several
  opportunities and we are not going to repeat them here. However a brief
  enumeration of the importance of these object is appropriate: the oldest OCs
- allow us to investigate the extension in height and radial extension of the
- galactic disk; old OCs tell us about the chemical history, the mixing processes
- and the processes of OCs destruction by interaction with other populations of
- the galaxy as well as the age-metallicity relationship 
- \citep{Friel1995,Tosi_2004,Hayes_2015}. The youngest OCs, on the other hand, are
- not only used as laboratories to investigate stellar evolution~\citep[they allow
- studying in detail the boundary conditions necessary to create new generations
- of stars, ][]{Lada2003} but are also routinely employed too in the analysis
- of the Milky Way's
+ allow us to investigate the height and radial extension of the galactic disk,
+ old OCs tell us about the chemical history (age-metallicity relation), the
+ mixing processes (radial metallicity gradient), and the processes of cluster
+ destruction by interaction with other populations of the
+ galaxy~\citep{Friel1995,Tosi_2004,Hayes_2015}.
+ The youngest OCs, on the other hand, are not only used as laboratories to
+ investigate stellar evolution~\citep[they allow studying in detail the boundary
+ conditions necessary to create new generations of stars, ][]{Lada2003} but are
+ also routinely employed in the analysis of the Milky Way's
  structure~\citep{Loktin_1992,Moitinho_2006,Vazquez2008,Moitinho_2010}
  becoming particularly useful in the tracing of spiral
  arms~\citep{carraro_2013,Molina_2018}.
  %
- Young OCs are mainly arranged along the galactic disk where the strong visual
+ Young OCs are mainly arranged along the galactic disk, where the strong visual
  absorption and the contamination by field stars very often prevent observing
- stars in the lower part of the sequence of these objects.
- In this sense, the situation is not much better for the older OCs which do not
+ stars in the lower part of their sequence.
+ The situation is not much better for the older OCs which do not
  have very luminous stars in the main sequence, although they do in the giant
  branch. Stars in the lower part of their sequences, as well as those belonging
  to the giant branch, share similar photometric characteristics with field stars
- making it quite difficult to unravel to which population each star
+ making it rather difficult to unravel to which population each star
  belongs~\citep{Hayes_2015}.
  %
  The situation worsens as the distance to the older OCs increases because the
  limiting magnitude increases, which results in only a small portion of
  the lower part being visible. But it is not only the photometric
  space that is disturbed by distance. The proper motions of distant OCs are
- extremely difficult to separate clearly from those characterizing the field
+ extremely difficult to separate from those characterizing the field
  population against which we see them projected, therefore introducing an
  additional degree of confusion in determining memberships.
 
  Our interest in this current article is twofold. On the one hand, it is focused
  on reexamining the distances and properties of the most distant OCs cataloged
- so far in our Galaxy. A total of 25 such distant clusters were found
- inspecting four different recognized databases that satisfy this requirement as
- we will explain below. However, these bases show enormous differences in the
- parameters determined for them, both in distances and in ages. In part, the
- differences in the parameters for the same object may be
- due to the different techniques used to obtain them combined with the problem
- of the very large distance at which they are located.
+ so far in our Galaxy. A total of 25 clusters that satisfy this requirement were
+ found inspecting four different recognized catalogs/databases, as we will
+ explain below.
+ However, these catalogs display enormous differences in the estimated distances
+ and ages. In part, these differences for the same catalogued object may be due
+ to the varying techniques used to perform the analysis, combined with
+ the problem of the very large distance at which they are located.
  %
- It is of great interest that the ages for most of these OCs included in recent
- catalogs, estimated with advanced analysis techniques, are presumed to be
- larger than one billion years. But in other catalogs these same clusters have
- relatively small ages and shorter distances as well. We want to
- contribute with our analysis to resolve the origin of these differences.
+ % The ages for most of these OCs, for example, are presumed to be larger than one
+ % billion years. But in other catalogs these
+ % same clusters have relatively small ages and shorter distances as well.
+ We want to contribute to the task of resolving these differences.
  %
  On the other hand, we want to test our new membership estimation technique
  pyUPMASK\footnote{\url{https://github.com/msolpera/pyUPMASK}}~\citep{Pera_2021}
  in combination with
  \texttt{ASteCA}\footnote{\url{http://asteca.github.io/}}~\citep{Perren_2015},
- on clusters with proper motions that are
- not easily distinguishable from that of surrounding stars, made up by a small
- number of members, and with non-trivial sequences in the photometric space.\\
+ on clusters with proper motions that are not easily distinguishable from that
+ of surrounding stars, composed of a small number of members, and with
+ non-trivial sequences in the photometric space.\\
 
 
- This article is structured as follows. In Sect~\ref{sec:cat_clust_data} we
+ This article is structured as follows. In Sect.~\ref{sec:cat_clust_data} we
  introduce the stellar cluster catalogues, the clusters selected to be
  analyzed (crossed-matched from those catalogues), and the photometric and
  astrometric data used to perform the analysis.
- Sect~\ref{sec:clust_analy} presents the methods employed in the study of all the
+ Sect.~\ref{sec:clust_analy} presents the methods employed in the study of all the
  clusters. The comparison of the estimated parameters with the catalogued
- values for each cluster is done in Sect~\ref{sec:results}. Finally,
- conclusions are highlighted in Sect~\ref{sec:conclusions}.
+ values for each cluster is done in Sect.~\ref{sec:results}. Finally,
+ conclusions are highlighted in Sect.~\ref{sec:conclusions}.
 
 
 
@@ -203,10 +201,10 @@ located more than a few Kpc away.}
 \section{Catalogues, clusters, and data}
  \label{sec:cat_clust_data}
 
- We selected four catalogues to cross-match and subsequently identify the most
- distant clusters: \citet[][New Catalog of Optically Visible Open Clusters and
- Candidates, hereinafter OC02]{Dias_2002},~\citet[][WEBDA,\footnote{
- \url{https://webda.physics.muni.cz/}}]{Netopil_2012},
+ We selected four catalogues to cross-match and subsequently use to identify the
+ most distant clusters: \citet[][New Catalog of Optically Visible Open Clusters
+ and Candidates, hereinafter OC02]{Dias_2002},~\citet[][hereinafter
+ WEBDA\footnote{\url{https://webda.physics.muni.cz/}}]{Netopil_2012},
  \citet[][Milky Way Star Clusters Catalog, hereinafter MWSC]{Kharchenko_2012},
  and~\citet[][hereinafter CG20]{Cantat_2020}.
  %
@@ -215,12 +213,12 @@ located more than a few Kpc away.}
  (OC02) entries, and are heavily used in the field of open cluster research.
  The parameter values in both catalogues are heterogeneous, being compiled from
  various sources.
- The WEBDA catalog is the largest one ($\sim$3000 entries) and, similarly to the CG20
- catalog ($\sim$2000 entries), is composed of homogeneous fundamental parameter
- values obtained for all its entries. The method employed by the authors of the
- MWSC catalog is a semi-automated isochrone fit, while the CG20 catalog was
- generated employing an artificial neural network (trained on parameter values
- taken from the literature).
+ The MWSC catalog is the largest one ($\sim$3000 entries) and, similarly to the
+ CG20 catalog ($\sim$2000 entries), is composed of homogeneous fundamental
+ parameter values obtained for all its entries.
+ The method employed by the authors of the MWSC catalog is a semi-automated
+ isochrone fit, while the CG20 catalog was generated employing an artificial
+ neural network (trained on parameter values taken from the literature).
 
  Since we are interested in the open clusters most distant from the Sun, we
  select from these cross-matched catalogues those that are located at a
@@ -298,14 +296,14 @@ located more than a few Kpc away.}
  \end{tabular}
  \end{table*}
 
- Our full list initially consisted of thirty-eight open clusters. Eleven of
+ Our full list initially consisted of thirty-eight open clusters; eleven of
  these were found only in the MWSC catalog with distances larger than 9000 pc.
  These are either listed with substantially smaller distances in the other
- catalogs, or too sparse and or dubious. Hence these clusters were removed from
+ catalogs, or too sparse and/or dubious. Hence these clusters were removed from
  the cross-matched list.
  %
- Two other clusters were also removed: Shorlin 1 ($\alpha_{2000}$=166.44,
- $\delta_{2000}$=-61.23) and FSR0338
+ Two other clusters were also removed from the initial list : Shorlin 1 
+ ($\alpha_{2000}$=166.44, $\delta_{2000}$=-61.23) and FSR0338
  ($\alpha_{2000}$=327.93, $\delta_{2000}$=55.33). The latter appears in WEBDA and
  MWSC at a distance of 12600 pc and 5600 pc respectively, while the former is
  listed only in MWSC with a distance of 14655 pc. Shorlin1 is studied
@@ -336,16 +334,17 @@ located more than a few Kpc away.}
  dispersion of the stars that occupy the overdensity around the central
  coordinates assigned to either object. Second, the lack of a clear sequence in
  their respective color-magnitude diagrams (CMD hereinafter). These two clusters
- are thus also discarded from further analysis.\\
+ are thus also discarded from further analysis.
 
  Most of the twenty-five selected clusters are located in the Third Quadrant
  with all of them in the latitude range of $\left[-12^{\circ}, 8^{\circ}\right]$,
  relatively close to the galactic plane. The final list thus contains 24
- clusters in the MWSC catalog, 21 in WEBDA, 19 in OC, and 16 in CG20.
+ clusters present in the MWSC catalog, 21 in WEBDA, 19 in OC02, and 16 in
+ CG20.\\
 
  There are two other major works where a large catalog of analyzed open clusters
- is presented: \cite{Lui_2019} and \cite{Dias_2021}. The latter does not contain
- clusters with such large distances, and was not used. The former lists
+ is presented: \cite{Lui_2019} and \cite{Dias_2021}. The former does not contain
+ clusters with such large distances, and was not used. The latter lists
  only four clusters that are also present in our set of twenty-five selected
  clusters. None of their distances comply with our selection filter, hence this
  database was not included. This fact notwithstanding, their distance values will
@@ -369,7 +368,7 @@ located more than a few Kpc away.}
 
  \begin{figure*}
   \resizebox{\hsize}{!}{\includegraphics[]{figs/MWmap.png}}
-  \caption{Right: position of the twenty-five clusters selected from the four
+  \caption{Left: position of the twenty-five clusters selected from the four
   catalogs mentioned in the text, on a face-on view of the Milky Way. The Sun
   and the center of the Galaxy are marked with a yellow filled circle and a
   black filled circle, respectively. Left, top and bottom: edge-on views,
@@ -390,8 +389,7 @@ located more than a few Kpc away.}
   The first step in the cluster analysis is the estimation of their structural
   properties, i.e. center coordinates and limiting radius. Although centers and
   diameters are present in (some of) the catalogues, not all of these values are
-  correct. We use our \texttt{ASteCA} package
-  \citep{Perren_2015}\footnote{\url{http://asteca.github.io/}} throughout this
+  correct. We use our \texttt{ASteCA} package throughout this
   work to perform the structural and fundamental parameters analysis. We have
   applied this tool to the study of hundreds of clusters in previous articles,
   with excellent results~\citep{Perren_2017,Perren_2020}.
@@ -432,7 +430,6 @@ located more than a few Kpc away.}
   (particularly in the parallax and proper motions spaces), the trade off
   between losing a small portion of members and improving the contrast of the
   true members over the field noise, is positive.
-
   The $r_{a}$ values used in our analysis being smaller than the tidal radius,
   means that the total estimated mass for each cluster shown in
   Sect.~\ref{sec:results} must be thought of as a lower limit.\\
@@ -465,25 +462,11 @@ located more than a few Kpc away.}
  \subsection{Membership and fundamental parameters}
   \label{ssec:fund_pars}
 
-  \begin{figure*}
-   \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
-   \caption{Left: VPD for stars in the analyzed Berkeley 29
-    frame; green and grey circles show the selected true members and the field
-    stars, respectively.
-    Center: CMD for the cluster's members with the isochrone associated to the
-    best synthetic cluster fit drawn in red to guide the eye. The grey region
-    represents the uncertainty in the fit.
-    Right: best synthetic cluster fit found by \texttt{ASteCA} with the same
-    isochrone now show in green. Blue and red circles are single and binary
-    systems, respectively.}
-   \label{fig:BER29_fpars}
-  \end{figure*}
-
   Before we can estimate the fundamental parameters with \texttt{ASteCA}, we
   need to select the set of most probable members for each cluster. For this
   task we employed our recently developed pyUPMASK algorithm which demonstrated
   a great performance even for very contaminated clusters, outperforming
-  UPMASK~\citep{Krone2014} as demonstrated in~\cite{Pera_2021}.
+  UPMASK~\citep{Krone2014} as shown in~\cite{Pera_2021}.
 
   pyUPMASk requires an input data set composed of $(\alpha, \delta)$ coordinates
   and at least two dimensions of data of any type to estimate the membership
@@ -496,9 +479,9 @@ located more than a few Kpc away.}
   This is particularly true for the parallax data which
   rapidly tends to zero for stars beyond $\sim$2 kpc, where the parallax values
   for the cluster members become almost indistinguishable from the contaminating
-  field stars. The selected clustering method in pyPMASK was a Gaussian Mixture
-  Model, which demonstrated to have the best performance in~\cite{Pera_2021} 
-  (see Sect. 4).
+  field stars. The selected clustering method in pyUPMASK was a Gaussian Mixture
+  Model, which demonstrated to have the best performance
+  in~\citet[][see Sect. 4]{Pera_2021}.
 
   Once pyUPMASK has assigned membership probabilities to all the stars in the
   frame, we must select the set of stars that most likely belong to the
@@ -542,7 +525,20 @@ located more than a few Kpc away.}
   \noindent The maximum value for the extinction priors, $E_{BV}^{max}$, was set
   on a per-cluster basis selecting the values given by the~\cite{Schlegel_1998}
   extinction maps with the re-calibration by~\cite{Schlafly_2011}.
-  
+
+  \begin{figure*}
+   \resizebox{\hsize}{!}{\includegraphics[]{figs/BER29_fpars.png}}
+   \caption{Left: VPD for stars in the analyzed Berkeley 29
+    frame; green and grey circles show the selected true members and the field
+    stars, respectively.
+    Center: CMD for the cluster's members with the isochrone associated to the
+    best synthetic cluster fit drawn in red to guide the eye.
+    Right: best synthetic cluster fit found by \texttt{ASteCA} with the same
+    isochrone now show in green. Blue and red circles are single and binary
+    systems, respectively.}
+   \label{fig:BER29_fpars}
+  \end{figure*}
+
   In Fig.~\ref{fig:BER29_fpars} we show the result of the membership
   probabilities estimation done with pyUPMASK, plus the fundamental parameters
   estimation performed by \texttt{ASteCA}. We only show here the plots for
@@ -553,8 +549,11 @@ located more than a few Kpc away.}
   stars. The members are clearly very much embedded within the field stars
   distribution, which is expected for distant clusters. The center plot shows
   the CMD traced by the selected members, and the right plot a sampling of the
-  best fit synthetic cluster obtained. The isochrone is associated with the
-  synthetic cluster but it is there merely to guide the eye, the fit is
+  best fit synthetic cluster. The grid in the center and right plots is
+  the 2-dimensional binning used to estimate the likelihood, obtained using
+  Knuth's rule~\citep{Knuth_2006}. The grey region represents the uncertainty
+  in the fit. The isochrone drawn in the center and right plots is associated
+  with the synthetic cluster but it is there merely to guide the eye; the fit is
   performed for the CMD of the observed cluster versus the CMD of synthetic
   clusters, not versus theoretical isochrones~\citep[this is further
   explained in:][]{Perren_2015,Perren_2017,Perren_2020}.\\
@@ -710,9 +709,9 @@ located more than a few Kpc away.}
   mag) limit originally used to perform the selection from the published
   databases. The binary fraction ranges from 30\% up to $\sim90$\% for the
   cluster Saurer 3. The total estimated masses are found in the range [2000,
-  60000] M$_{\odot}$ with the exception of vd Bergh-Hagen 176, for which a mass
-  of 170000 M$_{\odot}$ is given. It is worth noticing however that this is a
-  lower limit estimate since \texttt{ASteCA} does not take into account the
+  60000] M$_{\odot}$ with the exception of vd Bergh-Hagen 176, for which a much
+  larger mass of 170000 M$_{\odot}$ is given. This is however a lower limit
+  estimate since \texttt{ASteCA} does not take into account the
   experienced dynamical mass loss, which can be significant for old stellar
   clusters~\citep{Martinez_2017}.\\
 
@@ -825,7 +824,7 @@ located more than a few Kpc away.}
 
   The bottom plot in Fig.~\ref{fig:dist_comparisions} shows the parallax values
   analysis. Here the distance estimates obtained by \texttt{ASteCA} processing
-  the Gaia eDR3 photometry are compared to three methods to estimate distances
+  the Gaia EDR3 photometry are compared to three methods to estimate distances
   using parallaxes: \texttt{ASteCA}'s own Bayesian inference, the Kalkayotl
   package estimate, and the inversion of the median of the selected member's
   parallaxes. It is clear to see that a trend arises where the most distant
@@ -874,11 +873,11 @@ located more than a few Kpc away.}
   In this section we discuss each cluster separately, in the context of how our
   findings compare to those published in the literature.\\
 
-  \noindent \textbf{Berkeley 73}: Its CMD shows a main sequence and a well
-  defined turn-off (TO from now on) point, followed by a giant branch that is a
-  bit redder than expected. Probably some stars above the TO could be candidates
-  to blue stragglers. There is no strong evidence of stars forming a red clump 
-  (RC hereinafter).
+  \noindent \textbf{Berkeley 73}: the CMD for this cluster shows a main sequence
+  and a well defined turn-off (TO from now on) point, followed by a giant branch
+  that is a bit redder than expected. Probably some stars above the TO could be
+  candidates to blue stragglers. There is no strong evidence of stars forming a
+  red clump (RC hereinafter).
   The results from~\cite{Ortolani_2005}, \cite{Carraro_2005},
   and~\cite{Carraro_2007_oldOC} for this cluster are 2.3/1.5/1.5 Gyr and
   6.5/9.7/11.5 kpc for the age and distance, respectively.
@@ -888,12 +887,9 @@ located more than a few Kpc away.}
   in~\cite{Dias_2021} of 5.8 kpc, with an age of 2.2 Gyr. This is thus a
   rather old cluster, located well below the 9 Kpc limit.\\
 
-  \textbf{Berkeley 25}: The CMD shows a clear giant branch and several stars
+  \noindent \textbf{Berkeley 25}: The CMD shows a clear giant branch and several stars
   above the TO that can be candidates to blue straggler stars. The RDP of
   Berkeley 25 shows a radius about $5^{\prime}$, the largest one in the sample.
-  The distance assigned by \texttt{ASteCA} is 7.2 kpc with an age of 6.0 Gyr,
-  meaning that the cluster is located at a closer distance and is found to be
-  older than what is shown in the databases.
   % These values are also rather different from the ones estimated
   % by~\cite{Carraro_2005}, who found an age of 3.0 Gyr and a distance of 11.3
   % kpc. The authors assumed a cluster radius of $0.8^{\prime}$, which is only
@@ -903,24 +899,30 @@ located more than a few Kpc away.}
   distance of 11.3 kpc. These values are similar to the ones given
   in~\cite{Carraro_2007_oldOC} of 5 Gyr and 13.2 kpc for the age and the
   distance.
+  The distance assigned by \texttt{ASteCA} is 7.2 kpc with an age of 6.0 Gyr,
+  meaning that the cluster is located at a closer distance and is found to be
+  older than what is shown in the databases.
   Along with a better parameter estimation performed by \texttt{ASteCA} using
   Gaia data, the rather small cluster region used may explain the differences
-  between our parameters and those by Carraro et al.\\
+  between our parameters and those by Carraro et al. The databases MWSC,
+  WEBDA, and OC02 all list distances larger than 11 kpc for this cluster. CG20
+  on the other hand gives a value of 6.8 kpc, much closer to our estimate
+  although associated to a considerably smaller age of 2.5 Gyr.\\
 
-  \textbf{Berkeley 75}: This is a sparse cluster, with less than 100 detected
+  \noindent \textbf{Berkeley 75}: This is a sparse cluster, with less than 100 detected
   members. \cite{Carraro_2005} claim that this cluster possess
   a TO at $V= 17.5$ mag, a radius of $1^{\prime}$, an age of 3.5 Gyr and is
   located at a distance of 9.8 kpc.
-  Our analysis yielded a $2^{\prime}$ radius with the TO set at $G=17.7$ mag.
-  The giant branch is poorly populated though it shows a two-star RC.
-  There are some stars above the sub-giant branch that could be explained
-  by binary systems. Our analysis concludes that Berkeley 75 is 6.0 Gyr old
+  Our structural analysis yielded a $2^{\prime}$ radius with the TO set at
+  $G=17.7$ mag. The giant branch is poorly populated though it shows a two-star
+  RC. There are some stars above the sub-giant branch that could be explained
+  by binary systems. \texttt{ASteCA} concludes that Berkeley 75 is 6.0 Gyr old
   cluster, placed at 7.9 kpc. This distance is similar to the one found by CG20
   of 8.3 Kpc, although the age assigned by CG20 is substantially smaller (1.7
   Gyr). The age assigned by OC02 is closer to ours (4 Gyr) but their distance is
   larger by $\sim$1 kpc.\\
 
-  \textbf{Berkeley 26}: This cluster appears as a not so relevant overdensity
+  \noindent \textbf{Berkeley 26}: This cluster appears as a not so relevant overdensity
   projected against the background field. Although its RDP is well established
   and the radius is near $2^{\prime}$, the cluster TO is diffuse due to the
   scatter of stars and the likely presence blue straggler candidates. The
@@ -937,7 +939,7 @@ located more than a few Kpc away.}
   includes this cluster with a distance of 12.5 kpc. This is apparently
   a mistake, since the original source for this value is \cite{Piatti_2010}.\\
 
-  \textbf{Berkeley 29}: \cite{Tosi_2004} carried out a photometric analysis
+  \noindent \textbf{Berkeley 29}: \cite{Tosi_2004} carried out a photometric analysis
   and found that this could be the most distant cluster in our galaxy to date.
   The parameters they attribute to this object are an age of 3.5 Gyr and a
   distance ranging from 11.2 to 14.4 kpc.
@@ -956,7 +958,7 @@ located more than a few Kpc away.}
   by~\cite{Tosi_2004}, located at almost 22 kpc from the galactic center (see
   Table~\ref{tab:velocities}).\\
 
-  \textbf{Tombaugh 2}: This is a populated cluster with almost 900 identified
+  \noindent \textbf{Tombaugh 2}: This is a populated cluster with almost 900 identified
   members. A very wide main sequence followed by a giant branch with a relevant
   RC are evident in its CMD. We speculate that part of the stars
   above the TO point may be blue stragglers. Tombaugh 2 is 1.9 Gyr old and is
@@ -974,16 +976,17 @@ located more than a few Kpc away.}
   Due to the presence of variable stars the cluster was also observed by
   \cite{Kubiak_1992}, estimating an age of 4 Gyr and a distance of 6.3 kpc.\\
 
-  \textbf{Berkeley 76}: The CMD of Berkeley 76 shows a diffuse TO at $G=16.5$
-  mag, followed by a relevant giant branch. The parameters indicate a distance
-  of 5.5 kpc, and an age of 1.8 Gyr, far from the 12.6 kpc distance given
+  \noindent \textbf{Berkeley 76}: The CMD of Berkeley 76 shows a diffuse TO at $G=16.5$
+  mag, followed by a relevant giant branch. The parameters found by
+  \texttt{ASteCA} indicate a distance of 5.5 kpc, and an age of 1.8 Gyr, far
+  from the 12.6 kpc distance given
   by \cite{Carraro_2013_Five} although the age they determined, 1.5 Gyr, is
   close to ours. This same distance is reported by OC02 and WEBDA, while a
   smaller and much more reasonable value of 4.7 kpc is given in CG20.
   The distance discrepancy can obey to the fact that Carraro et al. set
   the TO at $V=18.5$ mag, 2 magnitudes below ours.\\
 
-  \textbf{FSR 1212}: This is a sparse cluster with less than 100 identified 
+  \noindent \textbf{FSR 1212}: This is a sparse cluster with less than 100 identified 
   members whose overdensity visibly stands out in the coordinates space. The CMD
   shows a defined cluster TO at $G=17.5$ mag with a giant branch and a RC that
   are also well established. We notice a slight reddening of stars along the
@@ -995,7 +998,7 @@ located more than a few Kpc away.}
   locates this cluster at 1.8 kpc with an age of 0.4 Gyr, which is entirely too
   close and too young.\\
 
-  \textbf{Saurer 1}: First reported in~\citet[][along with Saurer 3 and Saurer 6]
+  \noindent \textbf{Saurer 1}: First reported in~\citet[][along with Saurer 3 and Saurer 6]
   {Saurer_1994} this cluster was analyzed by \cite{Carraro_2003} under
   the name of Saurer A, who estimated an age near 5 Gyr and a distance of 13.8
   kpc for a TO placed at $V=19$ mag. According to these authors, Saurer 1 is the
@@ -1010,7 +1013,7 @@ located more than a few Kpc away.}
   a barely larger distance, 13.1 kpc, were determined
   by~\cite{Frinchaboy_2006}.\\
 
-  \textbf{Czernik 30}: The CMD for this cluster shows a robust main sequence
+  \noindent \textbf{Czernik 30}: The CMD for this cluster shows a robust main sequence
   and a defined giant branch. The TO is situated at $G=17.5$ mag approximately.
   Our analysis results in a distance of 6.6 kpc and an age of 3.5 Gyr. These
   values are in good agreement with those of~\cite{Dias_2021} (5.9 kpc, 3 Gyr),
@@ -1026,10 +1029,10 @@ located more than a few Kpc away.}
   shown in Table 7 of~\cite{Perren_2015}.}
   CG20, WEBDA, and MWSC all report similar distances to the one found here:
   6.6 kpc, 6.2 kpc, and 6.8 kpc, respectively. We conclude that this cluster
-  is thus well below the 9.1 kpc distance given by OC02.\\
+  is thus well below the 9.1 kpc distance listed in OC02.\\
 
-  \textbf{Arp-Madore 2}: also know as ESO 368-7, this cluster's CMD shows
-  a well traced TO and red giant branch with a very short main sequence, and a
+  \noindent \textbf{Arp-Madore 2}: This cluster's CMD shows a well traced TO and
+  red giant branch with a very short main sequence, and a
   well established RC at $G=17$ mag.
   % Looking at Fig. 7 of~\cite{Ortolani_1995} the TO is located
   % 17<V<18 and the TO at V=20 while ours is G=19.5.
@@ -1050,7 +1053,7 @@ located more than a few Kpc away.}
   Our distance thus is a good match for that of CG20, falling within the range
   given by the two previous studies mentioned.\\
 
-  \textbf{vd Bergh-Hagen 4}: With less than 70 confirmed members, this is the
+  \noindent \textbf{vd Bergh-Hagen 4}: With less than 70 confirmed members, this is the
   third less populated cluster. A very weak but extended main sequence is
   visible in the CMD stretching almost 4 magnitudes.
   % where stars above $G=18.5$ mag appear blue-shifted with respect to the main
@@ -1070,7 +1073,7 @@ located more than a few Kpc away.}
   cluster is considerably more contaminated than ours, with a large number of
   obvious field stars polluting the diagram.\\
 
-  \textbf{FSR 1419}: This is a poorly studied cluster first reported
+  \noindent \textbf{FSR 1419}: This is a poorly studied cluster first reported
   in~\cite{Froebrich_2007}. CG20 and MWSC estimated ages and distances of
   1.6/0.2 Gyr and 11.1/8.4 kpc, respectively.
   We see in the cluster's  CMD that the TO is located at $G\approx19$ mag,
@@ -1081,7 +1084,7 @@ located more than a few Kpc away.}
   9.3 kpc. While the distance lies within the range defined by the MWSC and CG20
   databases, the age shows a large difference with both databases.\\  
 
-  \textbf{vd Bergh-Hagen 37}: This cluster has been catalogued in OC02
+  \noindent \textbf{vd Bergh-Hagen 37}: This cluster has been catalogued in OC02
   as an object placed a 11.22 kpc with an age about 0.7 Gyr. These values were
   revised in~\cite{Dias_2021} finding 3.4 kpc and 0.3 Gyr for the distance and
   age. There is a remarkable distance difference between both results. 
@@ -1096,7 +1099,7 @@ located more than a few Kpc away.}
   report that vd Bergh-Hagen 37 is located at a distance of 4.0 kpc and its age
   is 0.17 Gyr.\\
 
-  \textbf{ESO 092 05}: Using BVI photometry \cite{Ortolani_2008} estimated
+  \noindent \textbf{ESO 092 05}: Using BVI photometry \cite{Ortolani_2008} estimated
   an age of 6 Gyr and a distance of 11 kpc for this object. Our distance is
   larger, 13.0 kpc, but the age is almost the same (5.5 Gyr).
   % The TO from Ortolani et al is set near V=19 mag while ours is set  at few
@@ -1115,7 +1118,7 @@ located more than a few Kpc away.}
   abundance is most likely a result of an overestimation of the cluster's
   extinction in Ortolani et al.\\
 
-  \textbf{ESO 092 18}: Early work by~\cite{Kubiak_1991} employing BVI CCD
+  \noindent \textbf{ESO 092 18}: Early work by~\cite{Kubiak_1991} employing BVI CCD
   photometry estimated $\sim$10 kpc and 8 Gyr for the distance and age of this
   cluster.
   % The VI observations by~\cite{Phelps_1994_develop} obtained 0.6 kpc and about 1
@@ -1138,7 +1141,7 @@ located more than a few Kpc away.}
   the distance given to this cluster is 6.3 kpc which is still far from our
   estimate, but much more reasonable than the 600 pc listed.\\
 
-  \textbf{Saurer 3}: This is a poorly studied cluster also known as Saurer C.
+  \noindent \textbf{Saurer 3}: This is a poorly studied cluster also known as Saurer C.
   Its CMD shows a dispersed sequence, suggesting a TO point at about G=19 mag
   and an evident RC at G=16.5 mag. Members appear scattered around the short
   main sequence, probably because of increasing photometric errors of Gaia data
@@ -1158,9 +1161,9 @@ located more than a few Kpc away.}
   kpc limit, in contradiction to the $\sim$9.5 kpc distance reported in
   OC02 (whose source is the Carraro \& Baume article).\\
 
-  \textbf{Kronberger 39}: This cluster is immersed in a region of high field
+  \noindent \textbf{Kronberger 39}: This cluster is immersed in a region of high field
   star contamination. It was studied in the JHK bands by~\cite{Kronberger_2006}
-  and catalogued as a \emph{cluster candidate with RC}. Using a radius of 0.8
+  and catalogued as a \emph{``cluster candidate with RC''}. Using a radius of 0.8
   arcmin (ours is 2 arcmins), these authors computed a distance of about 11.1
   kpc (the distance value used in the OC02 database) with no age estimate.
   %
@@ -1175,7 +1178,7 @@ located more than a few Kpc away.}
   The values for the age and distance in the MWSC database are 1 Myr and 4.4
   kpc, very much in disagreement with the estimates given by \texttt{ASteCA}.\\
 
-  \textbf{ESO 093 08}: With only 60 identified members this is the second less
+  \noindent \textbf{ESO 093 08}: With only 60 identified members this is the second less
   populated cluster in our sample. Using VI photometry~\cite{Bica_1999} located
   this cluster at a distance of 13.7 kpc, with an age in the range 4-5 Gyr.
   More recently, also using VI CCD photometry, \cite{Phelps_2003} estimated 14
@@ -1196,10 +1199,10 @@ located more than a few Kpc away.}
   lists a small distance of 3.7 kpc for this cluster whose source is not
   clear.\\
 
-  \textbf{vd Bergh-Hagen 144}: This cluster, also referred to as Andrew-Lindsay
+  \noindent \textbf{vd Bergh-Hagen 144}: This cluster, also referred to as Andrew-Lindsay
   1 and ESO 96-SC04, is known for hosting the planetary nebula PHR
   1315-6555~\citep{Parker_2011}.
-  In one of the first studies of this cluster\cite{Janes_1994} estimated a
+  In one of the first studies of this cluster~\cite{Janes_1994} estimated a
   distance of 7.6 kpc, very close to the value in the MWSC database. On the
   other end of the distance spectrum,
   \cite{Carraro_2005_neglected} assumed a cluster radius of $0.6^{\prime}$ and
@@ -1221,7 +1224,7 @@ located more than a few Kpc away.}
   distance of $\sim12$ kpc, the value present in OC02 and WEBDA, and an age of
   about 0.66 Gyr.\\
 
-  \textbf{vd Bergh-Hagen 176}: Originally reported as an open cluster
+  \noindent \textbf{vd Bergh-Hagen 176}: Originally reported as an open cluster
   in~\cite{vandenBergh_1975}, this is a very interesting object that has been
   profusely studied over the past almost five decades. Much of the interest
   comes from the fact that it is still not settled whether this is a metal-rich
@@ -1276,9 +1279,9 @@ located more than a few Kpc away.}
   cluster as metal rich ([Fe/H]$\approx$0.26) and massive (M$\approx170000\,
   M_{\odot}$), the most massive object of our sample by far.\\
 
-  \textbf{Kronberger 31}: This poorly studied and compact cluster was reported
-  in~\cite{Kronberger_2006} and classified as a \emph{cluster candidate with
-  RC}. Using a $1.3^{\prime}$ radius to delimit the cluster region, the authors
+  \noindent \textbf{Kronberger 31}: This poorly studied and compact cluster was reported
+  in~\cite{Kronberger_2006} and classified as a \emph{``cluster candidate with
+  RC''}. Using a $1.3^{\prime}$ radius to delimit the cluster region, the authors
   assigned an excess of $E_{BV}$=0.84 mag and a distance of 11.9 Kpc.
   %
   It is possible to identify in the CMD a short main sequence, the TO at G=18.3
@@ -1291,7 +1294,7 @@ located more than a few Kpc away.}
   locates this cluster below the 9 kpc limit in disagreement with Kronberger et
   al. and the MWSC catalog that assigns a distance of 12.6 kpc.\\
 
-  \textbf{Saurer 6}: This is another poorly studied cluster whose CMD denotes a
+  \noindent \textbf{Saurer 6}: This is another poorly studied cluster whose CMD denotes a
   wide and short main sequence, with a TO showing at approximately G=18 mag. The
   giant branch is quite scattered although the RC is evident.
   The RDP gives a cluster radius of $2^{\prime}$ with a high star density
@@ -1302,7 +1305,7 @@ located more than a few Kpc away.}
   which are 1.4 Gyr and 9.3 kpc. WEBDA and OC02 report the same distance, but
   the MWSC catalog assigns a smaller distance of 7.3 kpc.\\
 
-  \textbf{Berkeley 56}: Always classified as an old open
+  \noindent \textbf{Berkeley 56}: Always classified as an old open
   cluster~\citep[see for example][]{King_1964}, this is a well populated object
   and the second cluster with the largest number of identified members in our
   sample. It is also the second most massive cluster in our sample according
@@ -1319,13 +1322,13 @@ located more than a few Kpc away.}
   \texttt{ASteCA} estimates 11 kpc and 5.6 Gyr for the distance and age,
   both values within the range defined by the above mentioned articles.\\
 
-  \textbf{Berkeley 102}: This is a curious cluster regarding its distance
+  \noindent \textbf{Berkeley 102}: This is a curious cluster regarding its distance
   estimates in the literature. The four catalogs used in this work list wildly
   different values: 2.6 kpc~\citep[WEBDA;][]{Tadross_2008}, 4.9 kpc (MWSC),
   9.6 kpc~\citep[OC02;][]{Hasegawa_2008}, 10.5 kpc (CG20). Likewise, the
   assigned ages in these catalogs range from 0.6 Gyr to $\sim4$ Gyr.
   \cite{Maciejewski_2008} analyzed BV and 2MASS photometry and concluded that
-  this is a \emph{``only a chance alignment of physically unrelated star''}.
+  this is \emph{``only a chance alignment of physically unrelated star''}.
   %
   The CMD for Berkeley 102 shows a scattered main sequence with the TO at G=18.5
   mag and a well defined giant branch, which leads us to reject the conclusion
@@ -1410,15 +1413,15 @@ located more than a few Kpc away.}
   slope~\citep{Donor_2020}. In~\cite{Donor_2018} it was previously shown that
   the metallicity gradient is also (expectedly) highly dependent on the database
   used fix the distances, varying as much as 40\% depending on the used
-  database. This result was confirmed in~\citep{Donor_2020}, where a
+  database. This result was confirmed in~\cite{Donor_2020}, where a
   database-dependent variation of of 15\% was found.
   % from Donor et al (2020)
   % Donor et al. (2018) (henceforth OCCAMII) showed that this gradient could
   % change by as much as 40%, depending on which distance catalog was used
   %
 
-  We found six clusters from our sample that were also investigated in recent
-  works: Berkeley 25, Berkeley 29, Berkeley 73, Czernik 30, Saurer 1, and
+  We found six clusters from our sample that were also investigated in very
+  recent works: Berkeley 25, Berkeley 29, Berkeley 73, Czernik 30, Saurer 1, and
   Tombaugh 2; studied in \cite{Donor_2020}, \cite{Netopil_2021}, and
   \cite{Spina_2021}. The [Fe/H] values are shown in Table~\ref{tab:metal} along
   with the \texttt{ASteCA} estimates. The uncertainties are around 0.02, 0.06,
@@ -1428,8 +1431,8 @@ located more than a few Kpc away.}
   that for most of the clusters in Table~\ref{tab:metal} the metal content was
   estimated using three stars or less, which is a rather small number from which
   to derive proper statistical errors. What we see in this table is what can
-  also be seen in~Fig.\ref{fig:met_gradient}: \texttt{ASteCA} assigns on average
-  larger metallicities that those expected.
+  also be seen in Fig.~\ref{fig:met_gradient}: \texttt{ASteCA} assigns on
+  average larger metallicities that those expected.
   There is a visible concentration
   of nine clusters around $R_{GC}\sim13$ kpc grouped around
   [Fe/H]$\approx0.1$ dex, where the Donor et al. linear relation
@@ -1437,9 +1440,9 @@ located more than a few Kpc away.}
   analyzed in~\cite{Perren_2020} (shown as grey circles in the plot) display a
   much more balanced distribution around the [Fe/H]$\approx0.0$ dex expected
   value for their galactocentric distance of $\sim9$ kpc.
-  Given the large uncertainties for the metallicities given by \texttt{ASteCA},
-  the clusters at $R_{GC}\sim13$ kpc could still land close to the Donor et al.
-  relation within the 2-sigma region.
+  Given the large uncertainties for the metallicities found by \texttt{ASteCA},
+  the clusters at $R_{GC}\sim13$ kpc could still be placed close to the Donor et
+  al. relation and remain within the 2-sigma range.\\
 
 
   \begin{table}
@@ -1590,8 +1593,8 @@ located more than a few Kpc away.}
   extinction, total mass, and binary fraction, are shown in 
   Table~\ref{tab:results}. In this table we can see that these are
   rather old clusters: with the exception of just two (vd Bergh-Hagen 37 and
-  Kronberger 31), the remaining ones are all older than 1 Gyr.
-  Only thirteen clusters out of twenty-five turn out to be at a distance larger
+  Kronberger 31) the remaining ones are all older than 1 Gyr.
+  Only fourteen clusters out of twenty-five turn out to be at a distance larger
   than 9 kpc from the Sun, thus reducing the number of clusters that fit the
   minimum distance criteria by almost half.
 
@@ -1607,7 +1610,7 @@ located more than a few Kpc away.}
   vector seen in Fig.~\ref{fig:MWmap_vectors}.
 
   Despite some bias effect~\citep[e.g. lower dust absorption, particularly
-  along the FitzgGerald window][]{Fitzgerald_1968}, it appears that a large
+  along the Fitzgerald window][]{Fitzgerald_1968}, it appears that a large
   number of clusters in the third quadrant of the Galaxy follow the warp defined
   by the diffuse blue population~\citep{Carraro_2005_detection,Moitinho_2006},
   whose maximum height above the galactic equator takes place at about
@@ -1865,7 +1868,7 @@ sfdmap\footnote{\url{https://github.com/kbarbary/sfdmap}}.
    \cite{Tarricq_2021}, [2]: \cite{Dias_2002}, [3]: \cite{Soubiran_2018}, [4]: 
    \cite{Dias_2007}, [5]: \cite{Frinchaboy_2006}. The values marked with an
    asterisk ($^*$) where obtained for E9218 and KRON31 from a single member for
-   each cluster (from our own selection) from Gaia eDR3 data.}
+   each cluster (from our own selection) from Gaia EDR3 data.}
    \label{tab:velocities}
    \centering
    \renewcommand{\arraystretch}{1.3}
