@@ -7,6 +7,7 @@ Plot the distances obtained with ASteCA versus those from the four databases
 from astropy.io import ascii
 # import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 # from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.gridspec as gridspec
 from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw, ft_sz
@@ -72,34 +73,45 @@ def main(dpi=dpi):
             cl['a_median'] - lit_data[cl_i]['A_OC'],
             cl['a_median'] - lit_data[cl_i]['A_CG']))
 
+    colors = sns.color_palette("Spectral", 13)[2::3]
+    markers = ('o', '*', 'v', '^')
+
     #
     fig = plt.figure(figsize=(25, 25))
     gs = gridspec.GridSpec(grid_y, grid_x)
     ax = plt.subplot(gs[0:1, 0:2])
 
     ax.scatter(age_dct['x'], age_dct['A_MW'], label="MWSC",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='o')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[0],
+               color=colors[0])
     ax.scatter(age_dct['x'], age_dct['A_WB'], label="WEBDA",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='s')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[1],
+               color=colors[1])
     ax.scatter(age_dct['x'], age_dct['A_OC'], label="OC02",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='^')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[2],
+               color=colors[2])
     ax.scatter(age_dct['x'], age_dct['A_CG'], label="CG20",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='v')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[3],
+               color=colors[3])
 
     ax.axhline(0, ls=':', c='k')
     ax.set_xlabel("ASteCA [Gyr]", fontsize=ft_sz)
     ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
     plt.legend()
 
-    ax = plt.subplot(gs[1:3, 0:2])
+    ax = plt.subplot(gs[1:2, 0:2])
     ax.scatter(age_dct['b_fr'], age_dct['A_MW'], label="MWSC",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='o')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[0],
+               color=colors[0])
     ax.scatter(age_dct['b_fr'], age_dct['A_WB'], label="WEBDA",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='s')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[1],
+               color=colors[1])
     ax.scatter(age_dct['b_fr'], age_dct['A_OC'], label="OC02",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='^')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[2],
+               color=colors[2])
     ax.scatter(age_dct['b_fr'], age_dct['A_CG'], label="CG20",
-               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker='v')
+               s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[3],
+               color=colors[3])
     ax.axhline(0, ls=':', c='k')
     ax.set_xlabel(r"$b_{fr}$", fontsize=ft_sz)
     ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
