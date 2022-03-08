@@ -86,9 +86,25 @@ def main(dpi=dpi):
         [asteca_data['d_16th'], asteca_data['d_median'],
          asteca_data['d_84th']]) + 5))
     R_GC = xyzCoords(dist_pc, lon, lat)
-    FeH = ZtoFeH(asteca_data['z_median'])
-    FeH_16 = ZtoFeH(asteca_data['z_16th'])
-    FeH_84 = ZtoFeH(asteca_data['z_84th'])
+
+    #
+    FeH = np.array(ZtoFeH(asteca_data['z_median']))
+    FeH_16 = np.array(ZtoFeH(asteca_data['z_16th']))
+    FeH_84 = np.array(ZtoFeH(asteca_data['z_84th']))
+
+    # # Test using z values obtained setting b_fr=0.5
+    # bf_05_run = ascii.read(in_folder + 'asteca_output_z_free_bf_05.dat')
+    # bf_05_names = list([_.split('/')[1].upper() for _ in bf_05_run['NAME']])
+    # z_data = []
+    # for name in asteca_data['NAME']:
+    #     idx = bf_05_names.index(name.split('/')[1].upper())
+    #     z_data.append([bf_05_run['z_median'][idx],
+    #                    bf_05_run['z_16th'][idx],
+    #                    bf_05_run['z_84th'][idx]])
+    # z_data = np.array(z_data).T
+    # FeH = ZtoFeH(z_data[0])
+    # FeH_16 = ZtoFeH(z_data[1])
+    # FeH_84 = ZtoFeH(z_data[2])
 
     dist_pc, lon, lat = _16_clusts['dist'] * 1000., _16_clusts['lon'],\
         _16_clusts['lat']
@@ -114,11 +130,11 @@ def main(dpi=dpi):
 
     ax = plt.subplot(gs[0:1, 0:2])
 
-    x, y = _16_R_GC.value, _16_FeH.value
+    x, y = _16_R_GC.value, _16_FeH
     plt.scatter(
         x, y, s=sc_sz, c='grey', ec=sc_ec, lw=sc_lw, alpha=.5, zorder=2)
 
-    x, y = R_GC.T[1].value, FeH.value
+    x, y = R_GC.T[1].value, FeH
     xerr = np.array([x - R_GC.T[0].value, R_GC.T[2].value - x])
     yerr = np.array([FeH - FeH_16, FeH_84 - FeH])
     plt.errorbar(
