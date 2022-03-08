@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 
 root_f = '../2_pipeline/5_ASteCA/'
 in_folder = root_f + 'out/'
-out_folder = 'tmp/'
 
 
 def main(dpi=300):
