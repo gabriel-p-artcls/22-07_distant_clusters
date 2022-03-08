@@ -1,11 +1,9 @@
 
 The folders have the following meanings:
 
-* `0_data`: raw data for the analyzed data
-* `1_code`: code used to analyze the data and generate the final plots
+* `0_data`: raw data for the analysed data
+* `1_code`: code used to analyse the data and generate the final plots
 * `2_pipeline`: output from the different processes used throughout the analysis
-* `3_article`: final article
-
 
 
 
@@ -110,7 +108,23 @@ Remove unused columns from the raw data files.
 
 ## pyUPMASK
 
-Processed all clusters with pyUPMASK+GMM, using only the proper motions as processing data.
+Processed all clusters with pyUPMASK+GMM, using only the proper motions as processing data and the following parameters:
+
+```
+oultr_method   = stdregion
+stdRegion_nstd = 5.
+OL_runs      = 50
+resampleFlag = False
+PCAflag      = True
+PCAdims      = 2
+GUMM_flag    = True
+GUMM_perc    = auto
+KDEP_flag    = True
+IL_runs    = 100
+N_membs    = 25
+N_cl_max   = 1000
+clust_method = GaussianMixture
+```
 
 
 
