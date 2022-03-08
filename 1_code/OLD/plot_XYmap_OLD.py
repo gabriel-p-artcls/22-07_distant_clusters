@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import seaborn as sns
 import numpy as np
-from plot_pars import dpi, sc_sz, sc_ec, sc_lw
+from plot_pars import dpi, grid_x, grid_y, sc_sz, sc_ec, sc_lw
 
 
 lit_data = """
@@ -116,82 +116,78 @@ def main(dpi=dpi):
     markers = ('o', '*', 'v', '^')
     Xmin, Xmax, Ymin, Ymax, Zmin, Zmax = -24, 11, -19, 16, -2.6, 2.6
 
-    grid_x, grid_y = 12, 12
     fig = plt.figure(figsize=(17, 17))
     gs = gridspec.GridSpec(grid_y, grid_x)
 
-    gxy = ((0, 3, 0, 3), (0, 3, 3, 6), (0, 3, 6, 9), (0, 3, 9, 12))
-    fs = 18
+    plt.subplot(gs[0:4, 0:4])
+    # plt.grid(ls=':', c='grey', lw=.5, zorder=.5)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
 
-    # cl_plots1 = [[], []]
+    cl_plots1 = [[], []]
     for ic, cat in enumerate(DBs_list):
         x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
-        y1, y2, x1, x2 = gxy[ic]
-
-        # X_GC vs Y_GC
-        ax = plt.subplot(gs[y1:y2, x1:x2])
-        plt.title(cat.replace('D_', ''), fontsize=fs)
-        plt.axhline(0, ls=':', c='grey', zorder=-1)
-        plt.axvline(0, ls=':', c='grey', zorder=-1)
-        plt.scatter(
+        pl = plt.scatter(
             x_kpc, y_kpc, alpha=.8, marker=markers[ic], s=sc_sz * 2,
             lw=sc_lw, edgecolor=sc_ec, zorder=2.5, color=colors[ic])
-        # Plot Sun and center of Milky Way
-        plt.scatter(
-            s_xys.x, s_xys.y, c='yellow', s=50, edgecolor='k', zorder=2.5)
-        plt.scatter(0., 0., c='k', marker='o', s=150, zorder=2.5)
-        # Plot spiral arms
-        plotSpiral()
-        plt.xlim(Xmin, Xmax)
-        plt.ylim(Ymin, Ymax)
-        plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=fs)
-        if ic == 0:
-            plt.ylabel(r"$y_{GC}$ [Kpc]", fontsize=fs)
-        else:
-            ax.set_yticklabels([])
-        plt.xticks(fontsize=fs)
-        plt.yticks(fontsize=fs)
+        cl_plots1[0].append(pl)
+        cl_plots1[1].append(cat.replace('D_', ''))
 
-        # X_GC vs Z_GC
-        ax = plt.subplot(gs[y1 + 3:y2 + 3, x1:x2])
-        plt.scatter(
-            x_kpc, z_kpc, alpha=.8, marker=markers[ic], s=sc_sz * 2,
-            lw=sc_lw, edgecolor=sc_ec, zorder=2.5, color=colors[ic])
-        plt.axvline(0, ls=':', c='grey', zorder=-1)
-        plt.axhline(0, ls=':', c='grey', zorder=-1)
-        plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k',
-                    zorder=5)
-        plt.scatter(0., 0., c='k', marker='o', s=150, zorder=5)
-        plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=fs)
-        if ic == 0:
-            plt.ylabel(r"$z_{GC}$ [Kpc]", fontsize=fs)
-        else:
-            ax.set_yticklabels([])
-        plt.xlim(Xmin, Xmax)
-        plt.ylim(Zmin, Zmax)
-        plt.xticks(fontsize=fs)
-        plt.yticks(fontsize=fs)
+    # Plot Sun and center of Milky Way
+    plt.scatter(s_xys.x, s_xys.y, c='yellow', s=50, edgecolor='k', zorder=2.5)
+    plt.scatter(0., 0., c='k', marker='o', s=150, zorder=2.5)
+    # Plot spiral arms
+    cl_plots2 = plotSpiral()
 
-        #
-        # Y_GC vs Z_GC
-        ax = plt.subplot(gs[y1 + 6:y2 + 6, x1:x2])
+    l1 = plt.legend(cl_plots1[0], cl_plots1[1], loc=1, fontsize=12)
+    plt.legend(cl_plots2[0], cl_plots2[1], loc=4, fontsize=12)
+    plt.gca().add_artist(l1)
+    plt.xlim(Xmin, Xmax)
+    plt.ylim(Ymin, Ymax)
+    plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=15)
+    plt.ylabel(r"$y_{GC}$ [Kpc]", fontsize=15)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
+
+    #
+    # X_GC vs Z_GC
+    # plt.subplot(gs[4:6, 0:4])
+    plt.subplot(gs[0:2, 4:8])
+    for ic, cat in enumerate(DBs_list):
+        x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
         plt.scatter(
-            y_kpc, z_kpc, alpha=.8, marker=markers[ic], s=sc_sz * 2,
-            lw=sc_lw, edgecolor=sc_ec, zorder=2.5, color=colors[ic])
-        plt.axvline(0, ls=':', c='grey', zorder=-1)
-        plt.axhline(0, ls=':', c='grey', zorder=-1)
-        plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
-        plt.scatter(s_xys.y, s_xys.z, c='yellow', s=50, edgecolor='k',
-                    zorder=5)
-        plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=fs)
-        if ic == 0:
-            plt.ylabel(r"$z_{GC}$ [Kpc]", fontsize=fs)
-        else:
-            ax.set_yticklabels([])
-        plt.xlim(Ymin, Ymax)
-        plt.ylim(Zmin, Zmax)
-        plt.xticks(fontsize=fs)
-        plt.yticks(fontsize=fs)
+            x_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
+            s=100, lw=.5, edgecolor='k', zorder=2.5)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.scatter(s_xys.x, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
+    plt.scatter(0., 0., c='k', marker='o', s=150, zorder=5)
+    plt.xlabel(r"$x_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
+    plt.xlim(Xmin, Xmax)
+    plt.ylim(Zmin, Zmax)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
+
+    #
+    # Y_GC vs Z_GC
+    # plt.subplot(gs[6:8, 0:4])
+    plt.subplot(gs[2:4, 4:8])
+    for ic, cat in enumerate(DBs_list):
+        x_kpc, y_kpc, z_kpc = xyz_kpc[cat]
+        plt.scatter(
+            y_kpc, z_kpc, alpha=.8, color=colors[ic], marker=markers[ic],
+            s=100, lw=.5, edgecolor='k', zorder=2.5)
+    plt.axvline(0, ls=':', c='grey', zorder=-1)
+    plt.axhline(0, ls=':', c='grey', zorder=-1)
+    plt.scatter(0., 0., c='k', marker='o', s=150, zorder=4)
+    plt.scatter(s_xys.y, s_xys.z, c='yellow', s=50, edgecolor='k', zorder=5)
+    plt.xlabel(r"$y_{GC}\, [Kpc]$", fontsize=15)
+    plt.ylabel(r"$z_{GC}\, [Kpc]$", fontsize=15)
+    plt.xlim(Ymin, Ymax)
+    plt.ylim(Zmin, Zmax)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
 
     fig.tight_layout()
     plt.savefig(out_folder + 'MWmap.png', bbox_inches='tight', dpi=dpi)
