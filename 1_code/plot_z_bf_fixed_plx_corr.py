@@ -12,7 +12,8 @@ Runs in 'asteca_zfixed.dat':
 01/02: z=0.0152, b_fr=0.0
 03/04: z=0.0152, b_fr=free
 05   : z=free  , b_fr=0.0
-06   : z=0.0152, b_fr=0.3
+06   : z=0.0152, b_fr=0.3 <-- DEPRECATED
+07   : z=0.0152, b_fr=0.5
 
 
 2. Distances estimated by ASteCA vs other distance estimates.
@@ -100,7 +101,9 @@ def main(dpi=dpi):
             z_fixed[cl['NAME'][3:]] = d_pc
         elif cl['NAME'].startswith('05'):
             b_fixed[cl['NAME'][3:]] = d_pc
-        elif cl['NAME'].startswith('06'):
+        # elif cl['NAME'].startswith('06'):  # Old b_f=0.3 values
+        #     z_bf_fixed2[cl['NAME'][3:]] = d_pc
+        elif cl['NAME'].startswith('07'):
             z_bf_fixed2[cl['NAME'][3:]] = d_pc
 
     # Plx distances
@@ -112,19 +115,19 @@ def main(dpi=dpi):
         plx_kalkayotl[cl['Cluster']] = cl['Kalkayotl']
 
     #
-    fig = plt.figure(figsize=(20, 20))
+    fig = plt.figure(figsize=(20, 30))
     gs = gridspec.GridSpec(grid_y, grid_x)
 
-    ax = plt.subplot(gs[0:2, 0:2])
+    ax = plt.subplot(gs[0:1, 0:2])
     sols = {
         'z_bf_fixed': (z_bf_fixed, r'$Z=Z_{\odot},b_{fr}=0.0$'),
         'z_fixed': (z_fixed, r'$Z=Z_{\odot}$'),
         'b_fixed': (b_fixed, r'$b_{fr}=0.0$'),
-        'z_bf_fixed2': (z_bf_fixed2, r"$Z=Z_{\odot},b_{fr}=0.3$")
+        'z_bf_fixed2': (z_bf_fixed2, r"$Z=Z_{\odot},b_{fr}=0.5$")
     }
     plotDistDelta(ax, d_asteca, sols)
 
-    ax = plt.subplot(gs[2:4, 0:2])
+    ax = plt.subplot(gs[1:2, 0:2])
     sols = {
         'plx_median': (plx_median, r'median(Plx)$^{-1}$'),
         'plx_asteca': (plx_asteca, 'ASteCA'),
