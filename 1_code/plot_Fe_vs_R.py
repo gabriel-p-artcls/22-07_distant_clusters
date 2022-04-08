@@ -62,11 +62,12 @@ in_folder = '../2_pipeline/5_ASteCA/out/'
 out_folder = '../2_pipeline/plots/'
 
 
-def main(dpi=dpi):
+def main(dpi=dpi, sol='median'):
     """
     Plot [Fe/H] vs R_GC distribution for the ASteCA results
     """
     asteca_data = ascii.read(in_folder + 'asteca_output.dat')
+    # asteca_data = ascii.read('/home/gabriel/Documents/06/asteca_output.dat')
 
     radec_names = list([_.upper() for _ in radec_data['Cluster']])
     radec = []
@@ -83,28 +84,17 @@ def main(dpi=dpi):
     lat = lb.b.radian * u.radian
 
     dist_pc = 10**(.2 * (np.array(
-        [asteca_data['d_16th'], asteca_data['d_median'],
+        [asteca_data['d_16th'], asteca_data['d_' + sol],
          asteca_data['d_84th']]) + 5))
     R_GC = xyzCoords(dist_pc, lon, lat)
 
     #
-    FeH = np.array(ZtoFeH(asteca_data['z_median']))
-    FeH_16 = np.array(ZtoFeH(asteca_data['z_16th']))
-    FeH_84 = np.array(ZtoFeH(asteca_data['z_84th']))
-
-    # # Test using z values obtained setting b_fr=0.5
-    # bf_05_run = ascii.read(in_folder + 'asteca_output_z_free_bf_05.dat')
-    # bf_05_names = list([_.split('/')[1].upper() for _ in bf_05_run['NAME']])
-    # z_data = []
-    # for name in asteca_data['NAME']:
-    #     idx = bf_05_names.index(name.split('/')[1].upper())
-    #     z_data.append([bf_05_run['z_median'][idx],
-    #                    bf_05_run['z_16th'][idx],
-    #                    bf_05_run['z_84th'][idx]])
-    # z_data = np.array(z_data).T
-    # FeH = ZtoFeH(z_data[0])
-    # FeH_16 = ZtoFeH(z_data[1])
-    # FeH_84 = ZtoFeH(z_data[2])
+    # FeH = np.array(ZtoFeH(asteca_data['z_' + sol]))
+    # FeH_16 = np.array(ZtoFeH(asteca_data['z_16th']))
+    # FeH_84 = np.array(ZtoFeH(asteca_data['z_84th']))
+    FeH = asteca_data['z_' + sol]
+    FeH_16 = asteca_data['z_16th']
+    FeH_84 = asteca_data['z_84th']
 
     dist_pc, lon, lat = _16_clusts['dist'] * 1000., _16_clusts['lon'],\
         _16_clusts['lat']
@@ -121,8 +111,9 @@ def main(dpi=dpi):
     txt = {}
     for i, _ in enumerate(asteca_data['NAME']):
         txt[_[3:]] = (R_GC[i][1].value, FeH[i])
-        print("{}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
-            _[3:], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
+        if R_GC[i][1].value > 11.5:
+            print("{}, FeH={:.2f} ({:.2f},{:.2f}), R_GC={:.1f}".format(
+                _[3:], FeH[i], FeH_16[i], FeH_84[i], R_GC[i][1].value))
 
     #
     fig = plt.figure(figsize=(25, 25))
@@ -140,7 +131,7 @@ def main(dpi=dpi):
     plt.errorbar(
         x, y, xerr=xerr, yerr=yerr, fmt='none', c='grey', ls='none', zorder=0)
     plt.scatter(
-        x, y, s=sc_sz, c=asteca_data['a_median'], ec=sc_ec, lw=sc_lw, zorder=5)
+        x, y, s=sc_sz, c=asteca_data['a_' + sol], ec=sc_ec, lw=sc_lw, zorder=5)
 
     ax.annotate("SAU1", (txt['saurer1'][0] + .25, txt['saurer1'][1] + .025))
     ax.annotate("BH144", (txt['vdbh144'][0] + .25, txt['vdbh144'][1] + .025))
@@ -152,11 +143,31 @@ def main(dpi=dpi):
     plt.plot((13.9, 22), (-0.4, -0.473), ls=':', lw=2, c='k')
 
     plt.xlim(7., 23)
-    plt.ylim(-0.75, 0.3)
+    plt.ylim(-0.65, 0.35)
     cbar = plt.colorbar()
     cbar.set_label(r"$\log$ age")
     plt.xlabel(r"$R_{GC}$ [kpc]")
     plt.ylabel("[Fe/H]")
+
+    # FeH difference between ASteCA and Donor trend line
+    print("\n")
+    R_GC = R_GC.T[1].value
+    x, y = (8., 13.9), (0., -0.4)
+    # Calculate the coefficients and linear function
+    coefficients = np.polyfit(x, y, 1)
+    polynomial = np.poly1d(coefficients)
+    msk = R_GC <= 13.9
+    FeH_trend = polynomial(R_GC[msk])
+    print("16th={:.2f}, 50th={:.2f}, 84th{:.2f}".format(*np.percentile(
+        FeH_trend - FeH[msk], (16, 50, 84))))
+    # Now for the other segment
+    x, y = (13.9, 22), (-0.4, -0.473)
+    coefficients = np.polyfit(x, y, 1)
+    polynomial = np.poly1d(coefficients)
+    msk = R_GC > 13.9
+    FeH_trend = polynomial(R_GC[msk])
+    print("16th={:.2f}, 50th={:.2f}, 84th{:.2f}".format(*np.percentile(
+        FeH_trend - FeH[msk], (16, 50, 84))))
 
     fig.tight_layout()
     plt.savefig(out_folder + "Fe_vs_R.png", dpi=dpi, bbox_inches='tight')

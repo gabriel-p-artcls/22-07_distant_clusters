@@ -133,18 +133,18 @@ def main(dpi=dpi):
         'plx_asteca': (plx_asteca, 'ASteCA'),
         'plx_kalkayotl': (plx_kalkayotl, 'Kalkayotl')
     }
-    plotDistDelta(ax, d_asteca, sols, True)
+    plotDistDelta(ax, d_asteca, sols, True, 4)
 
     fig.tight_layout()
     plt.savefig(
         out_folder + "d_zb_fixed_plx.png", dpi=dpi, bbox_inches='tight')
 
 
-def plotDistDelta(ax, d_asteca, sols, xlabel=False):
+def plotDistDelta(ax, d_asteca, sols, xlabel=False, mo=0):
     """
     """
     cols = sns.color_palette()
-    marker = ('o', '*', '^', 'v')
+    marker = ('<', '>', 's', 'd', 'P', 'p', 'h')
 
     for i, (k, sol) in enumerate(sols.items()):
         # print(sol)
@@ -153,7 +153,7 @@ def plotDistDelta(ax, d_asteca, sols, xlabel=False):
             x.append(d_a)
             y.append(d_a - sol[0][cl])
         ax.scatter(
-            x, y, alpha=.6, color=cols[i], marker=marker[i], label=sol[1],
+            x, y, alpha=.6, color=cols[i], marker=marker[i + mo], label=sol[1],
             s=sc_sz, lw=sc_lw, ec=sc_ec)
         ax.axhline(np.median(y), ls=':', c=cols[i], lw=1.5)
 

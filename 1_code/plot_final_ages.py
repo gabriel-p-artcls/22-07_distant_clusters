@@ -5,7 +5,7 @@ Plot the distances obtained with ASteCA versus those from the four databases
 
 
 from astropy.io import ascii
-# import numpy as np
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 # from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -56,17 +56,27 @@ def main(dpi=dpi):
 
     lit_names = [_.lower() for _ in lit_data['Cluster']]
     age_dct = {
-        'x': [], 'A_MW': [], 'A_WB': [], 'A_OC': [], 'A_CG': [], 'b_fr': []}
+        'x': [], 'A_MW': [], 'A_WB': [], 'A_OC': [], 'A_CG': [], 'b_fr': [],
+        'LA_MW': [], 'LA_WB': [], 'LA_OC': [], 'LA_CG': []}
     for cl in data:
         cl_name = cl['NAME'][3:]
         cl_i = lit_names.index(cl_name)
-        age_asteca = (10**cl['a_median']) / 1e9
+        age_asteca = cl['a_median']
+        lin_age_asteca = (10**cl['a_median']) / 1e9
         age_dct['x'].append(age_asteca)
         age_dct['b_fr'].append(cl['b_median'])
-        age_dct['A_MW'].append(age_asteca - (10**lit_data[cl_i]['A_MW']) / 1e9)
-        age_dct['A_WB'].append(age_asteca - (10**lit_data[cl_i]['A_WB']) / 1e9)
-        age_dct['A_OC'].append(age_asteca - (10**lit_data[cl_i]['A_OC']) / 1e9)
-        age_dct['A_CG'].append(age_asteca - (10**lit_data[cl_i]['A_CG']) / 1e9)
+        age_dct['A_MW'].append(age_asteca - lit_data[cl_i]['A_MW'])
+        age_dct['A_WB'].append(age_asteca - lit_data[cl_i]['A_WB'])
+        age_dct['A_OC'].append(age_asteca - lit_data[cl_i]['A_OC'])
+        age_dct['A_CG'].append(age_asteca - lit_data[cl_i]['A_CG'])
+        age_dct['LA_MW'].append(lin_age_asteca - (
+            10**lit_data[cl_i]['A_MW']) / 1e9)
+        age_dct['LA_WB'].append(lin_age_asteca - (
+            10**lit_data[cl_i]['A_WB']) / 1e9)
+        age_dct['LA_OC'].append(lin_age_asteca - (
+            10**lit_data[cl_i]['A_OC']) / 1e9)
+        age_dct['LA_CG'].append(lin_age_asteca - (
+            10**lit_data[cl_i]['A_CG']) / 1e9)
         print("{:<17}: {:.2f} {:.2f} {:.2f} {:.2f}".format(
             cl_name, cl['a_median'] - lit_data[cl_i]['A_MW'],
             cl['a_median'] - lit_data[cl_i]['A_WB'],
@@ -76,11 +86,17 @@ def main(dpi=dpi):
     colors = sns.color_palette("Spectral", 13)[2::3]
     markers = ('o', '*', 'v', '^')
 
+    median_diff = 0.
+    for _ in ('A_MW', 'A_WB', 'A_OC', 'A_CG'):
+        median_diff += np.nanmedian(age_dct[_])
+        print(_, np.nanmedian(age_dct[_]))
+    print(median_diff / 4)
+
     #
     fig = plt.figure(figsize=(25, 25))
     gs = gridspec.GridSpec(grid_y, grid_x)
-    ax = plt.subplot(gs[0:1, 0:2])
 
+    ax = plt.subplot(gs[0:1, 0:2])
     ax.scatter(age_dct['x'], age_dct['A_MW'], label="MWSC",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[0],
                color=colors[0])
@@ -93,29 +109,39 @@ def main(dpi=dpi):
     ax.scatter(age_dct['x'], age_dct['A_CG'], label="CG20",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[3],
                color=colors[3])
-
     ax.axhline(0, ls=':', c='k')
-    ax.set_xlabel("ASteCA [Gyr]", fontsize=ft_sz)
-    ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
-    plt.legend()
+    ax.set_xlabel(r"$\log\,age_{ASteCA}$ [dex]", fontsize=ft_sz)
+    ax.set_ylabel("(ASteCA - DB) [dex]", fontsize=ft_sz)
+    plt.ylim(-.4, 1.6)
+    # plt.legend()
+
+    # For the line regression
+    X, Y = [], []
+    for _ in ('LA_MW', 'LA_WB', 'LA_OC', 'LA_CG'):
+        msk = np.isnan(age_dct[_])
+        X += list(np.array(age_dct['b_fr'])[~msk])
+        Y += list(np.array(age_dct[_])[~msk])
 
     ax = plt.subplot(gs[1:2, 0:2])
-    ax.scatter(age_dct['b_fr'], age_dct['A_MW'], label="MWSC",
+    ax.scatter(age_dct['b_fr'], age_dct['LA_MW'], label="MWSC",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[0],
                color=colors[0])
-    ax.scatter(age_dct['b_fr'], age_dct['A_WB'], label="WEBDA",
+    ax.scatter(age_dct['b_fr'], age_dct['LA_WB'], label="WEBDA",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[1],
                color=colors[1])
-    ax.scatter(age_dct['b_fr'], age_dct['A_OC'], label="OC02",
+    ax.scatter(age_dct['b_fr'], age_dct['LA_OC'], label="OC02",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[2],
                color=colors[2])
-    ax.scatter(age_dct['b_fr'], age_dct['A_CG'], label="CG20",
+    ax.scatter(age_dct['b_fr'], age_dct['LA_CG'], label="CG20",
                s=sc_sz, ec=sc_ec, lw=sc_lw, alpha=.5, marker=markers[3],
                color=colors[3])
     ax.axhline(0, ls=':', c='k')
-    ax.set_xlabel(r"$b_{fr}$", fontsize=ft_sz)
+    plt.plot(np.unique(X), np.poly1d(np.polyfit(X, Y, 1))(np.unique(X)),
+             ls='--', zorder=-2)
+    ax.set_xlabel(r"$b_{fr,ASteCA}$", fontsize=ft_sz)
     ax.set_ylabel("(ASteCA - DB) [Gyr]", fontsize=ft_sz)
-    # plt.legend()
+    # plt.ylim(-.4, 1.6)
+    plt.legend(loc='upper left')
 
     fig.tight_layout()
     plt.savefig(out_folder + "ages.png", dpi=dpi, bbox_inches='tight')

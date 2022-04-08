@@ -7,6 +7,7 @@ Plot the distances obtained with ASteCA versus those from the four databases
 from astropy.io import ascii
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from adjustText import adjust_text
@@ -83,6 +84,8 @@ def main(dpi=dpi):
     xylim = (100, 20800)
 
     # y0, y1, x0, x1
+    colors = sns.color_palette("Spectral", 13)[2::3]
+    markers = ('o', '*', 'v', '^')
     gs_ij = ((0, 2, 0, 2), (0, 2, 2, 4), (2, 4, 0, 2), (2, 4, 2, 4))
 
     for db_id, xlab in enumerate(
@@ -107,8 +110,9 @@ def main(dpi=dpi):
             yerr = np.array([[y - y_16, y_84 - y]]).T
             ax1.errorbar(x, y, yerr=yerr, fmt='', c='grey', zorder=1)
             ax1.scatter(
-                x, y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
-                zorder=4, vmin=vmin, vmax=vmax)
+                x, y, s=sc_sz, ec=sc_ec, lw=sc_lw,
+                zorder=4, vmin=vmin, vmax=vmax, color=colors[db_id],
+                marker=markers[db_id])
             texts.append(ax1.text(x, y, short_n[cl]))
 
         adjust_text(texts)
@@ -131,7 +135,7 @@ def main(dpi=dpi):
                 x, x - y, yerr=yerr, fmt='', c='grey', zorder=1)
             im = ax2.scatter(
                 x, x - y, c=col, s=sc_sz, ec=sc_ec, lw=sc_lw,
-                vmin=vmin, vmax=vmax, zorder=4)
+                vmin=vmin, vmax=vmax, zorder=4, marker=markers[db_id])
 
         ax2.plot(xylim, (0, 0), ls='--', c='k', lw=1.5, zorder=0)
         ax2.set_xlim(*xylim)

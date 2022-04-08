@@ -6,8 +6,8 @@ from . import prep_plots
 
 """
 Function to generate the proper motions + fundamental parameters plot. This
-file needs to be in the 'packages/out/' folder and called from 'func_caller()'
-with:
+file needs to be in the 'packages/out/' folder of ASteCA and called from
+'func_caller()' with:
 
     from .out import plot_fundpars
     plot_fundpars.main(npd, pd, clp, td)
@@ -40,8 +40,7 @@ final images.
 
 """
 
-pms_folder = '/media/gabriel/rest/Dropbox_nosync/Papers/future_projects/'\
-             + 'distant_clusters/2_pipeline/1_data_filter/out/'
+pms_folder = '/media/gabriel/rest/Dropbox_nosync/Papers/2022/distant_clusters/2_pipeline/1_data_filter/out/'
 
 
 def main(npd, pd, clp, td):

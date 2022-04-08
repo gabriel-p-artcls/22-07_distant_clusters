@@ -1,3 +1,4 @@
+
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 import astropy.coordinates as coord
@@ -8,7 +9,7 @@ import matplotlib.gridspec as gridspec
 from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
 import numpy as np
 from plot_pars import dpi, grid_x, grid_y
-from plot_XYmap import plotSpiral
+from plot_XYmap_v1 import plotSpiral
 from plot_Fe_vs_R import ZtoFeH
 
 
@@ -60,7 +61,8 @@ def main(dpi=dpi):
             d_pc = 10**(.2 * (asteca_data[idx]['d_median'] + 5))
             # dis_84 = 10**(.2 * (asteca_data[idx]['d_84th'] + 5))/1000
             # dis_16 = 10**(.2 * (asteca_data[idx]['d_16th'] + 5))/1000
-            feh = ZtoFeH(asteca_data[idx]['z_median'])
+            # feh = ZtoFeH(asteca_data[idx]['z_median'])
+            feh = asteca_data[idx]['z_median']
             age = asteca_data[idx]['a_median']
             mass = asteca_data[idx]['M_median']
             bfr = asteca_data[idx]['b_median']
@@ -111,8 +113,6 @@ def plot(lit_data, asteca_pars):
     im = plt.scatter(
         x_kpc, y_kpc, alpha=.75, s=asteca_pars[3] / 100, lw=.5,
         c=asteca_pars[1], edgecolor='k', zorder=2.5)
-        #, vmin=8.9, vmax=9.9)
-        # cmap="plasma")
 
     plotVectors(lit_data, x_kpc, y_kpc, vx, vy)
 
@@ -120,9 +120,10 @@ def plot(lit_data, asteca_pars):
     plt.scatter(s_xys.x, s_xys.y, c='yellow', s=50, edgecolor='k', zorder=2.5)
     plt.scatter(0., 0., c='k', marker='o', s=150, zorder=2.5)
     # Plot spiral arms
-    cl_plots = plotSpiral()
+    # cl_plots = plotSpiral()
+    plotSpiral()
+    # plt.legend(cl_plots[0], cl_plots[1], loc=4, fontsize=12)
 
-    plt.legend(cl_plots[0], cl_plots[1], loc=4, fontsize=12)
     plt.xlim(Xmin, Xmax)
     plt.ylim(Ymin, Ymax)
     plt.xlabel(r"$x_{GC}$ [Kpc]", fontsize=15)
@@ -184,11 +185,9 @@ def plot(lit_data, asteca_pars):
 
     # R_GC = np.sqrt(x_kpc**2 + y_kpc**2 + z_kpc**2)
     # ascii.write([
-    #     lit_data['Cluster'], lit_data['D_AS'], d_16, d_84, R_GC, x_kpc,
-    #     y_kpc, z_kpc, lit_data['pmRA'], lit_data['pmDE'], lit_data['RV']],
-    #     'table_CL.dat', names=[
-    #         'Cl', 'Dist', 'd_16', 'd_84', 'R_GC', 'X', 'Y', 'Z', 'pmRA',
-    #         'pmDE', 'RV'], overwrite=True)
+    #     lit_data['Cluster'], R_GC, x_kpc, y_kpc, z_kpc, lit_data['pmRA'],
+    #     lit_data['pmDE'], lit_data['RV']], 'table_CL.dat', names=[
+    #     'Cl', 'R_GC', 'X', 'Y', 'Z', 'pmRA', 'pmDE', 'RV'], overwrite=True)
 
 
 def plotVectors(lit_data, x, y, vx, vy):
