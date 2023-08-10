@@ -1,0 +1,8 @@
+Referee report
+
+I thank the authors for considering my earlier report, and congratulate them to their fast and thorough revision of the manuscript, especially concerning the results. The changes, where they were made, were carefully thought of. All answers to the individual points have been addressed satisfactorily, so I see no reason to further delay this publication.
+
+I only have one further minor suggestion, concerning the new Fig. 1. Right now it is hard to compare the different catalogues, because the objects in each panel are different ones.
+The main point of Fig. 1 is the distance scale. So maybe the easiest way to convey this message would be to plot in the background the ASteCA distribution, and to join clusters (ASteCA & catalogue) by a line?
+Another possibility would be to go back to the old Fig. 1, joining the same objects by lines too..
+This is of course up to the authors in the end.

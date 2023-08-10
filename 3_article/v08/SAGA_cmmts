@@ -1,0 +1,30 @@
+
+
+Q1: The ref Frinchaboy et al. 2004b was originally an arxiv article
+(https://ui.adsabs.harvard.edu/abs/2004astro.ph.11127F/abstract). Since the
+article was later on published in a conference proceedings
+(https://ui.adsabs.harvard.edu/abs/2006cams.book..130F/abstract), this
+reference can be updated to point to the latter:
+
+@INCOLLECTION{Frinchaboy_2006b,
+       author = {{Frinchaboy}, P.~M. and {Mu{\~n}oz}, R.~R. and {Majewski}, S.~R. and {Friel}, E.~D. and {Phelps}, R.~L. and {Kunkel}, W.~B.},
+        title = "{Star Clusters in the Galactic Anticenter Stellar Structure: New Radial Velocities \& Metallicities}",
+    booktitle = {Chemical Abundances and Mixing in Stars in the Milky Way and its Satellites},
+         year = 2006,
+        pages = {130},
+          doi = {10.1007/978-3-540-34136-9\_47},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2006cams.book..130F},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+Notice that I changed the reference ID from 'Frinchaboy_2004' to 'Frinchaboy_2006b'
+
+
+Line 25, page 2: remove the break: "..they are located. We want to.."
+Line 83, page 2: remove the break: "..of young stars. FSR0338 is.."
+Line 85, page 2: remove the break: "..uncertainties. In both cases.."
+Line 111, page 2: remove the break: "..this survey. In Fig. 1.."
+Line 4, page 25: add a line break:
+"..literature.
+
+Berkeley 73: The.."
